@@ -19,7 +19,7 @@ namespace OSMDataPrimitives
 			get { return this._latitude; }
 			set {
 				if(value < -90.0 || value > 90.0) {
-					throw new ArgumentOutOfRangeException(nameof(value), value, "The value for Latitude must be between -90.0 and 90.0.");
+					throw new ArgumentOutOfRangeException("Latitude", value, "The value for Latitude must be between -90.0 and 90.0.");
 				}
 				this._latitude = value;
 			}
@@ -32,7 +32,7 @@ namespace OSMDataPrimitives
 			get { return this._longitude; }
 			set {
 				if(value < -180.0 || value > 180.0) {
-					throw new ArgumentOutOfRangeException(nameof(value), value, "The value for Longitude must be between -180.0 and 180.0.");
+					throw new ArgumentOutOfRangeException("Longitude", value, "The value for Longitude must be between -180.0 and 180.0.");
 				}
 				this._longitude = value;
 			}
