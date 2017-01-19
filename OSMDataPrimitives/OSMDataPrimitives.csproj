@@ -40,8 +40,5 @@
     <Compile Include="OSMWay.cs" />
     <Compile Include="OSMRelation.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="LICENSE" />
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
