@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace OSMDataPrimitives
+﻿namespace OSMDataPrimitives
 {
 	/// <summary>
 	/// OSMMember.
