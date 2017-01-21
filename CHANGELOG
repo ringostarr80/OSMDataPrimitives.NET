@@ -1,0 +1,21 @@
+# Change Log
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](http://keepachangelog.com/) 
+and this project adheres to [Semantic Versioning](http://semver.org/).
+
+## [1.0.2] - 2017-01-21
+### Added
+- This CHANGELOG file.
+- added extension to convert the OpenStreetMap classes to XmlElement or Xml-String.
+- added extension to convert the OpenStreetMap classes to BsonDocument (separate project, because of the additional needed MongoDB.BSON package).
+
+### Changed
+- Target Framework to 4.0
+
+## [1.0.1] - 2017-01-19
+### Added
+- nuspec file to generate NuGet package.
+
+## [1.0] - 2017-01-19
+- first release with all basic OpenStreetMap classes (OSMNode, OSMWay and OSMRelation)
