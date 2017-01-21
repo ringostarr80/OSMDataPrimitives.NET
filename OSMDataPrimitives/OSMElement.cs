@@ -6,11 +6,11 @@ namespace OSMDataPrimitives
 	/// <summary>
 	/// OSMElement is the base class for OSMNode, OSMWay and OSMRelation.
 	/// </summary>
-	public abstract class OSMElement
+	public abstract class OSMElement : IOSMElement
 	{
 		private long _id = 0;
 		private ulong _version = 0;
-		private DateTime _timestamp = DateTime.Now;
+		private DateTime _timestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 		private long _changeset = 0;
 		private ulong _userId = 0;
 		private string _userName = string.Empty;
