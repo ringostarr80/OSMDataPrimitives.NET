@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package >
+	<metadata>
+		<id>OSMDataPrimitives.BSON</id>
+		<version>1.0.3</version>
+		<title>OSMDataPrimitives.BSON</title>
+		<authors>Ringo Leese</authors>
+		<owners>Ringo Leese</owners>
+		<licenseUrl>https://github.com/ringostarr80/OSMDataPrimitives/blob/master/LICENSE</licenseUrl>
+		<projectUrl>https://github.com/ringostarr80/OSMDataPrimitives</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>This is the BSON-Extension for the OSMDataPrimitives project</description>
+		<releaseNotes>First NuGet release.</releaseNotes>
+		<copyright>Copyright 2017</copyright>
+		<tags>osm data primitives bson</tags>
+		<dependencies>
+			<dependency id="MongoDB.Bson" version="2.4.0"/>
+			<dependency id="OSMDataPrimitives" version="1.0.3" />
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="..\LICENSE" target="LICENSE"/>
+		<file src="bin\Release\OSMDataPrimitives.BSON.dll" target="lib\net45"/>
+		<file src="bin\Release\OSMDataPrimitives.BSON.xml" target="lib\net45"/>
+	</files>
+</package>

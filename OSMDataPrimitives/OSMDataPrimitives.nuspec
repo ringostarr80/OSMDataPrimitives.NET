@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>OSMDataPrimitives</id>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <title>OSMDataPrimitives</title>
     <authors>Ringo Leese</authors>
     <owners>Ringo Leese</owners>
@@ -10,8 +10,12 @@
     <projectUrl>https://github.com/ringostarr80/OSMDataPrimitives</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>This pretty little project is intended to provide the 3 basic data types (nodes, ways and relations) of OpenStreetMap as .NET classes</description>
-    <releaseNotes>Firs release.</releaseNotes>
+    <releaseNotes>Just trying to improve the nuspec-file.</releaseNotes>
     <copyright>Copyright 2017</copyright>
     <tags>osm data primitives</tags>
   </metadata>
+	<files>
+		<file src="..\LICENSE" target="LICENSE"/>
+		<file src="bin\Release\**" target="lib\net4"/>
+	</files>
 </package>

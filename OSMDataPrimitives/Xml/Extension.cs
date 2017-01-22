@@ -11,8 +11,8 @@ namespace OSMDataPrimitives.Xml
 		/// <summary>
 		/// Converts the OSMElement to an XmlElement.
 		/// </summary>
-		/// <returns>The XmlElement.</returns>
 		/// <param name="element">IOSMElement.</param>
+		/// <returns>The XmlElement.</returns>
 		public static XmlElement ToXml(this IOSMElement element)
 		{
 			return ToXml(element, new XmlDocument());

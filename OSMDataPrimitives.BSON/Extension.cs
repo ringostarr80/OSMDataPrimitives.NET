@@ -2,9 +2,17 @@
 
 namespace OSMDataPrimitives.BSON
 {
-    public static class Extension
+	/// <summary>
+	/// Extension to provide Bson-capabilities.
+	/// </summary>
+	public static class Extension
     {
-		public static BsonDocument ToBson(this OSMElement element)
+		/// <summary>
+		/// Converts the OSMElement to an BsonDocument
+		/// </summary>
+		/// <param name="element">IOSMElement.</param>
+		/// <returns>The BsonDocument.</returns>
+		public static BsonDocument ToBson(this IOSMElement element)
 		{
 			var bsonDoc = new BsonDocument();
 			bsonDoc.Add("id", element.Id);
