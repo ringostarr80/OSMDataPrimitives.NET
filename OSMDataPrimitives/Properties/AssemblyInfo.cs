@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("OSMDataPrimitives.BSON")]
+[assembly: AssemblyProduct("OSMDataPrimitives")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
