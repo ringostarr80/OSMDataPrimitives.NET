@@ -6,7 +6,7 @@ namespace OSMDataPrimitives.BSON
 	/// Extension to provide Bson-capabilities.
 	/// </summary>
 	public static class Extension
-    {
+	{
 		/// <summary>
 		/// Converts the OSMElement to an BsonDocument
 		/// </summary>
@@ -15,21 +15,21 @@ namespace OSMDataPrimitives.BSON
 		public static BsonDocument ToBson(this IOSMElement element)
 		{
 			var bsonDoc = new BsonDocument();
-			bsonDoc.Add("id", element.Id);
+			bsonDoc.Add("id", (long)element.Id);
 			if(element is OSMNode) {
 				var nodeElement = (OSMNode)element;
-				var locationDoc = new BsonDocument() {
+				var locationDoc = new BsonDocument {
 					{ "lat", nodeElement.Latitude },
 					{ "lon", nodeElement.Longitude }
 				};
 				bsonDoc.Add("location", locationDoc);
 			}
-			bsonDoc.Add("version",  (long)element.Version);
+			bsonDoc.Add("version", (long)element.Version);
 			if(element.UserId != 0) {
 				bsonDoc.Add("uid", (long)element.UserId);
 				bsonDoc.Add("user", element.UserName);
 			}
-			bsonDoc.Add("changeset", element.Changeset);
+			bsonDoc.Add("changeset", (long)element.Changeset);
 			bsonDoc.Add("timestamp", element.Timestamp);
 
 			if(element is OSMWay) {
@@ -41,7 +41,7 @@ namespace OSMDataPrimitives.BSON
 				var relationElement = (OSMRelation)element;
 				var bsonMembersArray = new BsonArray();
 				foreach(var osmMember in relationElement.Members) {
-					var memberDocument = new BsonDocument() {
+					var memberDocument = new BsonDocument {
 						{ "type", osmMember.Type.ToString().ToLower() },
 						{ "ref", osmMember.Ref },
 						{ "role", osmMember.Role }

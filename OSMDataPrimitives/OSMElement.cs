@@ -6,21 +6,21 @@ namespace OSMDataPrimitives
 	/// <summary>
 	/// OSMElement is the base class for OSMNode, OSMWay and OSMRelation.
 	/// </summary>
-	public abstract class OSMElement : IOSMElement
+	public abstract class OSMElement : IOSMElement, ICloneable
 	{
-		private long _id = 0;
+		private ulong _id = 0;
 		private ulong _version = 0;
 		private DateTime _timestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-		private long _changeset = 0;
+		private ulong _changeset = 0;
 		private ulong _userId = 0;
 		private string _userName = string.Empty;
 		private NameValueCollection _tags = new NameValueCollection();
 
 		/// <summary>
-		/// Gets the identifier.
+		/// Gets or sets the identifier.
 		/// </summary>
 		/// <value>The identifier.</value>
-		public long Id { get { return this._id; } }
+		public ulong Id { get { return this._id; } set { this._id = value; } }
 		/// <summary>
 		/// Gets or sets the version.
 		/// </summary>
@@ -35,7 +35,7 @@ namespace OSMDataPrimitives
 		/// Gets or sets the changeset.
 		/// </summary>
 		/// <value>The changeset.</value>
-		public long Changeset { get { return this._changeset; } set { this._changeset = value; } }
+		public ulong Changeset { get { return this._changeset; } set { this._changeset = value; } }
 		/// <summary>
 		/// Gets or sets the user identifier.
 		/// </summary>
@@ -56,9 +56,20 @@ namespace OSMDataPrimitives
 		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.OSMElement"/> class.
 		/// </summary>
 		/// <param name="id">Identifier.</param>
-		protected OSMElement(long id)
+		protected OSMElement(ulong id)
 		{
 			this._id = id;
+		}
+
+		/// <summary>
+		/// Clone this instance.
+		/// </summary>
+		public object Clone()
+		{
+			var clone = (OSMElement)this.MemberwiseClone();
+			clone._tags = new NameValueCollection(this._tags);
+
+			return clone;
 		}
 	}
 }

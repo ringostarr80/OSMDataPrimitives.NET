@@ -19,9 +19,20 @@ namespace OSMDataPrimitives
 		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.OSMRelation"/> class.
 		/// </summary>
 		/// <param name="id">Identifier.</param>
-		public OSMRelation(long id) : base(id)
+		public OSMRelation(ulong id) : base(id)
 		{
 
+		}
+
+		/// <summary>
+		/// Clone this instance.
+		/// </summary>
+		public new object Clone()
+		{
+			var clone = (OSMRelation)base.Clone();
+			clone._members = new List<OSMMember>(this._members);
+
+			return clone;
 		}
 	}
 }

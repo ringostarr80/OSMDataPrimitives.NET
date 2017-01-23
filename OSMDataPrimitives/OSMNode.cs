@@ -5,7 +5,7 @@ namespace OSMDataPrimitives
 	/// <summary>
 	/// OSMNode.
 	/// </summary>
-	public class OSMNode : OSMElement
+	public partial class OSMNode : OSMElement
 	{
 		private double _latitude = 0.0;
 		private double _longitude = 0.0;
@@ -42,9 +42,21 @@ namespace OSMDataPrimitives
 		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.OSMNode"/> class.
 		/// </summary>
 		/// <param name="id">Identifier.</param>
-		public OSMNode(long id) : base(id)
+		public OSMNode(ulong id) : base(id)
 		{
 
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.OSMNode"/> class.
+		/// </summary>
+		/// <param name="id">Identifier.</param>
+		/// <param name="latitude">Latitude.</param>
+		/// <param name="longitude">Longitude.</param>
+		public OSMNode(ulong id, double latitude, double longitude) : base(id)
+		{
+			this.Latitude = latitude;
+			this.Longitude = longitude;
 		}
 	}
 }

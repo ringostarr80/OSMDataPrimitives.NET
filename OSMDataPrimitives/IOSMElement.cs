@@ -12,7 +12,7 @@ namespace OSMDataPrimitives
 		/// Gets the identifier.
 		/// </summary>
 		/// <value>The identifier.</value>
-		long Id { get; }
+		ulong Id { get; }
 		/// <summary>
 		/// Gets or sets the version.
 		/// </summary>
@@ -27,7 +27,7 @@ namespace OSMDataPrimitives
 		/// Gets or sets the changeset.
 		/// </summary>
 		/// <value>The changeset.</value>
-		long Changeset { get; set; }
+		ulong Changeset { get; set; }
 		/// <summary>
 		/// Gets or sets the user identifier.
 		/// </summary>

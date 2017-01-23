@@ -15,7 +15,8 @@
     <tags>osm data primitives</tags>
   </metadata>
 	<files>
-		<file src="..\LICENSE" target="LICENSE"/>
-		<file src="bin\Release\**" target="lib\net4"/>
+		<file src="../LICENSE" target="LICENSE"/>
+		<file src="bin/Release/OSMDataPrimitives.dll" target="lib/net4"/>
+		<file src="bin/Release/OSMDataPrimitives.xml" target="lib/net4"/>
 	</files>
 </package>

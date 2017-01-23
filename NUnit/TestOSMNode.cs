@@ -7,7 +7,7 @@ using OSMDataPrimitives.BSON;
 namespace NUnit
 {
 	[TestFixture]
-	public class Test
+	public class TestOSMNode
 	{
 		private OSMNode GetDefaultOSMNode()
 		{
@@ -25,6 +25,42 @@ namespace NUnit
 
 			return node;
 		}
+
+		[Test]
+		public void TestOSMNodeClone()
+		{
+			var node = this.GetDefaultOSMNode();
+			var nodeClone = (OSMNode)node.Clone();
+			nodeClone.Changeset += 1;
+			nodeClone.Version += 1;
+			nodeClone.Latitude += 2.341;
+			nodeClone.Longitude -= 1.754325;
+			nodeClone.UserId = 2;
+			nodeClone.UserName = "bar";
+			nodeClone.Timestamp = new DateTime(2017, 1, 25, 15, 20, 55, DateTimeKind.Utc);
+			nodeClone.Tags["name"] = "hello";
+			nodeClone.Tags["ref"] = "world";
+
+			Assert.AreEqual(7, node.Changeset);
+			Assert.AreEqual(8, nodeClone.Changeset);
+			Assert.AreEqual(3, node.Version);
+			Assert.AreEqual(4, nodeClone.Version);
+			Assert.AreEqual(52.123456, node.Latitude);
+			Assert.AreEqual(54.464456, nodeClone.Latitude);
+			Assert.AreEqual(12.654321, node.Longitude);
+			Assert.AreEqual(10.899996, nodeClone.Longitude);
+			Assert.AreEqual(5, node.UserId);
+			Assert.AreEqual(2, nodeClone.UserId);
+			Assert.AreEqual("foo", node.UserName);
+			Assert.AreEqual("bar", nodeClone.UserName);
+			Assert.AreEqual(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc), node.Timestamp);
+			Assert.AreEqual(new DateTime(2017, 1, 25, 15, 20, 55, DateTimeKind.Utc), nodeClone.Timestamp);
+			Assert.AreEqual("bar", node.Tags["name"]);
+			Assert.AreEqual("hello", nodeClone.Tags["name"]);
+			Assert.AreEqual("baz", node.Tags["ref"]);
+			Assert.AreEqual("world", nodeClone.Tags["ref"]);
+		}
+
 		[Test]
 		public void TestOSMNodeToXmlString()
 		{
