@@ -120,12 +120,13 @@ namespace NUnit
 			NameValueCollection sqlParameters;
 			var sqlInsert = node.ToPostgreSQLInsert(out sqlParameters);
 			var expectedSql = "INSERT INTO nodes (osm_id, lat, lon, tags) ";
-			expectedSql += "VALUES(@osm_id::bigint, @lat::double precision, @lon::double precision, hstore(ARRAY['name','bar','ref','baz']))";
+			expectedSql += "VALUES(@osm_id::bigint, @lat::double precision, @lon::double precision, @tags::hstore)";
 			Assert.AreEqual(expectedSql, sqlInsert);
 			var expectedSqlParameters = new NameValueCollection {
 				{"osm_id", "2"},
 				{"lat", "52.123456"},
-				{"lon", "12.654321"}
+				{"lon", "12.654321"},
+				{"tags", "\"name\"=>\"bar\",\"ref\"=>\"baz\""}
 			};
 			Assert.AreEqual(expectedSqlParameters.Count, sqlParameters.Count);
 			foreach(string key in expectedSqlParameters) {

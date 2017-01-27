@@ -135,21 +135,17 @@ namespace OSMDataPrimitives.PostgreSQL
 			}
 
 			var tagsSB = new StringBuilder();
-			if(element.Tags.Count == 0) {
-				tagsSB.Append("");
-			} else {
-				tagsSB.Append("ARRAY[");
-				int tagCounter = 0;
+			if(element.Tags.Count >= 0) {
+				var tagCounter = 0;
 				foreach(string tagKey in element.Tags) {
 					tagCounter++;
 					if(tagCounter > 1) {
 						tagsSB.Append(",");
 					}
-					tagsSB.Append("'" + tagKey.Replace("'", "''") + "','" + element.Tags[tagKey].Replace("'", "''") + "'");
+					tagsSB.Append("\"" + tagKey.Replace("'", "''") + "\"=>\"" + element.Tags[tagKey].Replace("'", "''") + "\"");
 				}
-				tagsSB.Append("]");
-				parameters.Add("tags", tagsSB.ToString());
 			}
+			parameters.Add("tags", tagsSB.ToString());
 
 			//insertSB.Append(", " + tagsSB);
 			insertSB.Append(", @tags::hstore");

@@ -131,10 +131,11 @@ namespace NUnit
 			NameValueCollection sqlParameters;
 			var sqlInsert = relation.ToPostgreSQLInsert(out sqlParameters);
 			var expectedSql = "INSERT INTO relations (osm_id, tags, members) ";
-			expectedSql += "VALUES(@osm_id::bigint, hstore(ARRAY['name','this country','ref','DE']), ARRAY[hstore(ARRAY['type','way','ref','123','role','inner']), hstore(ARRAY['type','way','ref','234','role','outer'])])";
+			expectedSql += "VALUES(@osm_id::bigint, @tags::hstore, ARRAY[hstore(ARRAY['type','way','ref','123','role','inner']), hstore(ARRAY['type','way','ref','234','role','outer'])])";
 			Assert.AreEqual(expectedSql, sqlInsert);
 			var expectedSqlParameters = new NameValueCollection {
-				{"osm_id", "2"}
+				{"osm_id", "2"},
+				{"tags", "\"name\"=>\"this country\",\"ref\"=>\"DE\""}
 			};
 			Assert.AreEqual(expectedSqlParameters.Count, sqlParameters.Count);
 			foreach(string key in expectedSqlParameters) {

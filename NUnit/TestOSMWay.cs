@@ -155,10 +155,11 @@ namespace NUnit
 			NameValueCollection sqlParameters;
 			var sqlInsert = way.ToPostgreSQLInsert(out sqlParameters);
 			var expectedSql = "INSERT INTO ways (osm_id, tags, node_refs) ";
-			expectedSql += "VALUES(@osm_id::bigint, hstore(ARRAY['name','this road','ref','A1']), ARRAY[5, 9, 12, 543, 43, 1234151])";
+			expectedSql += "VALUES(@osm_id::bigint, @tags::hstore, ARRAY[5, 9, 12, 543, 43, 1234151])";
 			Assert.AreEqual(expectedSql, sqlInsert);
 			var expectedSqlParameters = new NameValueCollection {
-				{"osm_id", "2"}
+				{"osm_id", "2"},
+				{"tags", "\"name\"=>\"this road\",\"ref\"=>\"A1\""}
 			};
 			Assert.AreEqual(expectedSqlParameters.Count, sqlParameters.Count);
 			foreach(string key in expectedSqlParameters) {
