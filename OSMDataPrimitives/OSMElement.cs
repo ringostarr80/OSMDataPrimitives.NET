@@ -20,7 +20,7 @@ namespace OSMDataPrimitives
 		/// Gets or sets the identifier.
 		/// </summary>
 		/// <value>The identifier.</value>
-		public ulong Id { get { return this._id; } set { this._id = value; } }
+		public ulong Id { get { return this._id; } }
 		/// <summary>
 		/// Gets or sets the version.
 		/// </summary>
@@ -47,10 +47,18 @@ namespace OSMDataPrimitives
 		/// <value>The name of the user.</value>
 		public string UserName { get { return this._userName; } set { this._userName = value; } }
 		/// <summary>
-		/// Gets the tags.
+		/// Gets or sets the tags.
 		/// </summary>
 		/// <value>The tags.</value>
-		public NameValueCollection Tags { get { return this._tags; } }
+		public NameValueCollection Tags {
+			get { return this._tags; }
+			set {
+				if(value == null) {
+					throw new NullReferenceException("Tags can't be null.");
+				}
+				this._tags = value;
+			}
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.OSMElement"/> class.
@@ -70,6 +78,15 @@ namespace OSMDataPrimitives
 			clone._tags = new NameValueCollection(this._tags);
 
 			return clone;
+		}
+
+		/// <summary>
+		/// Overrides the identifier.
+		/// </summary>
+		/// <param name="newId">New identifier.</param>
+		public void OverrideId(ulong newId)
+		{
+			this._id = newId;
 		}
 	}
 }

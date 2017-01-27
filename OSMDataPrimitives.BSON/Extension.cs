@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 
 namespace OSMDataPrimitives.BSON
 {
@@ -7,6 +8,22 @@ namespace OSMDataPrimitives.BSON
 	/// </summary>
 	public static class Extension
 	{
+		static Extension()
+		{
+			BsonClassMap.RegisterClassMap<OSMNode>(cm => {
+				cm.AutoMap();
+				cm.MapCreator(n => new OSMNode(n.Id));
+			});
+			BsonClassMap.RegisterClassMap<OSMWay>(cm => {
+				cm.AutoMap();
+				cm.MapCreator(w => new OSMWay(w.Id));
+			});
+			BsonClassMap.RegisterClassMap<OSMRelation>(cm => {
+				cm.AutoMap();
+				cm.MapCreator(r => new OSMRelation(r.Id));
+			});
+		}
+
 		/// <summary>
 		/// Converts the OSMElement to an BsonDocument
 		/// </summary>
@@ -43,7 +60,7 @@ namespace OSMDataPrimitives.BSON
 				foreach(var osmMember in relationElement.Members) {
 					var memberDocument = new BsonDocument {
 						{ "type", osmMember.Type.ToString().ToLower() },
-						{ "ref", osmMember.Ref },
+						{ "ref", (long)osmMember.Ref },
 						{ "role", osmMember.Role }
 					};
 					bsonMembersArray.Add(memberDocument);

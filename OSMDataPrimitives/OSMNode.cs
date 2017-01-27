@@ -5,7 +5,7 @@ namespace OSMDataPrimitives
 	/// <summary>
 	/// OSMNode.
 	/// </summary>
-	public partial class OSMNode : OSMElement
+	public class OSMNode : OSMElement
 	{
 		private double _latitude = 0.0;
 		private double _longitude = 0.0;

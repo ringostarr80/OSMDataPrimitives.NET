@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.5] - 2017-01-27
+### Added
+- extension to convert XmlElement to IOSMElement.
+- PostgreSQL extension.
+- method OSMElement.OverrideId(ulong newId) to explicitly change the id of OSMNode, OSMWay or OSMRelation.
+- some more NUnit-Tests.
+
+### Changed
+- changed NodeRefs-Type from long to ulong.
+
 ## [1.0.4] - 2017-01-23
 ### Changed
 - OSMElement's are now cloneable.

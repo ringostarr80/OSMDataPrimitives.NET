@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>OSMDataPrimitives.BSON</id>
-		<version>1.0.4</version>
+		<version>1.0.5</version>
 		<title>OSMDataPrimitives.BSON</title>
 		<authors>Ringo Leese</authors>
 		<owners>Ringo Leese</owners>

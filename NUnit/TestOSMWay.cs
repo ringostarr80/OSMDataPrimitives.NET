@@ -2,7 +2,9 @@
 using NUnit.Framework;
 using OSMDataPrimitives;
 using OSMDataPrimitives.Xml;
+using OSMDataPrimitives.PostgreSQL;
 using OSMDataPrimitives.BSON;
+using System.Collections.Specialized;
 
 namespace NUnit
 {
@@ -96,6 +98,96 @@ namespace NUnit
 			expectedXmlString += "<tag k=\"ref\" v=\"A1\" />";
 			expectedXmlString += "</way>";
 			Assert.AreEqual(expectedXmlString, way.ToXmlString());
+		}
+
+		[Test]
+		public void TestXmlElementToOSMWay()
+		{
+			var way = this.GetDefaultOSMWay();
+			var xmlWay = way.ToXml();
+			var convertedWay = (OSMWay)xmlWay.ToOSMElement();
+
+			Assert.AreEqual(2, convertedWay.Id);
+			Assert.AreEqual(7, convertedWay.Changeset);
+			Assert.AreEqual(3, convertedWay.Version);
+			Assert.AreEqual(5, convertedWay.UserId);
+			Assert.AreEqual("foo", convertedWay.UserName);
+			Assert.AreEqual(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc), convertedWay.Timestamp);
+			Assert.AreEqual("this road", convertedWay.Tags["name"]);
+			Assert.AreEqual("A1", convertedWay.Tags["ref"]);
+			Assert.AreEqual(6, convertedWay.NodeRefs.Count);
+			Assert.AreEqual(5, convertedWay.NodeRefs[0]);
+			Assert.AreEqual(9, convertedWay.NodeRefs[1]);
+			Assert.AreEqual(12, convertedWay.NodeRefs[2]);
+			Assert.AreEqual(543, convertedWay.NodeRefs[3]);
+			Assert.AreEqual(43, convertedWay.NodeRefs[4]);
+			Assert.AreEqual(1234151, convertedWay.NodeRefs[5]);
+		}
+
+		[Test]
+		public void TestXmlStringToOSMWay()
+		{
+			var way = this.GetDefaultOSMWay();
+			var xmlString = way.ToXmlString();
+			var convertedWay = (OSMWay)xmlString.ToOSMElement();
+
+			Assert.AreEqual(2, convertedWay.Id);
+			Assert.AreEqual(7, convertedWay.Changeset);
+			Assert.AreEqual(3, convertedWay.Version);
+			Assert.AreEqual(5, convertedWay.UserId);
+			Assert.AreEqual("foo", convertedWay.UserName);
+			Assert.AreEqual(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc), convertedWay.Timestamp);
+			Assert.AreEqual("this road", convertedWay.Tags["name"]);
+			Assert.AreEqual("A1", convertedWay.Tags["ref"]);
+			Assert.AreEqual(6, convertedWay.NodeRefs.Count);
+			Assert.AreEqual(5, convertedWay.NodeRefs[0]);
+			Assert.AreEqual(9, convertedWay.NodeRefs[1]);
+			Assert.AreEqual(12, convertedWay.NodeRefs[2]);
+			Assert.AreEqual(543, convertedWay.NodeRefs[3]);
+			Assert.AreEqual(43, convertedWay.NodeRefs[4]);
+			Assert.AreEqual(1234151, convertedWay.NodeRefs[5]);
+		}
+
+		[Test]
+		public void TestOSMWayToPostgreSQLInsertString()
+		{
+			var way = this.GetDefaultOSMWay();
+			NameValueCollection sqlParameters;
+			var sqlInsert = way.ToPostgreSQLInsert(out sqlParameters);
+			var expectedSql = "INSERT INTO ways (osm_id, tags, node_refs) ";
+			expectedSql += "VALUES(@osm_id::bigint, hstore(ARRAY['name','this road','ref','A1']), ARRAY[5, 9, 12, 543, 43, 1234151])";
+			Assert.AreEqual(expectedSql, sqlInsert);
+			var expectedSqlParameters = new NameValueCollection {
+				{"osm_id", "2"}
+			};
+			Assert.AreEqual(expectedSqlParameters.Count, sqlParameters.Count);
+			foreach(string key in expectedSqlParameters) {
+				Assert.NotNull(sqlParameters[key]);
+				Assert.AreEqual(expectedSqlParameters[key], sqlParameters[key]);
+			}
+		}
+
+		[Test]
+		public void TestOSMWayToPostgreSQLSelectString()
+		{
+			var way = this.GetDefaultOSMWay();
+			var sqlSelect = way.ToPostgreSQLSelect();
+			var expectedSql = "SELECT osm_id, tags, node_refs FROM ways";
+			Assert.AreEqual(expectedSql, sqlSelect);
+
+			sqlSelect = way.ToPostgreSQLSelect(inclusiveMetaField: true);
+			expectedSql = "SELECT osm_id, version, changeset, uid, user, timestamp, tags, node_refs FROM ways";
+			Assert.AreEqual(expectedSql, sqlSelect);
+
+			sqlSelect = way.ToPostgreSQLSelect(id: 6);
+			expectedSql = "SELECT osm_id, tags, node_refs FROM ways WHERE osm_id = 6";
+			Assert.AreEqual(expectedSql, sqlSelect);
+
+			sqlSelect = way.ToPostgreSQLSelect(offset: 20, limit: 200);
+			expectedSql = "SELECT osm_id, tags, node_refs FROM ways OFFSET 20 LIMIT 200";
+			Assert.AreEqual(expectedSql, sqlSelect);
+
+			Assert.Throws(typeof(ArgumentException), () => { way.ToPostgreSQLSelect(id: 6, offset: 20, limit: 200); });
 		}
 
 		[Test]

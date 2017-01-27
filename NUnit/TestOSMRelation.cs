@@ -2,7 +2,9 @@
 using NUnit.Framework;
 using OSMDataPrimitives;
 using OSMDataPrimitives.Xml;
+using OSMDataPrimitives.PostgreSQL;
 using OSMDataPrimitives.BSON;
+using System.Collections.Specialized;
 
 namespace NUnit
 {
@@ -80,6 +82,88 @@ namespace NUnit
 			expectedXmlString += "<tag k=\"ref\" v=\"DE\" />";
 			expectedXmlString += "</relation>";
 			Assert.AreEqual(expectedXmlString, relation.ToXmlString());
+		}
+
+		[Test]
+		public void TestXmlElementToOSMRelation()
+		{
+			var relation = this.GetDefaultOSMRelation();
+			var xmlRelation = relation.ToXml();
+			var convertedRelation = (OSMRelation)xmlRelation.ToOSMElement();
+
+			Assert.AreEqual(2, convertedRelation.Id);
+			Assert.AreEqual(7, convertedRelation.Changeset);
+			Assert.AreEqual(3, convertedRelation.Version);
+			Assert.AreEqual(5, convertedRelation.UserId);
+			Assert.AreEqual("foo", convertedRelation.UserName);
+			Assert.AreEqual(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc), convertedRelation.Timestamp);
+			Assert.AreEqual("this country", convertedRelation.Tags["name"]);
+			Assert.AreEqual("DE", convertedRelation.Tags["ref"]);
+			Assert.AreEqual(2, convertedRelation.Members.Count);
+			Assert.AreEqual(new OSMMember(MemberType.Way, 123, "inner"), convertedRelation.Members[0]);
+			Assert.AreEqual(new OSMMember(MemberType.Way, 234, "outer"), convertedRelation.Members[1]);
+		}
+
+		[Test]
+		public void TestXmlStringToOSMRelation()
+		{
+			var relation = this.GetDefaultOSMRelation();
+			var xmlString = relation.ToXmlString();
+			var convertedRelation = (OSMRelation)xmlString.ToOSMElement();
+
+			Assert.AreEqual(2, convertedRelation.Id);
+			Assert.AreEqual(7, convertedRelation.Changeset);
+			Assert.AreEqual(3, convertedRelation.Version);
+			Assert.AreEqual(5, convertedRelation.UserId);
+			Assert.AreEqual("foo", convertedRelation.UserName);
+			Assert.AreEqual(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc), convertedRelation.Timestamp);
+			Assert.AreEqual("this country", convertedRelation.Tags["name"]);
+			Assert.AreEqual("DE", convertedRelation.Tags["ref"]);
+			Assert.AreEqual(2, convertedRelation.Members.Count);
+			Assert.AreEqual(new OSMMember(MemberType.Way, 123, "inner"), convertedRelation.Members[0]);
+			Assert.AreEqual(new OSMMember(MemberType.Way, 234, "outer"), convertedRelation.Members[1]);
+		}
+
+		[Test]
+		public void TestOSMRelationToPostgreSQLInsertString()
+		{
+			var relation = this.GetDefaultOSMRelation();
+			NameValueCollection sqlParameters;
+			var sqlInsert = relation.ToPostgreSQLInsert(out sqlParameters);
+			var expectedSql = "INSERT INTO relations (osm_id, tags, members) ";
+			expectedSql += "VALUES(@osm_id::bigint, hstore(ARRAY['name','this country','ref','DE']), ARRAY[hstore(ARRAY['type','way','ref','123','role','inner']), hstore(ARRAY['type','way','ref','234','role','outer'])])";
+			Assert.AreEqual(expectedSql, sqlInsert);
+			var expectedSqlParameters = new NameValueCollection {
+				{"osm_id", "2"}
+			};
+			Assert.AreEqual(expectedSqlParameters.Count, sqlParameters.Count);
+			foreach(string key in expectedSqlParameters) {
+				Assert.NotNull(sqlParameters[key]);
+				Assert.AreEqual(expectedSqlParameters[key], sqlParameters[key]);
+			}
+		}
+
+		[Test]
+		public void TestOSMRelationToPostgreSQLSelectString()
+		{
+			var relation = this.GetDefaultOSMRelation();
+			var sqlSelect = relation.ToPostgreSQLSelect();
+			var expectedSql = "SELECT osm_id, tags, members FROM relations";
+			Assert.AreEqual(expectedSql, sqlSelect);
+
+			sqlSelect = relation.ToPostgreSQLSelect(inclusiveMetaField: true);
+			expectedSql = "SELECT osm_id, version, changeset, uid, user, timestamp, tags, members FROM relations";
+			Assert.AreEqual(expectedSql, sqlSelect);
+
+			sqlSelect = relation.ToPostgreSQLSelect(id: 7);
+			expectedSql = "SELECT osm_id, tags, members FROM relations WHERE osm_id = 7";
+			Assert.AreEqual(expectedSql, sqlSelect);
+
+			sqlSelect = relation.ToPostgreSQLSelect(offset: 30, limit: 300);
+			expectedSql = "SELECT osm_id, tags, members FROM relations OFFSET 30 LIMIT 300";
+			Assert.AreEqual(expectedSql, sqlSelect);
+
+			Assert.Throws(typeof(ArgumentException), () => { relation.ToPostgreSQLSelect(id: 7, offset: 30, limit: 300); });
 		}
 
 		[Test]

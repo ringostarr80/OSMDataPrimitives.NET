@@ -2,7 +2,9 @@
 using NUnit.Framework;
 using OSMDataPrimitives;
 using OSMDataPrimitives.Xml;
+using OSMDataPrimitives.PostgreSQL;
 using OSMDataPrimitives.BSON;
+using System.Collections.Specialized;
 
 namespace NUnit
 {
@@ -71,6 +73,88 @@ namespace NUnit
 			expectedXmlString += "<tag k=\"ref\" v=\"baz\" />";
 			expectedXmlString += "</node>";
 			Assert.AreEqual(expectedXmlString, node.ToXmlString());
+		}
+
+		[Test]
+		public void TestXmlElementToOSMNode()
+		{
+			var node = this.GetDefaultOSMNode();
+			var xmlNode = node.ToXml();
+			var convertedNode = xmlNode.ToOSMElement();
+
+			Assert.AreEqual(2, convertedNode.Id);
+			Assert.AreEqual(7, convertedNode.Changeset);
+			Assert.AreEqual(3, convertedNode.Version);
+			Assert.AreEqual(52.123456, ((OSMNode)convertedNode).Latitude);
+			Assert.AreEqual(12.654321, ((OSMNode)convertedNode).Longitude);
+			Assert.AreEqual(5, convertedNode.UserId);
+			Assert.AreEqual("foo", convertedNode.UserName);
+			Assert.AreEqual(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc), convertedNode.Timestamp);
+			Assert.AreEqual("bar", convertedNode.Tags["name"]);
+			Assert.AreEqual("baz", convertedNode.Tags["ref"]);
+		}
+
+		[Test]
+		public void TestXmlStringToOSMNode()
+		{
+			var node = this.GetDefaultOSMNode();
+			var xmlString = node.ToXmlString();
+			var convertedNode = xmlString.ToOSMElement();
+
+			Assert.AreEqual(2, convertedNode.Id);
+			Assert.AreEqual(7, convertedNode.Changeset);
+			Assert.AreEqual(3, convertedNode.Version);
+			Assert.AreEqual(52.123456, ((OSMNode)convertedNode).Latitude);
+			Assert.AreEqual(12.654321, ((OSMNode)convertedNode).Longitude);
+			Assert.AreEqual(5, convertedNode.UserId);
+			Assert.AreEqual("foo", convertedNode.UserName);
+			Assert.AreEqual(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc), convertedNode.Timestamp);
+			Assert.AreEqual("bar", convertedNode.Tags["name"]);
+			Assert.AreEqual("baz", convertedNode.Tags["ref"]);
+		}
+
+		[Test]
+		public void TestOSMNodeToPostgreSQLInsertString()
+		{
+			var node = this.GetDefaultOSMNode();
+			NameValueCollection sqlParameters;
+			var sqlInsert = node.ToPostgreSQLInsert(out sqlParameters);
+			var expectedSql = "INSERT INTO nodes (osm_id, lat, lon, tags) ";
+			expectedSql += "VALUES(@osm_id::bigint, @lat::double precision, @lon::double precision, hstore(ARRAY['name','bar','ref','baz']))";
+			Assert.AreEqual(expectedSql, sqlInsert);
+			var expectedSqlParameters = new NameValueCollection {
+				{"osm_id", "2"},
+				{"lat", "52.123456"},
+				{"lon", "12.654321"}
+			};
+			Assert.AreEqual(expectedSqlParameters.Count, sqlParameters.Count);
+			foreach(string key in expectedSqlParameters) {
+				Assert.NotNull(sqlParameters[key]);
+				Assert.AreEqual(expectedSqlParameters[key], sqlParameters[key]);
+			}
+		}
+
+		[Test]
+		public void TestOSMNodeToPostgreSQLSelectString()
+		{
+			var node = this.GetDefaultOSMNode();
+			var sqlSelect = node.ToPostgreSQLSelect();
+			var expectedSql = "SELECT osm_id, lat, lon, tags FROM nodes";
+			Assert.AreEqual(expectedSql, sqlSelect);
+
+			sqlSelect = node.ToPostgreSQLSelect(inclusiveMetaField: true);
+			expectedSql = "SELECT osm_id, version, changeset, uid, user, timestamp, lat, lon, tags FROM nodes";
+			Assert.AreEqual(expectedSql, sqlSelect);
+
+			sqlSelect = node.ToPostgreSQLSelect(id: 5);
+			expectedSql = "SELECT osm_id, lat, lon, tags FROM nodes WHERE osm_id = 5";
+			Assert.AreEqual(expectedSql, sqlSelect);
+
+			sqlSelect = node.ToPostgreSQLSelect(offset: 10, limit: 100);
+			expectedSql = "SELECT osm_id, lat, lon, tags FROM nodes OFFSET 10 LIMIT 100";
+			Assert.AreEqual(expectedSql, sqlSelect);
+
+			Assert.Throws(typeof(ArgumentException), () => { node.ToPostgreSQLSelect(id: 5, offset: 10, limit: 100); });
 		}
 
 		[Test]

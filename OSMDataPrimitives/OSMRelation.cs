@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace OSMDataPrimitives
 {
@@ -10,10 +11,18 @@ namespace OSMDataPrimitives
 		private List<OSMMember> _members = new List<OSMMember>();
 
 		/// <summary>
-		/// Gets the members.
+		/// Gets or sets the members.
 		/// </summary>
 		/// <value>The members.</value>
-		public List<OSMMember> Members { get { return this._members; } }
+		public List<OSMMember> Members {
+			get { return this._members; }
+			set {
+				if(value == null) {
+					throw new NullReferenceException("Members can't be null.");
+				}
+				this._members = value;
+			}
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.OSMRelation"/> class.

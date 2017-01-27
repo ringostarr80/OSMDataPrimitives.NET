@@ -39,9 +39,15 @@ namespace OSMDataPrimitives
 		/// <value>The name of the user.</value>
 		string UserName { get; set; }
 		/// <summary>
-		/// Gets the tags.
+		/// Gets or sets the tags.
 		/// </summary>
 		/// <value>The tags.</value>
-		NameValueCollection Tags { get; }
+		NameValueCollection Tags { get; set; }
+
+		/// <summary>
+		/// Overrides the identifier.
+		/// </summary>
+		/// <param name="newId">New identifier.</param>
+		void OverrideId(ulong newId);
 	}
 }

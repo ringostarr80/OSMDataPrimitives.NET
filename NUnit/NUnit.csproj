@@ -8,7 +8,7 @@
     <RootNamespace>NUnit</RootNamespace>
     <AssemblyName>NUnit</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <ReleaseVersion>1.0.4</ReleaseVersion>
+    <ReleaseVersion>1.0.5</ReleaseVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -35,6 +35,7 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.3.6.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TestOSMNode.cs" />

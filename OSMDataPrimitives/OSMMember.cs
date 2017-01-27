@@ -12,7 +12,7 @@
 		/// <summary>
 		/// The member-reference-id.
 		/// </summary>
-		public long Ref;
+		public ulong Ref;
 		/// <summary>
 		/// The member-role (usually "inner" or "outer").
 		/// </summary>
@@ -24,7 +24,7 @@
 		/// <param name="type">Type.</param>
 		/// <param name="reference">Reference.</param>
 		/// <param name="role">Role.</param>
-		public OSMMember(MemberType type, long reference, string role)
+		public OSMMember(MemberType type, ulong reference, string role)
 		{
 			this.Type = type;
 			this.Ref = reference;
