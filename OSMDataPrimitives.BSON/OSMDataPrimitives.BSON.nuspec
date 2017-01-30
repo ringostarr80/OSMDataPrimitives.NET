@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>OSMDataPrimitives.BSON</id>
-		<version>1.0.5</version>
+		<version>1.0.6</version>
 		<title>OSMDataPrimitives.BSON</title>
 		<authors>Ringo Leese</authors>
 		<owners>Ringo Leese</owners>
@@ -15,7 +15,7 @@
 		<tags>osm data primitives bson</tags>
 		<dependencies>
 			<dependency id="MongoDB.Bson" version="2.4.0"/>
-			<dependency id="OSMDataPrimitives" version="1.0.4" />
+			<dependency id="OSMDataPrimitives" version="1.0.6" />
 		</dependencies>
 	</metadata>
 	<files>

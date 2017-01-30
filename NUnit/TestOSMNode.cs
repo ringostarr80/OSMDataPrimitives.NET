@@ -126,7 +126,7 @@ namespace NUnit
 				{"osm_id", "2"},
 				{"lat", "52.123456"},
 				{"lon", "12.654321"},
-				{"tags", "\"name\"=>\"bar\",\"ref\"=>\"baz\""}
+				{"tags", "\"name\"=>\"bar\", \"ref\"=>\"baz\""}
 			};
 			Assert.AreEqual(expectedSqlParameters.Count, sqlParameters.Count);
 			foreach(string key in expectedSqlParameters) {

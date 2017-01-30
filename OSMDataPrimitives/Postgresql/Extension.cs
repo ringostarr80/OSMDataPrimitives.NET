@@ -140,27 +140,20 @@ namespace OSMDataPrimitives.PostgreSQL
 				foreach(string tagKey in element.Tags) {
 					tagCounter++;
 					if(tagCounter > 1) {
-						tagsSB.Append(",");
+						tagsSB.Append(", ");
 					}
-					tagsSB.Append("\"" + tagKey.Replace("'", "''") + "\"=>\"" + element.Tags[tagKey].Replace("'", "''") + "\"");
+					tagsSB.Append("\"" + tagKey.Replace("'", "''") + "\"=>\"" + element.Tags[tagKey].Replace("'", "''").Replace("\\", "\\\\").Replace("\"", "\\\"") + "\"");
 				}
+			} else {
+				tagsSB.Append("''");
 			}
 			parameters.Add("tags", tagsSB.ToString());
 
-			//insertSB.Append(", " + tagsSB);
 			insertSB.Append(", @tags::hstore");
 			if(element is OSMWay) {
+				insertSB.Append(", @node_refs::bigint[]");
 				var wayElement = (OSMWay)element;
-				insertSB.Append(", ARRAY[");
-				var nodeRefCounter = 0;
-				foreach(long nodeRef in wayElement.NodeRefs) {
-					nodeRefCounter++;
-					if(nodeRefCounter > 1) {
-						insertSB.Append(", ");
-					}
-					insertSB.Append(nodeRef);
-				}
-				insertSB.Append("]");
+				parameters.Add("node_refs", "{" + string.Join(", ", wayElement.NodeRefs) + "}");
 			}
 			if(element is OSMRelation) {
 				var relationElement = (OSMRelation)element;
@@ -171,11 +164,12 @@ namespace OSMDataPrimitives.PostgreSQL
 					if(membersCounter > 1) {
 						insertSB.Append(", ");
 					}
-					insertSB.Append("hstore(ARRAY[");
-					insertSB.Append("'type','" + member.Type.ToString().ToLower() + "'");
-					insertSB.Append(",'ref','" + member.Ref + "'");
-					insertSB.Append(",'role','" + member.Role.Replace("'", "''") + "'");
-					insertSB.Append("])");
+					insertSB.Append("@member_" + membersCounter + "::hstore");
+					var memberSB = new StringBuilder();
+					memberSB.Append("\"type\"=>\"" + member.Type.ToString().ToLower() + "\",");
+					memberSB.Append("\"ref\"=>\"" + member.Ref + "\",");
+					memberSB.Append("\"role\"=>\"" + member.Role.Replace("'", "''") + "\"");
+					parameters.Add("member_" + membersCounter, memberSB.ToString());
 				}
 				insertSB.Append("]");
 			}
