@@ -71,7 +71,7 @@ namespace OSMDataPrimitives.BSON
 			if(element.Tags.Count > 0) {
 				var tagsDoc = new BsonDocument();
 				foreach(string tagKey in element.Tags) {
-					tagsDoc.Add(tagKey, element.Tags[tagKey]);
+					tagsDoc.Add(tagKey.Replace(".", "\uFF0E").Replace("$", "\uFF04"), element.Tags[tagKey]);
 				}
 				bsonDoc.Add("tags", tagsDoc);
 			}

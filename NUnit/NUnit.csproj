@@ -41,6 +41,8 @@
     <Compile Include="TestOSMNode.cs" />
     <Compile Include="TestOSMWay.cs" />
     <Compile Include="TestOSMRelation.cs" />
+    <Compile Include="TestOSMNodeSpatial.cs" />
+    <Compile Include="TestOSMWaySpatial.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -56,6 +58,10 @@
     <ProjectReference Include="..\OSMDataPrimitives.BSON\OSMDataPrimitives.BSON.csproj">
       <Project>{4C41D41D-BCA0-4EA6-963B-AE0DB4A1064C}</Project>
       <Name>OSMDataPrimitives.BSON</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OSMDataPrimitives.Spatial\OSMDataPrimitives.Spatial.csproj">
+      <Project>{7C936B89-9A77-4715-B00A-3EA50C2500AD}</Project>
+      <Name>OSMDataPrimitives.Spatial</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

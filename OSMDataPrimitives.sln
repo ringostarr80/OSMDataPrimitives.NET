@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnit", "NUnit\NUnit.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSMDataPrimitives.BSON", "OSMDataPrimitives.BSON\OSMDataPrimitives.BSON.csproj", "{4C41D41D-BCA0-4EA6-963B-AE0DB4A1064C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSMDataPrimitives.Spatial", "OSMDataPrimitives.Spatial\OSMDataPrimitives.Spatial.csproj", "{7C936B89-9A77-4715-B00A-3EA50C2500AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{4C41D41D-BCA0-4EA6-963B-AE0DB4A1064C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C41D41D-BCA0-4EA6-963B-AE0DB4A1064C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C41D41D-BCA0-4EA6-963B-AE0DB4A1064C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C936B89-9A77-4715-B00A-3EA50C2500AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C936B89-9A77-4715-B00A-3EA50C2500AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C936B89-9A77-4715-B00A-3EA50C2500AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C936B89-9A77-4715-B00A-3EA50C2500AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
