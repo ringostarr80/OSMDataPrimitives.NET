@@ -6,8 +6,8 @@
 		<title>OSMDataPrimitives</title>
 		<authors>Ringo Leese</authors>
 		<owners>Ringo Leese</owners>
-		<licenseUrl>https://github.com/ringostarr80/OSMDataPrimitives/blob/master/LICENSE</licenseUrl>
-		<projectUrl>https://github.com/ringostarr80/OSMDataPrimitives</projectUrl>
+		<licenseUrl>https://github.com/ringostarr80/OSMDataPrimitives.NET/blob/master/LICENSE</licenseUrl>
+		<projectUrl>https://github.com/ringostarr80/OSMDataPrimitives.NET</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>This pretty little project is intended to provide the 3 basic data types (nodes, ways and relations) of OpenStreetMap as .NET classes</description>
 		<releaseNotes>cloneable OSMElement's.</releaseNotes>

@@ -6,8 +6,8 @@
 		<title>OSMDataPrimitives.BSON</title>
 		<authors>Ringo Leese</authors>
 		<owners>Ringo Leese</owners>
-		<licenseUrl>https://github.com/ringostarr80/OSMDataPrimitives/blob/master/LICENSE</licenseUrl>
-		<projectUrl>https://github.com/ringostarr80/OSMDataPrimitives</projectUrl>
+		<licenseUrl>https://github.com/ringostarr80/OSMDataPrimitives.NET/blob/master/LICENSE</licenseUrl>
+		<projectUrl>https://github.com/ringostarr80/OSMDataPrimitives.NET</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>This is the BSON-Extension for the OSMDataPrimitives project</description>
 		<releaseNotes>some updates.</releaseNotes>
