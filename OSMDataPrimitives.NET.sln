@@ -66,6 +66,6 @@ Global
 		$7.String = Exception
 		$0.VersionControlPolicy = $8
 		$8.inheritsSet = Mono
-		version = 1.0.6
+		version = 1.0.7
 	EndGlobalSection
 EndGlobal

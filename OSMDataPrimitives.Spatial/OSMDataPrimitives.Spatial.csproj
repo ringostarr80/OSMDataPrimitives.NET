@@ -8,7 +8,7 @@
     <RootNamespace>OSMDataPrimitives.Spatial</RootNamespace>
     <AssemblyName>OSMDataPrimitives.Spatial</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <ReleaseVersion>1.0.6</ReleaseVersion>
+    <ReleaseVersion>1.0.7</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

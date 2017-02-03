@@ -142,7 +142,7 @@ namespace OSMDataPrimitives.PostgreSQL
 					if(tagCounter > 1) {
 						tagsSB.Append(", ");
 					}
-					tagsSB.Append("\"" + tagKey.Replace("'", "''") + "\"=>\"" + element.Tags[tagKey].Replace("'", "''").Replace("\\", "\\\\").Replace("\"", "\\\"") + "\"");
+					tagsSB.Append("\"" + ReplaceHstoreValue(tagKey) + "\"=>\"" + ReplaceHstoreValue(element.Tags[tagKey]) + "\"");
 				}
 			} else {
 				tagsSB.Append("''");
@@ -168,7 +168,7 @@ namespace OSMDataPrimitives.PostgreSQL
 					var memberSB = new StringBuilder();
 					memberSB.Append("\"type\"=>\"" + member.Type.ToString().ToLower() + "\",");
 					memberSB.Append("\"ref\"=>\"" + member.Ref + "\",");
-					memberSB.Append("\"role\"=>\"" + member.Role.Replace("'", "''") + "\"");
+					memberSB.Append("\"role\"=>\"" + ReplaceHstoreValue(member.Role) + "\"");
 					parameters.Add("member_" + membersCounter, memberSB.ToString());
 				}
 				insertSB.Append("]");
@@ -191,6 +191,11 @@ namespace OSMDataPrimitives.PostgreSQL
 			}
 
 			return nodeRefs;
+		}
+
+		private static string ReplaceHstoreValue(string val)
+		{
+			return val.Replace("'", "''").Replace("\\", "\\\\").Replace("\"", "\\\"");
 		}
 
 		private static NameValueCollection ParseHstore(string hstoreString)

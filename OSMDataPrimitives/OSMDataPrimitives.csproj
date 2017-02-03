@@ -8,8 +8,8 @@
     <RootNamespace>OSMDataPrimitives</RootNamespace>
     <AssemblyName>OSMDataPrimitives</AssemblyName>
     <TargetFrameworkProfile />
-    <ReleaseVersion>1.0.6</ReleaseVersion>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ReleaseVersion>1.0.7</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
