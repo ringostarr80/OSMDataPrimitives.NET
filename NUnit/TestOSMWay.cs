@@ -174,22 +174,25 @@ namespace NUnit
 		{
 			var way = this.GetDefaultOSMWay();
 			var sqlSelect = way.ToPostgreSQLSelect();
-			var expectedSql = "SELECT osm_id, tags, node_refs FROM ways";
+			var expectedSql = "SELECT osm_id, tags, node_refs::text FROM ways WHERE osm_id = 2";
 			Assert.AreEqual(expectedSql, sqlSelect);
 
 			sqlSelect = way.ToPostgreSQLSelect(inclusiveMetaField: true);
-			expectedSql = "SELECT osm_id, version, changeset, uid, user, timestamp, tags, node_refs FROM ways";
+			expectedSql = "SELECT osm_id, version, changeset, uid, user, timestamp, tags, node_refs::text FROM ways WHERE osm_id = 2";
 			Assert.AreEqual(expectedSql, sqlSelect);
 
-			sqlSelect = way.ToPostgreSQLSelect(id: 6);
-			expectedSql = "SELECT osm_id, tags, node_refs FROM ways WHERE osm_id = 6";
+			way.OverrideId(6);
+			sqlSelect = way.ToPostgreSQLSelect();
+			expectedSql = "SELECT osm_id, tags, node_refs::text FROM ways WHERE osm_id = 6";
 			Assert.AreEqual(expectedSql, sqlSelect);
+		}
 
-			sqlSelect = way.ToPostgreSQLSelect(offset: 20, limit: 200);
-			expectedSql = "SELECT osm_id, tags, node_refs FROM ways OFFSET 20 LIMIT 200";
-			Assert.AreEqual(expectedSql, sqlSelect);
-
-			Assert.Throws(typeof(ArgumentException), () => { way.ToPostgreSQLSelect(id: 6, offset: 20, limit: 200); });
+		[Test]
+		public void TestOSMWayToPostgreSQLDeleteString()
+		{
+			var way = this.GetDefaultOSMWay();
+			var expectedSql = "DELETE FROM ways WHERE osm_id = 2";
+			Assert.AreEqual(expectedSql, way.ToPostgreSQLDelete());
 		}
 
 		[Test]

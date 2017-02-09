@@ -64,6 +64,55 @@ namespace NUnit
 			return way;
 		}
 
+		private OSMWaySpatial GetClockwiseOSMWaySpatial()
+		{
+			var way = new OSMWaySpatial(90105666) {
+				Version = 3,
+				Changeset = 15554642,
+				UserId = 173844,
+				UserName = "Antikalk",
+				Timestamp = new DateTime(2013, 3, 30, 18, 25, 11, DateTimeKind.Utc)
+			};
+			way.Tags.Add("addr:city", "Düsseldorf");
+			way.Tags.Add("addr:country", "DE");
+			way.Tags.Add("addr:housenumber", "6");
+			way.Tags.Add("addr:postcode", "40591");
+			way.Tags.Add("addr:street", "Opladener Straße");
+			way.Tags.Add("building", "yes");
+			way.Nodes.Add(new OSMNodeSpatial(1044559491, 51.1878774, 6.8192821));
+			way.Nodes.Add(new OSMNodeSpatial(1044559375, 51.1878761, 6.8191117));
+			way.Nodes.Add(new OSMNodeSpatial(1044559424, 51.1879890, 6.8191095));
+			way.Nodes.Add(new OSMNodeSpatial(1044559405, 51.1879903, 6.8192799));
+			way.Nodes.Add(new OSMNodeSpatial(1044559535, 51.1879820, 6.8192801));
+			way.Nodes.Add(new OSMNodeSpatial(1044559491, 51.1878774, 6.8192821));
+
+			return way;
+		}
+
+		private OSMWaySpatial GetCounterClockwiseOSMWaySpatial()
+		{
+			var way = new OSMWaySpatial(273579651) {
+				Version = 2,
+				Changeset = 21634385,
+				UserId = 24644,
+				UserName = "Athemis",
+				Timestamp = new DateTime(2014, 4, 11, 20, 29, 49, DateTimeKind.Utc)
+			};
+			way.Tags.Add("addr:city", "Düsseldorf");
+			way.Tags.Add("addr:country", "DE");
+			way.Tags.Add("addr:housenumber", "185");
+			way.Tags.Add("addr:postcode", "40591");
+			way.Tags.Add("addr:street", "Kölner Landstraße");
+			way.Tags.Add("building", "yes");
+			way.Nodes.Add(new OSMNodeSpatial(2784120049, 51.1882391, 6.8179689));
+			way.Nodes.Add(new OSMNodeSpatial(2784120048, 51.1881964, 6.8178443));
+			way.Nodes.Add(new OSMNodeSpatial(2784120046, 51.1880588, 6.8179631));
+			way.Nodes.Add(new OSMNodeSpatial(2784120047, 51.1880967, 6.8180917));
+			way.Nodes.Add(new OSMNodeSpatial(2784120049, 51.1882391, 6.8179689));
+
+			return way;
+		}
+
 		[Test]
 		public void TestOSMWaySpatialClone()
 		{
@@ -91,6 +140,53 @@ namespace NUnit
 		{
 			var closedWay = this.GetClosedOSMWaySpatial();
 			Assert.AreEqual(true, closedWay.IsClosed);
+		}
+
+		[Test]
+		public void TestOSMWaySpatialDirectionClockwise()
+		{
+			var counterClockwiseWay = this.GetCounterClockwiseOSMWaySpatial();
+			Assert.AreEqual(PolygonDirection.CounterClockwise, counterClockwiseWay.Direction);
+		}
+
+		[Test]
+		public void TestOSMWaySpatialDirectionCounterClockwise()
+		{
+			var clockwiseWay = this.GetClockwiseOSMWaySpatial();
+			Assert.AreEqual(PolygonDirection.Clockwise, clockwiseWay.Direction);
+		}
+
+		[Test]
+		public void TestOSMWaySpatialReverse()
+		{
+			var clockwiseWay = this.GetClockwiseOSMWaySpatial();
+			var counterClockwiseWay = clockwiseWay.Reverse();
+			Assert.AreEqual(PolygonDirection.CounterClockwise, counterClockwiseWay.Direction);
+		}
+
+		[Test]
+		public void TestOSMWaySpatialToWkt()
+		{
+			var way = this.GetDefaultOSMWaySpatial();
+			var wkt = way.ToWkt();
+			var expectedWkt = "LINESTRING (9.9936292 53.5510746, 9.9937873 53.5511904, 9.9943703 53.5515143, 9.994567 53.5516129)";
+			Assert.AreEqual(expectedWkt, wkt);
+		}
+
+		[Test]
+		public void TestOSMWaySpatialPointIsInPolygon()
+		{
+			var polygon = this.GetClosedOSMWaySpatial();
+
+			Assert.True(polygon.PointInPolygon(53.5514198, 9.9944637));
+			Assert.True(polygon.PointInPolygon(53.5511411, 9.9948384));
+			Assert.True(polygon.PointInPolygon(53.5509208, 9.9944416));
+			Assert.True(polygon.PointInPolygon(53.5510938, 9.9940587));
+
+			Assert.False(polygon.PointInPolygon(53.5512706, 9.9948439));
+			Assert.False(polygon.PointInPolygon(53.5507803, 9.9945476));
+			Assert.False(polygon.PointInPolygon(53.5509482, 9.9939608));
+			Assert.False(polygon.PointInPolygon(53.5513296, 9.9938440));
 		}
 	}
 }

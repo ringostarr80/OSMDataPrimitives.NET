@@ -39,5 +39,13 @@ namespace NUnit
 			var direction = node1.GetDirection(node2);
 			Assert.AreEqual(168, (int)direction);
 		}
+
+		public void TestNodeToWkt()
+		{
+			var node = this.GetOSMNodeSpatial1();
+			var wkt = node.ToWkt();
+			var expectedWkt = "POINT (53.553345 9.992475)";
+			Assert.AreEqual(expectedWkt, wkt);
+		}
 	}
 }

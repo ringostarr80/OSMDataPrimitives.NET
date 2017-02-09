@@ -151,22 +151,25 @@ namespace NUnit
 		{
 			var relation = this.GetDefaultOSMRelation();
 			var sqlSelect = relation.ToPostgreSQLSelect();
-			var expectedSql = "SELECT osm_id, tags, members FROM relations";
+			var expectedSql = "SELECT osm_id, tags, members FROM relations WHERE osm_id = 2";
 			Assert.AreEqual(expectedSql, sqlSelect);
 
 			sqlSelect = relation.ToPostgreSQLSelect(inclusiveMetaField: true);
-			expectedSql = "SELECT osm_id, version, changeset, uid, user, timestamp, tags, members FROM relations";
+			expectedSql = "SELECT osm_id, version, changeset, uid, user, timestamp, tags, members FROM relations WHERE osm_id = 2";
 			Assert.AreEqual(expectedSql, sqlSelect);
 
-			sqlSelect = relation.ToPostgreSQLSelect(id: 7);
+			relation.OverrideId(7);
+			sqlSelect = relation.ToPostgreSQLSelect();
 			expectedSql = "SELECT osm_id, tags, members FROM relations WHERE osm_id = 7";
 			Assert.AreEqual(expectedSql, sqlSelect);
+		}
 
-			sqlSelect = relation.ToPostgreSQLSelect(offset: 30, limit: 300);
-			expectedSql = "SELECT osm_id, tags, members FROM relations OFFSET 30 LIMIT 300";
-			Assert.AreEqual(expectedSql, sqlSelect);
-
-			Assert.Throws(typeof(ArgumentException), () => { relation.ToPostgreSQLSelect(id: 7, offset: 30, limit: 300); });
+		[Test]
+		public void TestOSMRelationToPostgreSQLDeleteString()
+		{
+			var relation = this.GetDefaultOSMRelation();
+			var expectedSql = "DELETE FROM relations WHERE osm_id = 2";
+			Assert.AreEqual(expectedSql, relation.ToPostgreSQLDelete());
 		}
 
 		[Test]

@@ -140,22 +140,25 @@ namespace NUnit
 		{
 			var node = this.GetDefaultOSMNode();
 			var sqlSelect = node.ToPostgreSQLSelect();
-			var expectedSql = "SELECT osm_id, lat, lon, tags FROM nodes";
+			var expectedSql = "SELECT osm_id, lat, lon, tags FROM nodes WHERE osm_id = 2";
 			Assert.AreEqual(expectedSql, sqlSelect);
 
 			sqlSelect = node.ToPostgreSQLSelect(inclusiveMetaField: true);
-			expectedSql = "SELECT osm_id, version, changeset, uid, user, timestamp, lat, lon, tags FROM nodes";
+			expectedSql = "SELECT osm_id, version, changeset, uid, user, timestamp, lat, lon, tags FROM nodes WHERE osm_id = 2";
 			Assert.AreEqual(expectedSql, sqlSelect);
 
-			sqlSelect = node.ToPostgreSQLSelect(id: 5);
+			node.OverrideId(5);
+			sqlSelect = node.ToPostgreSQLSelect();
 			expectedSql = "SELECT osm_id, lat, lon, tags FROM nodes WHERE osm_id = 5";
 			Assert.AreEqual(expectedSql, sqlSelect);
+		}
 
-			sqlSelect = node.ToPostgreSQLSelect(offset: 10, limit: 100);
-			expectedSql = "SELECT osm_id, lat, lon, tags FROM nodes OFFSET 10 LIMIT 100";
-			Assert.AreEqual(expectedSql, sqlSelect);
-
-			Assert.Throws(typeof(ArgumentException), () => { node.ToPostgreSQLSelect(id: 5, offset: 10, limit: 100); });
+		[Test]
+		public void TestOSMNodeToPostgreSQLDeleteString()
+		{
+			var node = this.GetDefaultOSMNode();
+			var expectedSql = "DELETE FROM nodes WHERE osm_id = 2";
+			Assert.AreEqual(expectedSql, node.ToPostgreSQLDelete());
 		}
 
 		[Test]

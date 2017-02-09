@@ -40,10 +40,7 @@ namespace OSMDataPrimitives.PostgreSQL
 		/// <returns>The PostgreSQL Select String.</returns>
 		/// <param name="element">Element.</param>
 		/// <param name="inclusiveMetaField">If set to <c>true</c> inclusive meta field.</param>
-		/// <param name="id">Identifier.</param>
-		/// <param name="limit">Limit.</param>
-		/// <param name="offset">Offset.</param>
-		public static string ToPostgreSQLSelect(this IOSMElement element, bool inclusiveMetaField = false, ulong id = 0, ulong limit = 0, ulong offset = 0)
+		public static string ToPostgreSQLSelect(this IOSMElement element, bool inclusiveMetaField = false)
 		{
 			var table = string.Empty;
 			var selectSB = new StringBuilder("SELECT osm_id");
@@ -56,7 +53,7 @@ namespace OSMDataPrimitives.PostgreSQL
 			}
 			selectSB.Append(", tags");
 			if(element is OSMWay) {
-				selectSB.Append(", node_refs");
+				selectSB.Append(", node_refs::text");
 				table = "ways";
 			}
 			if(element is OSMRelation) {
@@ -65,20 +62,33 @@ namespace OSMDataPrimitives.PostgreSQL
 			}
 
 			selectSB.Append(" FROM " + table);
-			if(id != 0) {
-				selectSB.Append(" WHERE osm_id = " + id);
-				if(offset != 0 || limit != 0) {
-					throw new ArgumentException("The parameter 'offset' and/or 'limit' are not allowed (makes no sense), if 'id' is set!", nameof(id));
-				}
-			}
-			if(offset != 0) {
-				selectSB.Append(" OFFSET " + offset);
-			}
-			if(limit != 0) {
-				selectSB.Append(" LIMIT " + limit);
-			}
+			selectSB.Append(" WHERE osm_id = " + element.Id);
 
 			return selectSB.ToString();
+		}
+
+		/// <summary>
+		/// Converts the OSMElement to a PostgreSQL Delete String.
+		/// </summary>
+		/// <returns>The PostgreSQL Delete String.</returns>
+		/// <param name="element">Element.</param>
+		/// <param name="tableName">TableName.</param>
+		public static string ToPostgreSQLDelete(this IOSMElement element, string tableName = null)
+		{
+			var table = string.Empty;
+			if(tableName != null) {
+				table = tableName;
+			} else {
+				if(element is OSMNode) {
+					table = "nodes";
+				} else if(element is OSMWay) {
+					table = "ways";
+				} else if(element is OSMRelation) {
+					table = "relations";
+				}
+			}
+
+			return string.Format("DELETE FROM {0} WHERE osm_id = {1}", table, element.Id);
 		}
 
 		/// <summary>
