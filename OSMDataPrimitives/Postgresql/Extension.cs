@@ -167,21 +167,25 @@ namespace OSMDataPrimitives.PostgreSQL
 			}
 			if(element is OSMRelation) {
 				var relationElement = (OSMRelation)element;
-				insertSB.Append(", ARRAY[");
-				var membersCounter = 0;
-				foreach(var member in relationElement.Members) {
-					membersCounter++;
-					if(membersCounter > 1) {
-						insertSB.Append(", ");
+				if(relationElement.Members.Count > 0) {
+					insertSB.Append(", ARRAY[");
+					var membersCounter = 0;
+					foreach(var member in relationElement.Members) {
+						membersCounter++;
+						if(membersCounter > 1) {
+							insertSB.Append(", ");
+						}
+						insertSB.Append("@member_" + membersCounter + "::hstore");
+						var memberSB = new StringBuilder();
+						memberSB.Append("\"type\"=>\"" + member.Type.ToString().ToLower() + "\",");
+						memberSB.Append("\"ref\"=>\"" + member.Ref + "\",");
+						memberSB.Append("\"role\"=>\"" + ReplaceHstoreValue(member.Role) + "\"");
+						parameters.Add("member_" + membersCounter, memberSB.ToString());
 					}
-					insertSB.Append("@member_" + membersCounter + "::hstore");
-					var memberSB = new StringBuilder();
-					memberSB.Append("\"type\"=>\"" + member.Type.ToString().ToLower() + "\",");
-					memberSB.Append("\"ref\"=>\"" + member.Ref + "\",");
-					memberSB.Append("\"role\"=>\"" + ReplaceHstoreValue(member.Role) + "\"");
-					parameters.Add("member_" + membersCounter, memberSB.ToString());
+					insertSB.Append("]");
+				} else {
+					insertSB.Append(", '{}'");
 				}
-				insertSB.Append("]");
 			}
 			insertSB.Append(")");
 

@@ -147,6 +147,18 @@ namespace NUnit
 		}
 
 		[Test]
+		public void TestOSMRelationWithoutMembersToPostgreSQLInsertString()
+		{
+			var relation = this.GetDefaultOSMRelation();
+			relation.Members.Clear();
+			NameValueCollection sqlParameters;
+			var sqlInsert = relation.ToPostgreSQLInsert(out sqlParameters);
+			var expectedSql = "INSERT INTO relations (osm_id, tags, members) ";
+			expectedSql += "VALUES(@osm_id::bigint, @tags::hstore, '{}')";
+			Assert.AreEqual(expectedSql, sqlInsert);
+		}
+
+		[Test]
 		public void TestOSMRelationToPostgreSQLSelectString()
 		{
 			var relation = this.GetDefaultOSMRelation();
