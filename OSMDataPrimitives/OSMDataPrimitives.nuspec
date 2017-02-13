@@ -2,7 +2,7 @@
 <package>
 	<metadata>
 		<id>OSMDataPrimitives</id>
-		<version>1.0.9</version>
+		<version>1.0.10</version>
 		<title>OSMDataPrimitives</title>
 		<authors>Ringo Leese</authors>
 		<owners>Ringo Leese</owners>
@@ -10,7 +10,7 @@
 		<projectUrl>https://github.com/ringostarr80/OSMDataPrimitives.NET</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>This pretty little project is intended to provide the 3 basic data types (nodes, ways and relations) of OpenStreetMap as .NET classes</description>
-		<releaseNotes>fixed an issue in PostgreSQL Extension.</releaseNotes>
+		<releaseNotes>fixed another issue in PostgreSQL Extension.</releaseNotes>
 		<copyright>Copyright 2017</copyright>
 		<tags>osm data primitives</tags>
 	</metadata>

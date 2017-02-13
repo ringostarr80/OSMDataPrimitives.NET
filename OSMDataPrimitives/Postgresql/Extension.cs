@@ -51,13 +51,13 @@ namespace OSMDataPrimitives.PostgreSQL
 				selectSB.Append(", lat, lon");
 				table = "nodes";
 			}
-			selectSB.Append(", tags");
+			selectSB.Append(", tags::text");
 			if(element is OSMWay) {
 				selectSB.Append(", node_refs::text");
 				table = "ways";
 			}
 			if(element is OSMRelation) {
-				selectSB.Append(", members");
+				selectSB.Append(", members::text");
 				table = "relations";
 			}
 
