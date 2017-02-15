@@ -237,6 +237,10 @@ namespace OSMDataPrimitives.Spatial
 				innerWays.RemoveInvalidPolygons();
 				innerWays.EnsurePolygonDirection();
 
+				if(outerWays.Count == 0) {
+					throw new Exception("invalid polygon data.");
+				}
+
 				foreach(var outerWay in outerWays) {
 					wayCounter++;
 					if(wayCounter > 1) {
