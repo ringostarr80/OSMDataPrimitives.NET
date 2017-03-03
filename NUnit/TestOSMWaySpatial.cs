@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using OSMDataPrimitives;
 using OSMDataPrimitives.Spatial;
 
 namespace NUnit
@@ -7,6 +8,27 @@ namespace NUnit
 	[TestFixture]
 	public class TestOSMWaySpatial
 	{
+		private OSMWay GetDefaultOSMWay()
+		{
+			var way = new OSMWay(2) {
+				UserId = 5,
+				UserName = "foo",
+				Version = 3,
+				Changeset = 7,
+				Timestamp = new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc)
+			};
+			way.NodeRefs.Add(5);
+			way.NodeRefs.Add(9);
+			way.NodeRefs.Add(12);
+			way.NodeRefs.Add(543);
+			way.NodeRefs.Add(43);
+			way.NodeRefs.Add(1234151);
+			way.Tags.Add("name", "this road");
+			way.Tags.Add("ref", "A1");
+
+			return way;
+		}
+
 		private OSMWaySpatial GetDefaultOSMWaySpatial()
 		{
 			var way = new OSMWaySpatial(19410366) {
@@ -126,6 +148,57 @@ namespace NUnit
 
 			Assert.AreEqual(53.5510746, defaultWay.Nodes[0].Latitude);
 			Assert.AreEqual(9.9936292, defaultWay.Nodes[0].Longitude);
+		}
+
+		[Test]
+		public void TestOSMWaySpatialConstructorWithOSMWay()
+		{
+			var way = this.GetDefaultOSMWay();
+			var waySpatial = new OSMWaySpatial(way);
+
+			waySpatial.Changeset += 1;
+			waySpatial.Version += 1;
+			waySpatial.UserId = 2;
+			waySpatial.UserName = "bar";
+			waySpatial.Timestamp = new DateTime(2017, 1, 25, 15, 20, 55, DateTimeKind.Utc);
+			waySpatial.Tags["name"] = "that street";
+			waySpatial.Tags["ref"] = "B2";
+			waySpatial.NodeRefs.Clear();
+			waySpatial.NodeRefs.Add(15);
+			waySpatial.NodeRefs.Add(19);
+			waySpatial.NodeRefs.Add(112);
+			waySpatial.NodeRefs.Add(1543);
+			waySpatial.NodeRefs.Add(143);
+			waySpatial.NodeRefs.Add(11234151);
+
+			Assert.AreEqual(7, way.Changeset);
+			Assert.AreEqual(8, waySpatial.Changeset);
+			Assert.AreEqual(3, way.Version);
+			Assert.AreEqual(4, waySpatial.Version);
+			Assert.AreEqual(5, way.UserId);
+			Assert.AreEqual(2, waySpatial.UserId);
+			Assert.AreEqual("foo", way.UserName);
+			Assert.AreEqual("bar", waySpatial.UserName);
+			Assert.AreEqual(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc), way.Timestamp);
+			Assert.AreEqual(new DateTime(2017, 1, 25, 15, 20, 55, DateTimeKind.Utc), waySpatial.Timestamp);
+			Assert.AreEqual("this road", way.Tags["name"]);
+			Assert.AreEqual("that street", waySpatial.Tags["name"]);
+			Assert.AreEqual("A1", way.Tags["ref"]);
+			Assert.AreEqual("B2", waySpatial.Tags["ref"]);
+
+			Assert.AreEqual(5, way.NodeRefs[0]);
+			Assert.AreEqual(9, way.NodeRefs[1]);
+			Assert.AreEqual(12, way.NodeRefs[2]);
+			Assert.AreEqual(543, way.NodeRefs[3]);
+			Assert.AreEqual(43, way.NodeRefs[4]);
+			Assert.AreEqual(1234151, way.NodeRefs[5]);
+
+			Assert.AreEqual(15, waySpatial.NodeRefs[0]);
+			Assert.AreEqual(19, waySpatial.NodeRefs[1]);
+			Assert.AreEqual(112, waySpatial.NodeRefs[2]);
+			Assert.AreEqual(1543, waySpatial.NodeRefs[3]);
+			Assert.AreEqual(143, waySpatial.NodeRefs[4]);
+			Assert.AreEqual(11234151, waySpatial.NodeRefs[5]);
 		}
 
 		[Test]

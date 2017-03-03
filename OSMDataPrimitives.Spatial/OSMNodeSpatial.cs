@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 
 namespace OSMDataPrimitives.Spatial
 {
@@ -27,6 +28,22 @@ namespace OSMDataPrimitives.Spatial
 		public OSMNodeSpatial(ulong id, double latitude, double longitude) : base(id, latitude, longitude)
 		{
 
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.Spatial.OSMNodeSpatial"/> class.
+		/// </summary>
+		/// <param name="node">Node.</param>
+		public OSMNodeSpatial(OSMNode node) : base(node.Id)
+		{
+			this.Latitude = node.Latitude;
+			this.Longitude = node.Longitude;
+			this.Changeset = node.Changeset;
+			this.Timestamp = node.Timestamp;
+			this.UserId = node.UserId;
+			this.UserName = node.UserName;
+			this.Version = node.Version;
+			this.Tags = new NameValueCollection(node.Tags);
 		}
 
 		private double DegreeToRadian(double angle)

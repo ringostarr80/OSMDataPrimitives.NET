@@ -174,16 +174,16 @@ namespace NUnit
 		{
 			var way = this.GetDefaultOSMWay();
 			var sqlSelect = way.ToPostgreSQLSelect();
-			var expectedSql = "SELECT osm_id, tags, node_refs::text FROM ways WHERE osm_id = 2";
+			var expectedSql = "SELECT osm_id, tags::text, node_refs::text FROM ways WHERE osm_id = 2";
 			Assert.AreEqual(expectedSql, sqlSelect);
 
 			sqlSelect = way.ToPostgreSQLSelect(inclusiveMetaField: true);
-			expectedSql = "SELECT osm_id, version, changeset, uid, user, timestamp, tags, node_refs::text FROM ways WHERE osm_id = 2";
+			expectedSql = "SELECT osm_id, version, changeset, uid, user, timestamp, tags::text, node_refs::text FROM ways WHERE osm_id = 2";
 			Assert.AreEqual(expectedSql, sqlSelect);
 
 			way.OverrideId(6);
 			sqlSelect = way.ToPostgreSQLSelect();
-			expectedSql = "SELECT osm_id, tags, node_refs::text FROM ways WHERE osm_id = 6";
+			expectedSql = "SELECT osm_id, tags::text, node_refs::text FROM ways WHERE osm_id = 6";
 			Assert.AreEqual(expectedSql, sqlSelect);
 		}
 

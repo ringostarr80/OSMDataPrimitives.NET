@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 
 namespace OSMDataPrimitives.Spatial
 {
@@ -81,6 +82,21 @@ namespace OSMDataPrimitives.Spatial
 		public OSMWaySpatial(ulong id) : base(id)
 		{
 
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.Spatial.OSMWaySpatial"/> class.
+		/// </summary>
+		/// <param name="way">Way.</param>
+		public OSMWaySpatial(OSMWay way) : base(way.Id)
+		{
+			this.Changeset = way.Changeset;
+			this.Timestamp = way.Timestamp;
+			this.UserId = way.UserId;
+			this.UserName = way.UserName;
+			this.Version = way.Version;
+			this.Tags = new NameValueCollection(way.Tags);
+			this.NodeRefs = new List<ulong>(way.NodeRefs);
 		}
 
 		/// <summary>

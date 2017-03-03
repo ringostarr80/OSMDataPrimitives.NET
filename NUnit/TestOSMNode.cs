@@ -140,16 +140,16 @@ namespace NUnit
 		{
 			var node = this.GetDefaultOSMNode();
 			var sqlSelect = node.ToPostgreSQLSelect();
-			var expectedSql = "SELECT osm_id, lat, lon, tags FROM nodes WHERE osm_id = 2";
+			var expectedSql = "SELECT osm_id, lat, lon, tags::text FROM nodes WHERE osm_id = 2";
 			Assert.AreEqual(expectedSql, sqlSelect);
 
 			sqlSelect = node.ToPostgreSQLSelect(inclusiveMetaField: true);
-			expectedSql = "SELECT osm_id, version, changeset, uid, user, timestamp, lat, lon, tags FROM nodes WHERE osm_id = 2";
+			expectedSql = "SELECT osm_id, version, changeset, uid, user, timestamp, lat, lon, tags::text FROM nodes WHERE osm_id = 2";
 			Assert.AreEqual(expectedSql, sqlSelect);
 
 			node.OverrideId(5);
 			sqlSelect = node.ToPostgreSQLSelect();
-			expectedSql = "SELECT osm_id, lat, lon, tags FROM nodes WHERE osm_id = 5";
+			expectedSql = "SELECT osm_id, lat, lon, tags::text FROM nodes WHERE osm_id = 5";
 			Assert.AreEqual(expectedSql, sqlSelect);
 		}
 

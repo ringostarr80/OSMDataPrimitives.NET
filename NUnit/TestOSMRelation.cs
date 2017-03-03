@@ -163,16 +163,16 @@ namespace NUnit
 		{
 			var relation = this.GetDefaultOSMRelation();
 			var sqlSelect = relation.ToPostgreSQLSelect();
-			var expectedSql = "SELECT osm_id, tags, members FROM relations WHERE osm_id = 2";
+			var expectedSql = "SELECT osm_id, tags::text, members::text FROM relations WHERE osm_id = 2";
 			Assert.AreEqual(expectedSql, sqlSelect);
 
 			sqlSelect = relation.ToPostgreSQLSelect(inclusiveMetaField: true);
-			expectedSql = "SELECT osm_id, version, changeset, uid, user, timestamp, tags, members FROM relations WHERE osm_id = 2";
+			expectedSql = "SELECT osm_id, version, changeset, uid, user, timestamp, tags::text, members::text FROM relations WHERE osm_id = 2";
 			Assert.AreEqual(expectedSql, sqlSelect);
 
 			relation.OverrideId(7);
 			sqlSelect = relation.ToPostgreSQLSelect();
-			expectedSql = "SELECT osm_id, tags, members FROM relations WHERE osm_id = 7";
+			expectedSql = "SELECT osm_id, tags::text, members::text FROM relations WHERE osm_id = 7";
 			Assert.AreEqual(expectedSql, sqlSelect);
 		}
 
