@@ -17,10 +17,7 @@ namespace OSMDataPrimitives
 		public List<ulong> NodeRefs {
 			get { return this._nodeRefs; }
 			set {
-				if(value == null) {
-					throw new NullReferenceException("NodeRefs can't be null.");
-				}
-				this._nodeRefs = value;
+				this._nodeRefs = value ?? throw new NullReferenceException("NodeRefs can't be null.");
 			}
 		}
 

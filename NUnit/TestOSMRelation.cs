@@ -128,8 +128,7 @@ namespace NUnit
 		public void TestOSMRelationToPostgreSQLInsertString()
 		{
 			var relation = this.GetDefaultOSMRelation();
-			NameValueCollection sqlParameters;
-			var sqlInsert = relation.ToPostgreSQLInsert(out sqlParameters);
+			var sqlInsert = relation.ToPostgreSQLInsert(out NameValueCollection sqlParameters);
 			var expectedSql = "INSERT INTO relations (osm_id, tags, members) ";
 			expectedSql += "VALUES(@osm_id::bigint, @tags::hstore, ARRAY[@member_1::hstore, @member_2::hstore])";
 			Assert.AreEqual(expectedSql, sqlInsert);
@@ -140,7 +139,7 @@ namespace NUnit
 				{"member_2", "\"type\"=>\"way\",\"ref\"=>\"234\",\"role\"=>\"outer\""}
 			};
 			Assert.AreEqual(expectedSqlParameters.Count, sqlParameters.Count);
-			foreach(string key in expectedSqlParameters) {
+			foreach (string key in expectedSqlParameters) {
 				Assert.NotNull(sqlParameters[key]);
 				Assert.AreEqual(expectedSqlParameters[key], sqlParameters[key]);
 			}
@@ -151,8 +150,7 @@ namespace NUnit
 		{
 			var relation = this.GetDefaultOSMRelation();
 			relation.Members.Clear();
-			NameValueCollection sqlParameters;
-			var sqlInsert = relation.ToPostgreSQLInsert(out sqlParameters);
+			var sqlInsert = relation.ToPostgreSQLInsert(out NameValueCollection sqlParameters);
 			var expectedSql = "INSERT INTO relations (osm_id, tags, members) ";
 			expectedSql += "VALUES(@osm_id::bigint, @tags::hstore, '{}')";
 			Assert.AreEqual(expectedSql, sqlInsert);
@@ -222,6 +220,47 @@ namespace NUnit
 			Assert.AreEqual("way", member2Doc.GetElement("type").Value.AsString);
 			Assert.AreEqual(234, member2Doc.GetElement("ref").Value.AsInt64);
 			Assert.AreEqual("outer", member2Doc.GetElement("role").Value.AsString);
+		}
+
+		[Test]
+		public void TestOSMRelationParseBsonDocument()
+		{
+			var relation = this.GetDefaultOSMRelation();
+			var bsonDoc = relation.ToBson();
+
+			var parsedRelation = new OSMRelation(0);
+			parsedRelation.ParseBsonDocument(bsonDoc);
+
+			var relation2 = new OSMRelation(2) {
+				UserId = 5,
+				UserName = "foo",
+				Version = 3,
+				Changeset = 7,
+				Timestamp = new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc)
+			};
+			relation2.Tags.Add("name", "this country");
+			relation2.Tags.Add("ref", "DE");
+			relation2.Members.Add(new OSMMember(MemberType.Way, 123, "inner"));
+			relation2.Members.Add(new OSMMember(MemberType.Way, 234, "outer"));
+
+			Assert.AreEqual(relation.Id, parsedRelation.Id);
+			Assert.AreEqual(relation.UserId, parsedRelation.UserId);
+			Assert.AreEqual(relation.UserName, parsedRelation.UserName);
+			Assert.AreEqual(relation.Version, parsedRelation.Version);
+			Assert.AreEqual(relation.Changeset, parsedRelation.Changeset);
+			Assert.AreEqual(relation.Timestamp, parsedRelation.Timestamp);
+			Assert.AreEqual(relation.Tags.Count, parsedRelation.Tags.Count);
+			Assert.AreEqual(relation.Members.Count, parsedRelation.Members.Count);
+
+			foreach (string key in relation.Tags) {
+				Assert.AreEqual(relation.Tags[key], parsedRelation.Tags[key]);
+			}
+
+			for (var i = 0; i < relation.Members.Count; i++) {
+				Assert.AreEqual(relation.Members[i].Type, parsedRelation.Members[i].Type);
+				Assert.AreEqual(relation.Members[i].Ref, parsedRelation.Members[i].Ref);
+				Assert.AreEqual(relation.Members[i].Role, parsedRelation.Members[i].Role);
+			}
 		}
 	}
 }

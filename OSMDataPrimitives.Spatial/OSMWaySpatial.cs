@@ -19,10 +19,7 @@ namespace OSMDataPrimitives.Spatial
 		public List<OSMNodeSpatial> Nodes {
 			get { return this._nodes; }
 			set {
-				if(value == null) {
-					throw new NullReferenceException("Nodes can't be null.");
-				}
-				this._nodes = value;
+				this._nodes = value ?? throw new NullReferenceException("Nodes can't be null.");
 			}
 		}
 
@@ -38,14 +35,14 @@ namespace OSMDataPrimitives.Spatial
 		/// <value><c>true</c> if this way is a closed line (polygon); otherwise, <c>false</c>.</value>
 		public bool IsClosed {
 			get {
-				if(this._nodes.Count < 3) {
+				if (this._nodes.Count < 3) {
 					return false;
 				}
 				var lastNodeIndex = this._nodes.Count - 1;
-				if(Math.Abs(this._nodes[0].Latitude - this._nodes[lastNodeIndex].Latitude) > double.Epsilon) {
+				if (Math.Abs(this._nodes[0].Latitude - this._nodes[lastNodeIndex].Latitude) > double.Epsilon) {
 					return false;
 				}
-				if(Math.Abs(this._nodes[0].Longitude - this._nodes[lastNodeIndex].Longitude) > double.Epsilon) {
+				if (Math.Abs(this._nodes[0].Longitude - this._nodes[lastNodeIndex].Longitude) > double.Epsilon) {
 					return false;
 				}
 
@@ -61,9 +58,9 @@ namespace OSMDataPrimitives.Spatial
 			get {
 				var nodesCount = this._nodes.Count;
 				var sum = 0.0;
-				for(var i = 0; i < nodesCount; i++) {
+				for (var i = 0; i < nodesCount; i++) {
 					var nextNodeIndex = i + 1;
-					if(i == nodesCount - 1) {
+					if (i == nodesCount - 1) {
 						nextNodeIndex = 0;
 					}
 					var longitudeDiff = this._nodes[nextNodeIndex].Longitude - this._nodes[i].Longitude;
@@ -106,7 +103,7 @@ namespace OSMDataPrimitives.Spatial
 		{
 			var clone = (OSMWaySpatial)base.Clone();
 			clone._nodes = new List<OSMNodeSpatial>();
-			foreach(var node in this._nodes) {
+			foreach (var node in this._nodes) {
 				clone._nodes.Add((OSMNodeSpatial)node.Clone());
 			}
 
@@ -131,17 +128,17 @@ namespace OSMDataPrimitives.Spatial
 		/// <param name="longitude">Longitude.</param>
 		public bool PointInPolygon(double latitude, double longitude)
 		{
-			if(!this.IsClosed) {
+			if (!this.IsClosed) {
 				return false;
 			}
 
 			var result = false;
 			var nodesCount = this.Nodes.Count;
 			var j = nodesCount - 1;
-			for(var i = 0; i < nodesCount; j = i++) {
+			for (var i = 0; i < nodesCount; j = i++) {
 				var iNode = this._nodes[i];
 				var jNode = this._nodes[j];
-				if(((iNode.Latitude > latitude) != (jNode.Latitude > latitude)) &&
+				if (((iNode.Latitude > latitude) != (jNode.Latitude > latitude)) &&
 				   (longitude < (jNode.Longitude - iNode.Longitude) * (latitude - iNode.Latitude) / (jNode.Latitude - iNode.Latitude) + iNode.Longitude)) {
 					result = !result;
 				}

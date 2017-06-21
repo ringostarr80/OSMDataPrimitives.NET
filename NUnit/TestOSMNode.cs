@@ -117,8 +117,7 @@ namespace NUnit
 		public void TestOSMNodeToPostgreSQLInsertString()
 		{
 			var node = this.GetDefaultOSMNode();
-			NameValueCollection sqlParameters;
-			var sqlInsert = node.ToPostgreSQLInsert(out sqlParameters);
+			var sqlInsert = node.ToPostgreSQLInsert(out NameValueCollection sqlParameters);
 			var expectedSql = "INSERT INTO nodes (osm_id, lat, lon, tags) ";
 			expectedSql += "VALUES(@osm_id::bigint, @lat::double precision, @lon::double precision, @tags::hstore)";
 			Assert.AreEqual(expectedSql, sqlInsert);
@@ -129,7 +128,7 @@ namespace NUnit
 				{"tags", "\"name\"=>\"bar\", \"ref\"=>\"baz\""}
 			};
 			Assert.AreEqual(expectedSqlParameters.Count, sqlParameters.Count);
-			foreach(string key in expectedSqlParameters) {
+			foreach (string key in expectedSqlParameters) {
 				Assert.NotNull(sqlParameters[key]);
 				Assert.AreEqual(expectedSqlParameters[key], sqlParameters[key]);
 			}
@@ -192,6 +191,30 @@ namespace NUnit
 			var tagRef = tagsElement.Value.AsBsonDocument.GetElement("ref");
 			Assert.AreEqual("bar", tagName.Value.AsString);
 			Assert.AreEqual("baz", tagRef.Value.AsString);
+		}
+
+		[Test]
+		public void TestOSMNodeParseBsonDocument()
+		{
+			var node = this.GetDefaultOSMNode();
+			var bsonDoc = node.ToBson();
+
+			var parsedNode = new OSMNode(0);
+			parsedNode.ParseBsonDocument(bsonDoc);
+
+			Assert.AreEqual(node.Id, parsedNode.Id);
+			Assert.AreEqual(node.Latitude, parsedNode.Latitude);
+			Assert.AreEqual(node.Longitude, parsedNode.Longitude);
+			Assert.AreEqual(node.UserId, parsedNode.UserId);
+			Assert.AreEqual(node.UserName, parsedNode.UserName);
+			Assert.AreEqual(node.Version, parsedNode.Version);
+			Assert.AreEqual(node.Changeset, parsedNode.Changeset);
+			Assert.AreEqual(node.Timestamp, parsedNode.Timestamp);
+			Assert.AreEqual(node.Tags.Count, parsedNode.Tags.Count);
+
+			foreach (string key in node.Tags) {
+				Assert.AreEqual(node.Tags[key], parsedNode.Tags[key]);
+			}
 		}
 	}
 }

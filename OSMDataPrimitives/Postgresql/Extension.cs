@@ -18,17 +18,16 @@ namespace OSMDataPrimitives.PostgreSQL
 		/// <param name="parameters">Parameters.</param>
 		public static void ParsePostgreSQLFields(this IOSMElement element, NameValueCollection parameters)
 		{
-			if(parameters["osm_id"] != null) {
+			if (parameters["osm_id"] != null) {
 				element.OverrideId(Convert.ToUInt64(parameters["osm_id"]));
 			}
 
-			if(parameters["tags"] != null) {
+			if (parameters["tags"] != null) {
 				element.Tags = ParseHstore(parameters["tags"]);
 			}
 
-			if(element is OSMWay) {
-				var wayElement = (OSMWay)element;
-				if(parameters["node_refs"] != null) {
+			if (element is OSMWay wayElement) {
+				if (parameters["node_refs"] != null) {
 					wayElement.NodeRefs = ParseNodeRefs(parameters["node_refs"]);
 				}
 			}
@@ -44,19 +43,19 @@ namespace OSMDataPrimitives.PostgreSQL
 		{
 			var table = string.Empty;
 			var selectSB = new StringBuilder("SELECT osm_id");
-			if(inclusiveMetaField) {
+			if (inclusiveMetaField) {
 				selectSB.Append(", version, changeset, uid, user, timestamp");
 			}
-			if(element is OSMNode) {
+			if (element is OSMNode) {
 				selectSB.Append(", lat, lon");
 				table = "nodes";
 			}
 			selectSB.Append(", tags::text");
-			if(element is OSMWay) {
+			if (element is OSMWay) {
 				selectSB.Append(", node_refs::text");
 				table = "ways";
 			}
-			if(element is OSMRelation) {
+			if (element is OSMRelation) {
 				selectSB.Append(", members::text");
 				table = "relations";
 			}
@@ -76,14 +75,14 @@ namespace OSMDataPrimitives.PostgreSQL
 		public static string ToPostgreSQLDelete(this IOSMElement element, string tableName = null)
 		{
 			var table = string.Empty;
-			if(tableName != null) {
+			if (tableName != null) {
 				table = tableName;
 			} else {
-				if(element is OSMNode) {
+				if (element is OSMNode) {
 					table = "nodes";
-				} else if(element is OSMWay) {
+				} else if (element is OSMWay) {
 					table = "ways";
-				} else if(element is OSMRelation) {
+				} else if (element is OSMRelation) {
 					table = "relations";
 				}
 			}
@@ -105,34 +104,33 @@ namespace OSMDataPrimitives.PostgreSQL
 			};
 
 			var tableName = "";
-			if(element is OSMNode) {
+			if (element is OSMNode) {
 				tableName = "nodes";
-			} else if(element is OSMWay) {
+			} else if (element is OSMWay) {
 				tableName = "ways";
-			} else if(element is OSMRelation) {
+			} else if (element is OSMRelation) {
 				tableName = "relations";
 			}
 
 			var insertSB = new StringBuilder("INSERT INTO " + tableName + " (osm_id");
-			if(inclusiveMetaFields) {
+			if (inclusiveMetaFields) {
 				insertSB.Append(", version, changeset, uid, user, timestamp");
 			}
-			if(element is OSMNode) {
-				var nodeElement = (OSMNode)element;
+			if (element is OSMNode nodeElement) {
 				insertSB.Append(", lat");
 				insertSB.Append(", lon");
 				parameters.Add("lat", nodeElement.Latitude.ToString(CultureInfo.InvariantCulture));
 				parameters.Add("lon", nodeElement.Longitude.ToString(CultureInfo.InvariantCulture));
 			}
 			insertSB.Append(", tags");
-			if(element is OSMWay) {
+			if (element is OSMWay) {
 				insertSB.Append(", node_refs");
 			}
-			if(element is OSMRelation) {
+			if (element is OSMRelation) {
 				insertSB.Append(", members");
 			}
 			insertSB.Append(") VALUES(@osm_id::bigint");
-			if(inclusiveMetaFields) {
+			if (inclusiveMetaFields) {
 				insertSB.Append(", @version::bigint, @changeset::bigint, @uid::bigint, @user, TIMESTAMP @timestamp");
 				parameters.Add("version", element.Version.ToString());
 				parameters.Add("changeset", element.Changeset.ToString());
@@ -140,16 +138,16 @@ namespace OSMDataPrimitives.PostgreSQL
 				parameters.Add("user", element.UserName);
 				parameters.Add("timestamp", element.Timestamp.ToString("yyyy-MM-dd hh:mm:ss", CultureInfo.InvariantCulture));
 			}
-			if(element is OSMNode) {
+			if (element is OSMNode) {
 				insertSB.Append(", @lat::double precision, @lon::double precision");
 			}
 
 			var tagsSB = new StringBuilder();
-			if(element.Tags.Count >= 0) {
+			if (element.Tags.Count >= 0) {
 				var tagCounter = 0;
-				foreach(string tagKey in element.Tags) {
+				foreach (string tagKey in element.Tags) {
 					tagCounter++;
-					if(tagCounter > 1) {
+					if (tagCounter > 1) {
 						tagsSB.Append(", ");
 					}
 					tagsSB.Append("\"" + ReplaceHstoreValue(tagKey) + "\"=>\"" + ReplaceHstoreValue(element.Tags[tagKey]) + "\"");
@@ -160,19 +158,18 @@ namespace OSMDataPrimitives.PostgreSQL
 			parameters.Add("tags", tagsSB.ToString());
 
 			insertSB.Append(", @tags::hstore");
-			if(element is OSMWay) {
+			if (element is OSMWay) {
 				insertSB.Append(", @node_refs::bigint[]");
 				var wayElement = (OSMWay)element;
 				parameters.Add("node_refs", "{" + string.Join(", ", wayElement.NodeRefs) + "}");
 			}
-			if(element is OSMRelation) {
-				var relationElement = (OSMRelation)element;
-				if(relationElement.Members.Count > 0) {
+			if (element is OSMRelation relationElement) {
+				if (relationElement.Members.Count > 0) {
 					insertSB.Append(", ARRAY[");
 					var membersCounter = 0;
-					foreach(var member in relationElement.Members) {
+					foreach (var member in relationElement.Members) {
 						membersCounter++;
-						if(membersCounter > 1) {
+						if (membersCounter > 1) {
 							insertSB.Append(", ");
 						}
 						insertSB.Append("@member_" + membersCounter + "::hstore");
@@ -194,13 +191,13 @@ namespace OSMDataPrimitives.PostgreSQL
 
 		private static List<ulong> ParseNodeRefs(string nodeRefsString)
 		{
-			if(nodeRefsString.StartsWith("{", StringComparison.InvariantCulture) && nodeRefsString.EndsWith("}", StringComparison.InvariantCulture)) {
+			if (nodeRefsString.StartsWith("{", StringComparison.InvariantCulture) && nodeRefsString.EndsWith("}", StringComparison.InvariantCulture)) {
 				nodeRefsString = nodeRefsString.Substring(1, nodeRefsString.Length - 2);
 			}
 
 			var nodeRefsArray = nodeRefsString.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 			var nodeRefs = new List<ulong>();
-			foreach(var nodeRef in nodeRefsArray) {
+			foreach (var nodeRef in nodeRefsArray) {
 				nodeRefs.Add(Convert.ToUInt64(nodeRef));
 			}
 
@@ -222,41 +219,41 @@ namespace OSMDataPrimitives.PostgreSQL
 				tagFound = false;
 
 				var beginKeyQuoteIndex = hstoreString.IndexOf("\"", startIndex, StringComparison.InvariantCulture);
-				if(beginKeyQuoteIndex == -1) {
+				if (beginKeyQuoteIndex == -1) {
 					break;
 				}
 				var endKeyQuoteIndex = hstoreString.IndexOf("\"", beginKeyQuoteIndex + 1, StringComparison.InvariantCulture);
-				if(endKeyQuoteIndex == -1) {
+				if (endKeyQuoteIndex == -1) {
 					break;
 				}
 				var tagKey = hstoreString.Substring(beginKeyQuoteIndex + 1, endKeyQuoteIndex - beginKeyQuoteIndex - 1);
-				if(hstoreString.Substring(endKeyQuoteIndex + 1, 2) != "=>") {
+				if (hstoreString.Substring(endKeyQuoteIndex + 1, 2) != "=>") {
 					break;
 				}
 
 				var beginValueQuoteIndex = hstoreString.IndexOf("\"", endKeyQuoteIndex + 2, StringComparison.InvariantCulture);
-				if(beginValueQuoteIndex == -1) {
+				if (beginValueQuoteIndex == -1) {
 					break;
 				}
 				var endValueQuoteIndex = hstoreString.IndexOf("\"", beginValueQuoteIndex + 1, StringComparison.InvariantCulture);
-				if(endValueQuoteIndex == -1) {
+				if (endValueQuoteIndex == -1) {
 					break;
 				}
-				if(hstoreString[endValueQuoteIndex - 1] == '\\') {
+				if (hstoreString[endValueQuoteIndex - 1] == '\\') {
 					var valueStartIndex = endValueQuoteIndex + 1;
 					var realValueFinishQuoteFound = false;
 					do {
 						realValueFinishQuoteFound = false;
 						endValueQuoteIndex = hstoreString.IndexOf("\"", valueStartIndex, StringComparison.InvariantCulture);
-						if(endValueQuoteIndex == -1) {
+						if (endValueQuoteIndex == -1) {
 							break;
 						}
-						if(hstoreString[endValueQuoteIndex - 1] != '\\') {
+						if (hstoreString[endValueQuoteIndex - 1] != '\\') {
 							realValueFinishQuoteFound = true;
 						} else {
 							valueStartIndex = endValueQuoteIndex + 1;
 						}
-					} while(!realValueFinishQuoteFound);
+					} while (!realValueFinishQuoteFound);
 				}
 
 				var tagValue = hstoreString.Substring(beginValueQuoteIndex + 1, endValueQuoteIndex - beginValueQuoteIndex - 1);
@@ -264,7 +261,7 @@ namespace OSMDataPrimitives.PostgreSQL
 
 				startIndex = endValueQuoteIndex + 1;
 				tagFound = true;
-			} while(tagFound);
+			} while (tagFound);
 
 			return hstore;
 		}

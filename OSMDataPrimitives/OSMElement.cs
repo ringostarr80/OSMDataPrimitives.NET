@@ -53,10 +53,7 @@ namespace OSMDataPrimitives
 		public NameValueCollection Tags {
 			get { return this._tags; }
 			set {
-				if(value == null) {
-					throw new NullReferenceException("Tags can't be null.");
-				}
-				this._tags = value;
+				this._tags = value ?? throw new NullReferenceException("Tags can't be null.");
 			}
 		}
 

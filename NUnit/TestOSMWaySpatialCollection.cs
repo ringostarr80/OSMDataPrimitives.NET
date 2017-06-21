@@ -92,10 +92,10 @@ namespace NUnit
 		{
 			var line1 = this.GetDefaultLine1();
 			var line2 = this.GetDefaultLine2();
-			var multiLine = new OSMWaySpatialCollection();
-			multiLine.Add(line1);
-			multiLine.Add(line2);
-
+			var multiLine = new OSMWaySpatialCollection {
+				line1,
+				line2
+			};
 			var expectedWkt = "MULTILINESTRING ((10 10, 20 20, 10 40), (40 40, 30 30, 40 20, 30 10))";
 			Assert.AreEqual(expectedWkt, multiLine.ToWkt());
 		}
@@ -105,10 +105,10 @@ namespace NUnit
 		{
 			var polygon1 = this.GetOuterPolygon1();
 			var polygon2 = this.GetOuterPolygon2();
-			var multiPolygon = new OSMWaySpatialCollection();
-			multiPolygon.Add(polygon1);
-			multiPolygon.Add(polygon2);
-
+			var multiPolygon = new OSMWaySpatialCollection {
+				polygon1,
+				polygon2
+			};
 			var expectedWkt = "MULTIPOLYGON (((30 20, 10 40, 45 40, 30 20)), ((15 5, 5 10, 10 20, 40 10, 15 5)))";
 			Assert.AreEqual(expectedWkt, multiPolygon.ToWkt(WktType.MultiPolygon));
 		}
@@ -119,11 +119,11 @@ namespace NUnit
 			var outerPolygon1 = this.GetOuterPolygon3();
 			var outerPolygon2 = this.GetOuterPolygon4();
 			var innerPolygon1 = this.GetInnerPolygon1();
-			var multiPolygon = new OSMWaySpatialCollection();
-			multiPolygon.Add(outerPolygon1);
-			multiPolygon.Add(outerPolygon2);
-			multiPolygon.Add(innerPolygon1);
-
+			var multiPolygon = new OSMWaySpatialCollection {
+				outerPolygon1,
+				outerPolygon2,
+				innerPolygon1
+			};
 			var expectedWkt = "MULTIPOLYGON (((40 40, 45 30, 20 45, 40 40)), ((20 35, 45 20, 30 5, 10 10, 10 30, 20 35), (30 20, 20 25, 20 15, 30 20)))";
 			Assert.AreEqual(expectedWkt, multiPolygon.ToWkt(WktType.MultiPolygon));
 		}

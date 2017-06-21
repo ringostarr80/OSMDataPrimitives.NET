@@ -152,8 +152,7 @@ namespace NUnit
 		public void TestOSMWayToPostgreSQLInsertString()
 		{
 			var way = this.GetDefaultOSMWay();
-			NameValueCollection sqlParameters;
-			var sqlInsert = way.ToPostgreSQLInsert(out sqlParameters);
+			var sqlInsert = way.ToPostgreSQLInsert(out NameValueCollection sqlParameters);
 			var expectedSql = "INSERT INTO ways (osm_id, tags, node_refs) ";
 			expectedSql += "VALUES(@osm_id::bigint, @tags::hstore, @node_refs::bigint[])";
 			Assert.AreEqual(expectedSql, sqlInsert);
@@ -163,7 +162,7 @@ namespace NUnit
 				{"node_refs", "{5, 9, 12, 543, 43, 1234151}"}
 			};
 			Assert.AreEqual(expectedSqlParameters.Count, sqlParameters.Count);
-			foreach(string key in expectedSqlParameters) {
+			foreach (string key in expectedSqlParameters) {
 				Assert.NotNull(sqlParameters[key]);
 				Assert.AreEqual(expectedSqlParameters[key], sqlParameters[key]);
 			}
@@ -231,6 +230,33 @@ namespace NUnit
 			Assert.AreEqual(543, nodeRefsBsonArray[3].AsInt64);
 			Assert.AreEqual(43, nodeRefsBsonArray[4].AsInt64);
 			Assert.AreEqual(1234151, nodeRefsBsonArray[5].AsInt64);
+		}
+
+		[Test]
+		public void TestOSMWayParseBsonDocument()
+		{
+			var way = this.GetDefaultOSMWay();
+			var bsonDoc = way.ToBson();
+
+			var parsedWay = new OSMWay(0);
+			parsedWay.ParseBsonDocument(bsonDoc);
+
+			Assert.AreEqual(way.Id, parsedWay.Id);
+			Assert.AreEqual(way.UserId, parsedWay.UserId);
+			Assert.AreEqual(way.UserName, parsedWay.UserName);
+			Assert.AreEqual(way.Version, parsedWay.Version);
+			Assert.AreEqual(way.Changeset, parsedWay.Changeset);
+			Assert.AreEqual(way.Timestamp, parsedWay.Timestamp);
+			Assert.AreEqual(way.Tags.Count, parsedWay.Tags.Count);
+			Assert.AreEqual(way.NodeRefs.Count, parsedWay.NodeRefs.Count);
+
+			foreach (string key in way.Tags) {
+				Assert.AreEqual(way.Tags[key], parsedWay.Tags[key]);
+			}
+
+			for (var i = 0; i < way.NodeRefs.Count; i++) {
+				Assert.AreEqual(way.NodeRefs[i], parsedWay.NodeRefs[i]);
+			}
 		}
 	}
 }

@@ -19,14 +19,14 @@ namespace OSMDataPrimitives.Spatial
 		public static IOSMElement ToOSMSpatialElement(this XmlElement element)
 		{
 			var idAttribute = element.Attributes.GetNamedItem("id");
-			if(idAttribute == null) {
+			if (idAttribute == null) {
 				throw new XmlException("Missing required xml-attribute 'id'.");
 			}
 
 			var id = Convert.ToUInt64(idAttribute.Value);
 
 			IOSMElement osmElement = null;
-			switch(element.Name) {
+			switch (element.Name) {
 				case "node":
 					osmElement = new OSMNodeSpatial(id);
 					break;
@@ -41,64 +41,61 @@ namespace OSMDataPrimitives.Spatial
 			}
 
 			var changesetAttribute = element.Attributes.GetNamedItem("changeset");
-			if(changesetAttribute != null) {
+			if (changesetAttribute != null) {
 				osmElement.Changeset = Convert.ToUInt64(changesetAttribute.Value);
 			}
 			var versionAttribute = element.Attributes.GetNamedItem("version");
-			if(versionAttribute != null) {
+			if (versionAttribute != null) {
 				osmElement.Version = Convert.ToUInt64(versionAttribute.Value);
 			}
 			var uidAttribute = element.Attributes.GetNamedItem("uid");
-			if(uidAttribute != null) {
+			if (uidAttribute != null) {
 				osmElement.UserId = Convert.ToUInt64(uidAttribute.Value);
 			}
 			var userAttribute = element.Attributes.GetNamedItem("user");
-			if(userAttribute != null) {
+			if (userAttribute != null) {
 				osmElement.UserName = userAttribute.Value;
 			}
 			var timestampAttribute = element.Attributes.GetNamedItem("timestamp");
-			if(timestampAttribute != null) {
+			if (timestampAttribute != null) {
 				osmElement.Timestamp = DateTime.Parse(timestampAttribute.Value, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
 			}
 
-			if(osmElement is OSMNodeSpatial) {
-				var nodeElement = (OSMNodeSpatial)osmElement;
+			if (osmElement is OSMNodeSpatial nodeElement) {
 				var latAttribute = element.Attributes.GetNamedItem("lat");
-				if(latAttribute != null) {
+				if (latAttribute != null) {
 					nodeElement.Latitude = Convert.ToDouble(latAttribute.Value, CultureInfo.InvariantCulture);
 				}
 				var lonAttribute = element.Attributes.GetNamedItem("lon");
-				if(lonAttribute != null) {
+				if (lonAttribute != null) {
 					nodeElement.Longitude = Convert.ToDouble(lonAttribute.Value, CultureInfo.InvariantCulture);
 				}
-			} else if(osmElement is OSMWaySpatial) {
-				var wayElement = (OSMWaySpatial)osmElement;
-				if(element.HasChildNodes) {
-					foreach(XmlNode childNode in element.ChildNodes) {
-						if(childNode.Name != "nd") {
+			} else if (osmElement is OSMWaySpatial wayElement) {
+				if (element.HasChildNodes) {
+					foreach (XmlNode childNode in element.ChildNodes) {
+						if (childNode.Name != "nd") {
 							continue;
 						}
 
 						var refAttribute = childNode.Attributes.GetNamedItem("ref");
-						if(refAttribute != null) {
+						if (refAttribute != null) {
 							wayElement.NodeRefs.Add(Convert.ToUInt64(refAttribute.Value));
 						}
 					}
 				}
-			} else if(osmElement is OSMRelation) {
-				var relationElement = (OSMRelation)osmElement;
-				if(element.HasChildNodes) {
-					foreach(XmlNode childNode in element.ChildNodes) {
-						if(childNode.Name != "member") {
+			} else if (osmElement is OSMRelation relationElement) {
+				if (element.HasChildNodes) {
+					foreach (XmlNode childNode in element.ChildNodes) {
+						if (childNode.Name != "member") {
 							continue;
 						}
 
 						var typeAttribute = childNode.Attributes.GetNamedItem("type");
 						var refAttribute = childNode.Attributes.GetNamedItem("ref");
 						var roleAttribute = childNode.Attributes.GetNamedItem("role");
-						if(typeAttribute != null && refAttribute != null && roleAttribute != null) {
+						if (typeAttribute != null && refAttribute != null && roleAttribute != null) {
 							MemberType? memberType = null;
-							switch(typeAttribute.Value) {
+							switch (typeAttribute.Value) {
 								case "node":
 									memberType = MemberType.Node;
 									break;
@@ -109,7 +106,7 @@ namespace OSMDataPrimitives.Spatial
 									memberType = MemberType.Relation;
 									break;
 							}
-							if(!memberType.HasValue) {
+							if (!memberType.HasValue) {
 								throw new XmlException("invalid xml-attribute value (" + typeAttribute.Value + ") for 'member[@type]'.");
 							}
 
@@ -120,13 +117,13 @@ namespace OSMDataPrimitives.Spatial
 				}
 			}
 
-			if(element.HasChildNodes) {
-				foreach(XmlNode childNode in element.ChildNodes) {
-					switch(childNode.Name) {
+			if (element.HasChildNodes) {
+				foreach (XmlNode childNode in element.ChildNodes) {
+					switch (childNode.Name) {
 						case "tag":
 							var kAttribute = childNode.Attributes.GetNamedItem("k");
 							var vAttribute = childNode.Attributes.GetNamedItem("v");
-							if(kAttribute != null && vAttribute != null) {
+							if (kAttribute != null && vAttribute != null) {
 								osmElement.Tags.Add(kAttribute.Value, vAttribute.Value);
 							}
 							break;
@@ -178,8 +175,8 @@ namespace OSMDataPrimitives.Spatial
 		public static string ToWkt(this OSMWaySpatial way, WktType? wktType = null)
 		{
 			var wktTypeString = (way.IsClosed) ? "POLYGON" : "LINESTRING";
-			if(wktType.HasValue) {
-				switch(wktType.Value) {
+			if (wktType.HasValue) {
+				switch (wktType.Value) {
 					case WktType.LineString:
 					case WktType.Polygon:
 						wktTypeString = wktType.Value.ToString().ToUpper();
@@ -209,8 +206,8 @@ namespace OSMDataPrimitives.Spatial
 			var wktTypeString = "MULTILINESTRING";
 			var openingBrace = "(";
 			var closingBrace = ")";
-			if(wktType.HasValue) {
-				switch(wktType.Value) {
+			if (wktType.HasValue) {
+				switch (wktType.Value) {
 					case WktType.MultiLineString:
 						wktTypeString = wktType.Value.ToString().ToUpper();
 						break;
@@ -229,7 +226,7 @@ namespace OSMDataPrimitives.Spatial
 			resultSB.Append(wktTypeString);
 			resultSB.Append(" (");
 			var wayCounter = 0;
-			if(wktTypeString == "MULTIPOLYGON") {
+			if (wktTypeString == "MULTIPOLYGON") {
 				var outerWays = new OSMWaySpatialCollection(ways.Where(w => w.Role == "outer")).Merge();
 				outerWays.RemoveInvalidPolygons();
 				outerWays.EnsurePolygonDirection();
@@ -237,18 +234,18 @@ namespace OSMDataPrimitives.Spatial
 				innerWays.RemoveInvalidPolygons();
 				innerWays.EnsurePolygonDirection();
 
-				if(outerWays.Count == 0) {
+				if (outerWays.Count == 0) {
 					throw new Exception("invalid polygon data.");
 				}
 
-				foreach(var outerWay in outerWays) {
+				foreach (var outerWay in outerWays) {
 					wayCounter++;
-					if(wayCounter > 1) {
+					if (wayCounter > 1) {
 						resultSB.Append(", ");
 					}
 					resultSB.Append("((" + outerWay.ToWktPart() + ")");
-					foreach(var innerWay in innerWays) {
-						if(!outerWay.PointInPolygon(innerWay.Nodes[0].Latitude, innerWay.Nodes[0].Longitude)) {
+					foreach (var innerWay in innerWays) {
+						if (!outerWay.PointInPolygon(innerWay.Nodes[0].Latitude, innerWay.Nodes[0].Longitude)) {
 							continue;
 						}
 
@@ -257,9 +254,9 @@ namespace OSMDataPrimitives.Spatial
 					resultSB.Append(")");
 				}
 			} else {
-				foreach(var way in ways) {
+				foreach (var way in ways) {
 					wayCounter++;
-					if(wayCounter > 1) {
+					if (wayCounter > 1) {
 						resultSB.Append(", ");
 					}
 					resultSB.Append(openingBrace + way.ToWktPart() + closingBrace);
@@ -285,9 +282,9 @@ namespace OSMDataPrimitives.Spatial
 			var resultSB = new StringBuilder();
 
 			var nodeCounter = 0;
-			foreach(var node in way.Nodes) {
+			foreach (var node in way.Nodes) {
 				nodeCounter++;
-				if(nodeCounter > 1) {
+				if (nodeCounter > 1) {
 					resultSB.Append(", ");
 				}
 				resultSB.Append(node.ToWktPart());

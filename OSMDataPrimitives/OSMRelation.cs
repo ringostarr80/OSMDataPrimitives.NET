@@ -17,10 +17,7 @@ namespace OSMDataPrimitives
 		public List<OSMMember> Members {
 			get { return this._members; }
 			set {
-				if(value == null) {
-					throw new NullReferenceException("Members can't be null.");
-				}
-				this._members = value;
+				this._members = value ?? throw new NullReferenceException("Members can't be null.");
 			}
 		}
 
