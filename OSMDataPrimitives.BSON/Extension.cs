@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using System;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 
 namespace OSMDataPrimitives.BSON
@@ -84,53 +85,74 @@ namespace OSMDataPrimitives.BSON
 		/// <param name="doc">BsonDocument.</param>
 		public static void ParseBsonDocument(this IOSMElement element, BsonDocument doc)
 		{
-			if (doc["id"] != null) {
+			if (doc.Contains("id")) {
 				element.OverrideId((ulong)doc["id"].AsInt64);
+			} else {
+				element.OverrideId(0);
 			}
+
 			if (element is OSMNode nodeElement) {
-				if (doc["location"] != null) {
+				if (doc.Contains("location")) {
 					var locationDoc = doc["location"].AsBsonDocument;
-					if (locationDoc["lat"] != null && locationDoc["lon"] != null) {
+					if (locationDoc.Contains("lat") && locationDoc.Contains("lon")) {
 						nodeElement.Latitude = locationDoc["lat"].AsDouble;
 						nodeElement.Longitude = locationDoc["lon"].AsDouble;
 					}
+				} else {
+					nodeElement.Latitude = 0.0;
+					nodeElement.Longitude = 0.0;
 				}
 			}
-			if (doc["version"] != null) {
+
+			if (doc.Contains("version")) {
 				element.Version = (ulong)doc["version"].AsInt64;
+			} else {
+				element.Version = 0;
 			}
-			if (doc["uid"] != null) {
+
+			if (doc.Contains("uid")) {
 				element.UserId = (ulong)doc["uid"].AsInt64;
 				element.UserName = doc["user"].AsString;
+			} else {
+				element.UserId = 0;
+				element.UserName = string.Empty;
 			}
-			if (doc["changeset"] != null) {
+
+			if (doc.Contains("changeset")) {
 				element.Changeset = (ulong)doc["changeset"].AsInt64;
+			} else {
+				element.Changeset = 0;
 			}
-			if (doc["timestamp"] != null) {
+
+			if (doc.Contains("timestamp")) {
 				element.Timestamp = doc["timestamp"].AsBsonDateTime.ToUniversalTime();
+			} else {
+				element.Timestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 			}
 
 			if (element is OSMWay wayElement) {
-				if (doc["node_refs"] != null) {
+				if (doc.Contains("node_refs")) {
 					var nodeRefsArray = doc["node_refs"].AsBsonArray;
 					foreach (var nodeRef in nodeRefsArray) {
 						wayElement.NodeRefs.Add((ulong)nodeRef.AsInt64);
 					}
+				} else {
+					wayElement.NodeRefs.Clear();
 				}
 			}
 
 			if (element is OSMRelation relationElement) {
-				if (doc["members"] != null) {
+				if (doc.Contains("members")) {
 					var membersArray = doc["members"].AsBsonArray;
 					foreach (var member in membersArray) {
 						var memberDoc = member.AsBsonDocument;
-						if (memberDoc["type"] == null) {
+						if (!memberDoc.Contains("type")) {
 							continue;
 						}
-						if (memberDoc["ref"] == null) {
+						if (!memberDoc.Contains("ref")) {
 							continue;
 						}
-						if (memberDoc["role"] == null) {
+						if (!memberDoc.Contains("role")) {
 							continue;
 						}
 						MemberType? memberType = null;
@@ -151,14 +173,18 @@ namespace OSMDataPrimitives.BSON
 
 						relationElement.Members.Add(new OSMMember(memberType.Value, (ulong)memberDoc["ref"].AsInt64, memberDoc["role"].AsString));
 					}
+				} else {
+					relationElement.Members.Clear();
 				}
 			}
 
-			if (doc["tags"] != null) {
+			if (doc.Contains("tags")) {
 				var tags = doc["tags"].AsBsonDocument;
 				foreach (string key in tags.Names) {
 					element.Tags.Add(key, tags[key].AsString);
 				}
+			} else {
+				element.Tags.Clear();
 			}
 		}
 	}

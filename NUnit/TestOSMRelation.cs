@@ -262,5 +262,23 @@ namespace NUnit
 				Assert.AreEqual(relation.Members[i].Role, parsedRelation.Members[i].Role);
 			}
 		}
+
+		[Test]
+		public void TestOSMRelationParseEmptyBsonDocument()
+		{
+			var relation = this.GetDefaultOSMRelation();
+			var bsonDoc = new MongoDB.Bson.BsonDocument();
+
+			relation.ParseBsonDocument(bsonDoc);
+
+			Assert.AreEqual(relation.Id, 0);
+			Assert.AreEqual(relation.UserId, 0);
+			Assert.AreEqual(relation.UserName, string.Empty);
+			Assert.AreEqual(relation.Version, 0);
+			Assert.AreEqual(relation.Changeset, 0);
+			Assert.AreEqual(relation.Timestamp, new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+			Assert.AreEqual(relation.Tags.Count, 0);
+			Assert.AreEqual(relation.Members.Count, 0);
+		}
 	}
 }

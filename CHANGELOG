@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.13] - 2017-06-22
+### Fixed
+- BSON-Extension: fixed parsing problem in IOSMElement.ParseBsonDocument(BsonDocument doc)-method.
+
 ## [1.0.12] - 2017-06-21
 ### Added
 - BSON-Extension: Added IOSMElement.ParseBsonDocument(BsonDocument doc)-method.

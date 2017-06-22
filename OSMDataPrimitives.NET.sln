@@ -61,6 +61,6 @@ Global
 		$5.RequiredSuffixes = $7
 		$7.String = Exception
 		$0.VersionControlPolicy = $8
-		version = 1.0.12
+		version = 1.0.13
 	EndGlobalSection
 EndGlobal

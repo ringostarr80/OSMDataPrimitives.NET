@@ -258,5 +258,23 @@ namespace NUnit
 				Assert.AreEqual(way.NodeRefs[i], parsedWay.NodeRefs[i]);
 			}
 		}
+
+		[Test]
+		public void TestOSMWayParseEmptyBsonDocument()
+		{
+			var way = this.GetDefaultOSMWay();
+			var bsonDoc = new MongoDB.Bson.BsonDocument();
+
+			way.ParseBsonDocument(bsonDoc);
+
+			Assert.AreEqual(way.Id, 0);
+			Assert.AreEqual(way.UserId, 0);
+			Assert.AreEqual(way.UserName, string.Empty);
+			Assert.AreEqual(way.Version, 0);
+			Assert.AreEqual(way.Changeset, 0);
+			Assert.AreEqual(way.Timestamp, new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+			Assert.AreEqual(way.Tags.Count, 0);
+			Assert.AreEqual(way.NodeRefs.Count, 0);
+		}
 	}
 }

@@ -2,7 +2,7 @@
 <package>
 	<metadata>
 		<id>OSMDataPrimitives.BSON</id>
-		<version>1.0.12</version>
+		<version>1.0.13</version>
 		<title>OSMDataPrimitives.BSON</title>
 		<authors>Ringo Leese</authors>
 		<owners>Ringo Leese</owners>
@@ -10,7 +10,7 @@
 		<projectUrl>https://github.com/ringostarr80/OSMDataPrimitives.NET</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>This is the BSON-Extension for the OSMDataPrimitives project</description>
-		<releaseNotes>Added IOSMElement.ParseBsonDocument(BsonDocument doc)-method.</releaseNotes>
+		<releaseNotes>Fixed a parsing problem in IOSMElement.ParseBsonDocument(BsonDocument doc)-method.</releaseNotes>
 		<copyright>Copyright 2017</copyright>
 		<tags>osm data primitives bson</tags>
 		<dependencies>
