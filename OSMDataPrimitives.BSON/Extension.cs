@@ -26,7 +26,7 @@ namespace OSMDataPrimitives.BSON
 		}
 
 		/// <summary>
-		/// Converts the OSMElement to an BsonDocument
+		/// Converts the OSMElement to a BsonDocument.
 		/// </summary>
 		/// <param name="element">IOSMElement.</param>
 		/// <returns>The BsonDocument.</returns>

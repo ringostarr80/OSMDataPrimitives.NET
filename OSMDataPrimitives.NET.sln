@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnit", "NUnit\NUnit.csproj", "{8CC257B9-719F-4CEE-8BBA-C11236DC7158}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitTests", "NUnitTests\NUnitTests.csproj", "{8CC257B9-719F-4CEE-8BBA-C11236DC7158}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSMDataPrimitives.BSON", "OSMDataPrimitives.BSON\OSMDataPrimitives.BSON.csproj", "{4C41D41D-BCA0-4EA6-963B-AE0DB4A1064C}"
 EndProject
