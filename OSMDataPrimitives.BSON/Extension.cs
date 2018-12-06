@@ -37,8 +37,8 @@ namespace OSMDataPrimitives.BSON
 			};
 			if (element is OSMNode nodeElement) {
 				var locationDoc = new BsonDocument {
-					{ "lat", nodeElement.Latitude },
-					{ "lon", nodeElement.Longitude }
+					{ "lon", nodeElement.Longitude },
+					{ "lat", nodeElement.Latitude }
 				};
 				bsonDoc.Add("location", locationDoc);
 			}
