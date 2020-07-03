@@ -2,11 +2,11 @@
 <package>
 	<metadata>
 		<id>OSMDataPrimitives</id>
-		<version>1.2.0</version>
+		<version>1.2.2</version>
 		<title>OSMDataPrimitives</title>
 		<authors>Ringo Leese</authors>
 		<owners>Ringo Leese</owners>
-		<licenseUrl>https://github.com/ringostarr80/OSMDataPrimitives.NET/blob/master/LICENSE</licenseUrl>
+		<license type="expression">CC0-1.0</license>
 		<projectUrl>https://github.com/ringostarr80/OSMDataPrimitives.NET</projectUrl>
 		<defaultPushSource>https://www.nuget.org/api/v2/package</defaultPushSource>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -14,10 +14,14 @@
 		<releaseNotes>updated project type to .NETStandard 2.0.</releaseNotes>
 		<copyright>Copyright 2017</copyright>
 		<tags>osm data primitives</tags>
+		<dependencies>
+			<group targetFramework=".NETStandard2.0"/>
+		</dependencies>
 	</metadata>
 	<files>
 		<file src="..\LICENSE" target="LICENSE"/>
 		<file src="bin\Release\netstandard2.0\OSMDataPrimitives.dll" target="lib\netstandard2.0"/>
+		<file src="bin\Release\netstandard2.0\OSMDataPrimitives.pdb" target="lib\netstandard2.0"/>
 		<file src="bin\Release\netstandard2.0\OSMDataPrimitives.xml" target="lib\netstandard2.0"/>
 	</files>
 </package>

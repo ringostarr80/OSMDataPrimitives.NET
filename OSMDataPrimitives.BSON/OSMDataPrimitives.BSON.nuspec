@@ -2,12 +2,13 @@
 <package>
 	<metadata>
 		<id>OSMDataPrimitives.BSON</id>
-		<version>1.2.1</version>
+		<version>1.2.2</version>
 		<title>OSMDataPrimitives.BSON</title>
 		<authors>Ringo Leese</authors>
 		<owners>Ringo Leese</owners>
-		<licenseUrl>https://github.com/ringostarr80/OSMDataPrimitives.NET/blob/master/LICENSE</licenseUrl>
+		<license type="expression">CC0-1.0</license>
 		<projectUrl>https://github.com/ringostarr80/OSMDataPrimitives.NET</projectUrl>
+		<defaultPushSource>https://www.nuget.org/api/v2/package</defaultPushSource>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>This is the BSON-Extension for the OSMDataPrimitives project</description>
 		<releaseNotes>updated project type to .NETStandard 2.0.</releaseNotes>
@@ -15,12 +16,16 @@
 		<tags>osm data primitives bson</tags>
 		<dependencies>
 			<dependency id="MongoDB.Bson" version="2.4.4"/>
-			<dependency id="OSMDataPrimitives" version="1.2.0" />
+			<dependency id="OSMDataPrimitives" version="1.2.2" />
+		</dependencies>
+		<dependencies>
+			<group targetFramework=".NETStandard2.0"/>
 		</dependencies>
 	</metadata>
 	<files>
 		<file src="..\LICENSE" target="LICENSE"/>
 		<file src="bin\Release\netstandard2.0\OSMDataPrimitives.BSON.dll" target="lib\netstandard2.0"/>
+		<file src="bin\Release\netstandard2.0\OSMDataPrimitives.BSON.pdb" target="lib\netstandard2.0"/>
 		<file src="bin\Release\netstandard2.0\OSMDataPrimitives.BSON.xml" target="lib\netstandard2.0"/>
 	</files>
 </package>
