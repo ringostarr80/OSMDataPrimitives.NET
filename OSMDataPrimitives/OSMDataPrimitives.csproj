@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <NuspecFile>OSMDataPrimitives.nuspec</NuspecFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
@@ -13,6 +13,6 @@
 
 
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <DocumentationFile>bin\Release\netstandard2.0\OSMDataPrimitives.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\netstandard2.1\OSMDataPrimitives.xml</DocumentationFile>
   </PropertyGroup>
 </Project>
