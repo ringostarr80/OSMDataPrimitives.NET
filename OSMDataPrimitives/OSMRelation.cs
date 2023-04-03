@@ -8,7 +8,7 @@ namespace OSMDataPrimitives
 	/// </summary>
 	public class OSMRelation : OSMElement
 	{
-		private List<OSMMember> _members = new List<OSMMember>();
+		private List<OSMMember> _members = new();
 
 		/// <summary>
 		/// Gets or sets the members.

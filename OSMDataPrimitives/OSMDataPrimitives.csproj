@@ -1,6 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <NuspecFile>OSMDataPrimitives.nuspec</NuspecFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
@@ -8,11 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
 
 
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <DocumentationFile>bin\Release\netstandard2.1\OSMDataPrimitives.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\net6.0\OSMDataPrimitives.xml</DocumentationFile>
   </PropertyGroup>
 </Project>

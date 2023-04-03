@@ -8,7 +8,7 @@ namespace OSMDataPrimitives
 	/// </summary>
 	public class OSMWay : OSMElement
 	{
-		private List<ulong> _nodeRefs = new List<ulong>();
+		private List<ulong> _nodeRefs = new();
 
 		/// <summary>
 		/// Gets or sets the node reference-ids.

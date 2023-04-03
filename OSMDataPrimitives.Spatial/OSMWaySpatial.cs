@@ -9,7 +9,7 @@ namespace OSMDataPrimitives.Spatial
 	/// </summary>
 	public class OSMWaySpatial : OSMWay
 	{
-		private List<OSMNodeSpatial> _nodes = new List<OSMNodeSpatial>();
+		private List<OSMNodeSpatial> _nodes = new();
 		private string _role = "outer";
 
 		/// <summary>

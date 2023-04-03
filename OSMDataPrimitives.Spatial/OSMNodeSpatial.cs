@@ -46,12 +46,22 @@ namespace OSMDataPrimitives.Spatial
 			this.Tags = new NameValueCollection(node.Tags);
 		}
 
-		private double DegreeToRadian(double angle)
+		/// <summary>
+		/// Converts the angle from degree to radian
+		/// </summary>
+		/// <param name="angle"></param>
+		/// <returns></returns>
+		public static double DegreeToRadian(double angle)
 		{
 			return Math.PI * angle / 180.0;
 		}
 
-		private double RadianToDegree(double angle)
+		/// <summary>
+        /// Converts the angle from radian to degree
+        /// </summary>
+        /// <param name="angle"></param>
+        /// <returns></returns>
+		public static double RadianToDegree(double angle)
 		{
 			return angle * (180.0 / Math.PI);
 		}

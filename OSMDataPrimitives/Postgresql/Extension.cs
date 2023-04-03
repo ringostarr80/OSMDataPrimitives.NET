@@ -158,9 +158,9 @@ namespace OSMDataPrimitives.PostgreSQL
 			parameters.Add("tags", tagsSB.ToString());
 
 			insertSB.Append(", @tags::hstore");
-			if (element is OSMWay) {
+			if (element is OSMWay way) {
 				insertSB.Append(", @node_refs::bigint[]");
-				var wayElement = (OSMWay)element;
+				var wayElement = way;
 				parameters.Add("node_refs", "{" + string.Join(", ", wayElement.NodeRefs) + "}");
 			}
 			if (element is OSMRelation relationElement) {
@@ -179,12 +179,12 @@ namespace OSMDataPrimitives.PostgreSQL
 						memberSB.Append("\"role\"=>\"" + ReplaceHstoreValue(member.Role) + "\"");
 						parameters.Add("member_" + membersCounter, memberSB.ToString());
 					}
-					insertSB.Append("]");
+					insertSB.Append(']');
 				} else {
 					insertSB.Append(", '{}'");
 				}
 			}
-			insertSB.Append(")");
+			insertSB.Append(')');
 
 			return insertSB.ToString();
 		}
@@ -192,7 +192,7 @@ namespace OSMDataPrimitives.PostgreSQL
 		private static List<ulong> ParseNodeRefs(string nodeRefsString)
 		{
 			if (nodeRefsString.StartsWith("{", StringComparison.InvariantCulture) && nodeRefsString.EndsWith("}", StringComparison.InvariantCulture)) {
-				nodeRefsString = nodeRefsString.Substring(1, nodeRefsString.Length - 2);
+				nodeRefsString = nodeRefsString[1..^1];
 			}
 
 			var nodeRefsArray = nodeRefsString.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
@@ -212,58 +212,68 @@ namespace OSMDataPrimitives.PostgreSQL
 		private static NameValueCollection ParseHstore(string hstoreString)
 		{
 			var hstore = new NameValueCollection();
+            var startIndex = 0;
 
-			var tagFound = false;
-			var startIndex = 0;
-			do {
-				tagFound = false;
+            bool tagFound;
+            do
+            {
+                var beginKeyQuoteIndex = hstoreString.IndexOf("\"", startIndex, StringComparison.InvariantCulture);
+                if (beginKeyQuoteIndex == -1)
+                {
+                    break;
+                }
+                var endKeyQuoteIndex = hstoreString.IndexOf("\"", beginKeyQuoteIndex + 1, StringComparison.InvariantCulture);
+                if (endKeyQuoteIndex == -1)
+                {
+                    break;
+                }
+                var tagKey = hstoreString.Substring(beginKeyQuoteIndex + 1, endKeyQuoteIndex - beginKeyQuoteIndex - 1);
+                if (hstoreString.Substring(endKeyQuoteIndex + 1, 2) != "=>")
+                {
+                    break;
+                }
 
-				var beginKeyQuoteIndex = hstoreString.IndexOf("\"", startIndex, StringComparison.InvariantCulture);
-				if (beginKeyQuoteIndex == -1) {
-					break;
-				}
-				var endKeyQuoteIndex = hstoreString.IndexOf("\"", beginKeyQuoteIndex + 1, StringComparison.InvariantCulture);
-				if (endKeyQuoteIndex == -1) {
-					break;
-				}
-				var tagKey = hstoreString.Substring(beginKeyQuoteIndex + 1, endKeyQuoteIndex - beginKeyQuoteIndex - 1);
-				if (hstoreString.Substring(endKeyQuoteIndex + 1, 2) != "=>") {
-					break;
-				}
+                var beginValueQuoteIndex = hstoreString.IndexOf("\"", endKeyQuoteIndex + 2, StringComparison.InvariantCulture);
+                if (beginValueQuoteIndex == -1)
+                {
+                    break;
+                }
+                var endValueQuoteIndex = hstoreString.IndexOf("\"", beginValueQuoteIndex + 1, StringComparison.InvariantCulture);
+                if (endValueQuoteIndex == -1)
+                {
+                    break;
+                }
+                if (hstoreString[endValueQuoteIndex - 1] == '\\')
+                {
+                    var valueStartIndex = endValueQuoteIndex + 1;
+                    bool realValueFinishQuoteFound;
+                    do
+                    {
+                        realValueFinishQuoteFound = false;
+                        endValueQuoteIndex = hstoreString.IndexOf("\"", valueStartIndex, StringComparison.InvariantCulture);
+                        if (endValueQuoteIndex == -1)
+                        {
+                            break;
+                        }
+                        if (hstoreString[endValueQuoteIndex - 1] != '\\')
+                        {
+                            realValueFinishQuoteFound = true;
+                        }
+                        else
+                        {
+                            valueStartIndex = endValueQuoteIndex + 1;
+                        }
+                    } while (!realValueFinishQuoteFound);
+                }
 
-				var beginValueQuoteIndex = hstoreString.IndexOf("\"", endKeyQuoteIndex + 2, StringComparison.InvariantCulture);
-				if (beginValueQuoteIndex == -1) {
-					break;
-				}
-				var endValueQuoteIndex = hstoreString.IndexOf("\"", beginValueQuoteIndex + 1, StringComparison.InvariantCulture);
-				if (endValueQuoteIndex == -1) {
-					break;
-				}
-				if (hstoreString[endValueQuoteIndex - 1] == '\\') {
-					var valueStartIndex = endValueQuoteIndex + 1;
-					var realValueFinishQuoteFound = false;
-					do {
-						realValueFinishQuoteFound = false;
-						endValueQuoteIndex = hstoreString.IndexOf("\"", valueStartIndex, StringComparison.InvariantCulture);
-						if (endValueQuoteIndex == -1) {
-							break;
-						}
-						if (hstoreString[endValueQuoteIndex - 1] != '\\') {
-							realValueFinishQuoteFound = true;
-						} else {
-							valueStartIndex = endValueQuoteIndex + 1;
-						}
-					} while (!realValueFinishQuoteFound);
-				}
+                var tagValue = hstoreString.Substring(beginValueQuoteIndex + 1, endValueQuoteIndex - beginValueQuoteIndex - 1);
+                hstore.Add(tagKey, tagValue);
 
-				var tagValue = hstoreString.Substring(beginValueQuoteIndex + 1, endValueQuoteIndex - beginValueQuoteIndex - 1);
-				hstore.Add(tagKey, tagValue);
+                startIndex = endValueQuoteIndex + 1;
+                tagFound = true;
+            } while (tagFound);
 
-				startIndex = endValueQuoteIndex + 1;
-				tagFound = true;
-			} while (tagFound);
-
-			return hstore;
+            return hstore;
 		}
 	}
 }

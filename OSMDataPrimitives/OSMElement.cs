@@ -10,11 +10,11 @@ namespace OSMDataPrimitives
 	{
 		private ulong _id = 0;
 		private ulong _version = 0;
-		private DateTime _timestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+		private DateTime _timestamp = new(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 		private ulong _changeset = 0;
 		private ulong _userId = 0;
 		private string _userName = string.Empty;
-		private NameValueCollection _tags = new NameValueCollection();
+		private NameValueCollection _tags = new();
 
 		/// <summary>
 		/// Gets or sets the identifier.

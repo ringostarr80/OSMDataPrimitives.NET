@@ -101,23 +101,14 @@ namespace OSMDataPrimitives.Xml
 			}
 
 			var id = Convert.ToUInt64(idAttribute.Value);
-
-			IOSMElement osmElement = null;
-			switch (element.Name) {
-				case "node":
-					osmElement = new OSMNode(id);
-					break;
-				case "way":
-					osmElement = new OSMWay(id);
-					break;
-				case "relation":
-					osmElement = new OSMRelation(id);
-					break;
-				default:
-					throw new XmlException("Invalid xml-element name '" + element.Name + "'. Expected 'node', 'way' or 'relation'.");
-			}
-
-			var changesetAttribute = element.Attributes.GetNamedItem("changeset");
+            IOSMElement osmElement = element.Name switch
+            {
+                "node" => new OSMNode(id),
+                "way" => new OSMWay(id),
+                "relation" => new OSMRelation(id),
+                _ => throw new XmlException("Invalid xml-element name '" + element.Name + "'. Expected 'node', 'way' or 'relation'."),
+            };
+            var changesetAttribute = element.Attributes.GetNamedItem("changeset");
 			if (changesetAttribute != null) {
 				osmElement.Changeset = Convert.ToUInt64(changesetAttribute.Value);
 			}
