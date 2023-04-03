@@ -1,3 +1,8 @@
+![license](https://img.shields.io/github/license/ringostarr80/OSMDataPrimitives.NET)
+![codeql_analysis](https://img.shields.io/github/actions/workflow/status/ringostarr80/OSMDataPrimitives.NET/codeql-analysis.yml)
+![nuget_version](https://img.shields.io/nuget/v/OSMDataPrimitives)
+![github_tag](https://img.shields.io/github/v/tag/ringostarr80/OSMDataPrimitives.NET?sort=semver)
+
 # OSMDataPrimitives
 
 ## Intention
