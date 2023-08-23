@@ -267,14 +267,14 @@ namespace NUnit
 
 			way.ParseBsonDocument(bsonDoc);
 
-			Assert.AreEqual(way.Id, 0);
-			Assert.AreEqual(way.UserId, 0);
-			Assert.AreEqual(way.UserName, string.Empty);
-			Assert.AreEqual(way.Version, 0);
-			Assert.AreEqual(way.Changeset, 0);
-			Assert.AreEqual(way.Timestamp, new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
-			Assert.AreEqual(way.Tags.Count, 0);
-			Assert.AreEqual(way.NodeRefs.Count, 0);
+			Assert.AreEqual(0, way.Id);
+			Assert.AreEqual(0, way.UserId);
+			Assert.AreEqual(string.Empty, way.UserName);
+			Assert.AreEqual(0, way.Version);
+			Assert.AreEqual(0, way.Changeset);
+			Assert.AreEqual(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc), way.Timestamp);
+			Assert.AreEqual(0, way.Tags.Count);
+			Assert.AreEqual(0, way.NodeRefs.Count);
 		}
 	}
 }

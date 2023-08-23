@@ -225,15 +225,15 @@ namespace NUnit
 
 			node.ParseBsonDocument(bsonDoc);
 
-			Assert.AreEqual(node.Id, 0);
-			Assert.AreEqual(node.Latitude, 0.0);
-			Assert.AreEqual(node.Longitude, 0.0);
-			Assert.AreEqual(node.UserId, 0);
-			Assert.AreEqual(node.UserName, string.Empty);
-			Assert.AreEqual(node.Version, 0);
-			Assert.AreEqual(node.Changeset, 0);
-			Assert.AreEqual(node.Timestamp, new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
-			Assert.AreEqual(node.Tags.Count, 0);
+			Assert.AreEqual(0, node.Id);
+			Assert.AreEqual(0.0, node.Latitude);
+			Assert.AreEqual(0.0, node.Longitude);
+			Assert.AreEqual(0, node.UserId);
+			Assert.AreEqual(string.Empty, node.UserName);
+			Assert.AreEqual(0, node.Version);
+			Assert.AreEqual(0, node.Changeset);
+			Assert.AreEqual(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc), node.Timestamp);
+			Assert.AreEqual(0, node.Tags.Count);
 		}
 	}
 }

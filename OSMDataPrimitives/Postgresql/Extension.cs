@@ -26,10 +26,8 @@ namespace OSMDataPrimitives.PostgreSQL
 				element.Tags = ParseHstore(parameters["tags"]);
 			}
 
-			if (element is OSMWay wayElement) {
-				if (parameters["node_refs"] != null) {
-					wayElement.NodeRefs = ParseNodeRefs(parameters["node_refs"]);
-				}
+			if (element is OSMWay wayElement && parameters["node_refs"] != null) {
+				wayElement.NodeRefs = ParseNodeRefs(parameters["node_refs"]);
 			}
 		}
 

@@ -95,12 +95,8 @@ namespace OSMDataPrimitives.Xml
 		/// <param name="element">XmlElement.</param>
 		public static IOSMElement ToOSMElement(this XmlElement element)
 		{
-			var idAttribute = element.Attributes.GetNamedItem("id");
-			if (idAttribute == null) {
-				throw new XmlException("Missing required xml-attribute 'id'.");
-			}
-
-			var id = Convert.ToUInt64(idAttribute.Value);
+			var idAttribute = element.Attributes.GetNamedItem("id") ?? throw new XmlException("Missing required xml-attribute 'id'.");
+            var id = Convert.ToUInt64(idAttribute.Value);
             IOSMElement osmElement = element.Name switch
             {
                 "node" => new OSMNode(id),
@@ -151,36 +147,34 @@ namespace OSMDataPrimitives.Xml
 						}
 					}
 				}
-			} else if (osmElement is OSMRelation relationElement) {
-				if (element.HasChildNodes) {
-					foreach (XmlNode childNode in element.ChildNodes) {
-						if (childNode.Name != "member") {
-							continue;
+			} else if (osmElement is OSMRelation relationElement && element.HasChildNodes) {
+				foreach (XmlNode childNode in element.ChildNodes) {
+					if (childNode.Name != "member") {
+						continue;
+					}
+
+					var typeAttribute = childNode.Attributes.GetNamedItem("type");
+					var refAttribute = childNode.Attributes.GetNamedItem("ref");
+					var roleAttribute = childNode.Attributes.GetNamedItem("role");
+					if (typeAttribute != null && refAttribute != null && roleAttribute != null) {
+						MemberType? memberType = null;
+						switch (typeAttribute.Value) {
+							case "node":
+								memberType = MemberType.Node;
+								break;
+							case "way":
+								memberType = MemberType.Way;
+								break;
+							case "relation":
+								memberType = MemberType.Relation;
+								break;
+						}
+						if (!memberType.HasValue) {
+							throw new XmlException("invalid xml-attribute value (" + typeAttribute.Value + ") for 'member[@type]'.");
 						}
 
-						var typeAttribute = childNode.Attributes.GetNamedItem("type");
-						var refAttribute = childNode.Attributes.GetNamedItem("ref");
-						var roleAttribute = childNode.Attributes.GetNamedItem("role");
-						if (typeAttribute != null && refAttribute != null && roleAttribute != null) {
-							MemberType? memberType = null;
-							switch (typeAttribute.Value) {
-								case "node":
-									memberType = MemberType.Node;
-									break;
-								case "way":
-									memberType = MemberType.Way;
-									break;
-								case "relation":
-									memberType = MemberType.Relation;
-									break;
-							}
-							if (!memberType.HasValue) {
-								throw new XmlException("invalid xml-attribute value (" + typeAttribute.Value + ") for 'member[@type]'.");
-							}
-
-							var refValue = Convert.ToUInt64(refAttribute.Value);
-							relationElement.Members.Add(new OSMMember(memberType.Value, refValue, roleAttribute.Value));
-						}
+						var refValue = Convert.ToUInt64(refAttribute.Value);
+						relationElement.Members.Add(new OSMMember(memberType.Value, refValue, roleAttribute.Value));
 					}
 				}
 			}

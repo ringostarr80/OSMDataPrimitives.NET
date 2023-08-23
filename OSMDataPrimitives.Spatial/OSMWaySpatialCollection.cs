@@ -124,10 +124,8 @@ namespace OSMDataPrimitives.Spatial
 					if(polygonDirection != PolygonDirection.CounterClockwise) {
 						this[i] = this[i].Reverse();
 					}
-				} else if(role == "outer") {
-					if(polygonDirection != PolygonDirection.Clockwise) {
-						this[i] = this[i].Reverse();
-					}
+				} else if(role == "outer" && polygonDirection != PolygonDirection.Clockwise) {
+					this[i] = this[i].Reverse();
 				}
 			}
 		}
