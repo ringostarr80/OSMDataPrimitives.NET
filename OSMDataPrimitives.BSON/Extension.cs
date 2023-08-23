@@ -85,10 +85,10 @@ namespace OSMDataPrimitives.BSON
 		/// <param name="doc">BsonDocument.</param>
 		public static void ParseBsonDocument(this IOSMElement element, BsonDocument doc)
 		{
+			element.OverrideId(0);
+
 			if (doc.Contains("id")) {
 				element.OverrideId((ulong)doc["id"].AsInt64);
-			} else {
-				element.OverrideId(0);
 			}
 
 			if (element is OSMNode nodeElement) {
@@ -104,12 +104,6 @@ namespace OSMDataPrimitives.BSON
 				}
 			}
 
-			if (doc.Contains("version")) {
-				element.Version = (ulong)doc["version"].AsInt64;
-			} else {
-				element.Version = 0;
-			}
-
 			if (doc.Contains("uid")) {
 				element.UserId = (ulong)doc["uid"].AsInt64;
 				element.UserName = doc["user"].AsString;
@@ -118,41 +112,27 @@ namespace OSMDataPrimitives.BSON
 				element.UserName = string.Empty;
 			}
 
-			if (doc.Contains("changeset")) {
-				element.Changeset = (ulong)doc["changeset"].AsInt64;
-			} else {
-				element.Changeset = 0;
-			}
-
-			if (doc.Contains("timestamp")) {
-				element.Timestamp = doc["timestamp"].AsBsonDateTime.ToUniversalTime();
-			} else {
-				element.Timestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-			}
+			element.Version = doc.Contains("version") ? (ulong)doc["version"].AsInt64 : element.Version = 0;
+			element.Changeset = doc.Contains("changeset") ? (ulong)doc["changeset"].AsInt64 : element.Changeset = 0;
+			element.Timestamp = doc.Contains("timestamp") ? doc["timestamp"].AsBsonDateTime.ToUniversalTime() : element.Timestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
 			if (element is OSMWay wayElement) {
+				wayElement.NodeRefs.Clear();
 				if (doc.Contains("node_refs")) {
 					var nodeRefsArray = doc["node_refs"].AsBsonArray;
 					foreach (var nodeRef in nodeRefsArray) {
 						wayElement.NodeRefs.Add((ulong)nodeRef.AsInt64);
 					}
-				} else {
-					wayElement.NodeRefs.Clear();
 				}
 			}
 
 			if (element is OSMRelation relationElement) {
+				relationElement.Members.Clear();
 				if (doc.Contains("members")) {
 					var membersArray = doc["members"].AsBsonArray;
 					foreach (var member in membersArray) {
 						var memberDoc = member.AsBsonDocument;
-						if (!memberDoc.Contains("type")) {
-							continue;
-						}
-						if (!memberDoc.Contains("ref")) {
-							continue;
-						}
-						if (!memberDoc.Contains("role")) {
+						if (!memberDoc.Contains("type") || !memberDoc.Contains("ref") || !memberDoc.Contains("role")) {
 							continue;
 						}
 						MemberType? memberType = null;
@@ -173,18 +153,15 @@ namespace OSMDataPrimitives.BSON
 
 						relationElement.Members.Add(new OSMMember(memberType.Value, (ulong)memberDoc["ref"].AsInt64, memberDoc["role"].AsString));
 					}
-				} else {
-					relationElement.Members.Clear();
 				}
 			}
 
+			element.Tags.Clear();
 			if (doc.Contains("tags")) {
 				var tags = doc["tags"].AsBsonDocument;
 				foreach (string key in tags.Names) {
 					element.Tags.Add(key, tags[key].AsString);
 				}
-			} else {
-				element.Tags.Clear();
 			}
 		}
 	}
