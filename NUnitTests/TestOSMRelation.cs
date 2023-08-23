@@ -271,14 +271,14 @@ namespace NUnit
 
 			relation.ParseBsonDocument(bsonDoc);
 
-			Assert.AreEqual(relation.Id, 0);
-			Assert.AreEqual(relation.UserId, 0);
-			Assert.AreEqual(relation.UserName, string.Empty);
-			Assert.AreEqual(relation.Version, 0);
-			Assert.AreEqual(relation.Changeset, 0);
-			Assert.AreEqual(relation.Timestamp, new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
-			Assert.AreEqual(relation.Tags.Count, 0);
-			Assert.AreEqual(relation.Members.Count, 0);
+			Assert.AreEqual(0, relation.Id);
+			Assert.AreEqual(0, relation.UserId);
+			Assert.AreEqual(string.Empty, relation.UserName);
+			Assert.AreEqual(0, relation.Version);
+			Assert.AreEqual(0, relation.Changeset);
+			Assert.AreEqual(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc), relation.Timestamp);
+			Assert.AreEqual(0, relation.Tags.Count);
+			Assert.AreEqual(0, relation.Members.Count);
 		}
 	}
 }

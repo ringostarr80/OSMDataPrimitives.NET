@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 
@@ -112,9 +113,9 @@ namespace OSMDataPrimitives.BSON
 				element.UserName = string.Empty;
 			}
 
-			element.Version = doc.Contains("version") ? (ulong)doc["version"].AsInt64 : element.Version = 0;
-			element.Changeset = doc.Contains("changeset") ? (ulong)doc["changeset"].AsInt64 : element.Changeset = 0;
-			element.Timestamp = doc.Contains("timestamp") ? doc["timestamp"].AsBsonDateTime.ToUniversalTime() : element.Timestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+			element.Version = doc.Contains("version") ? (ulong)doc["version"].AsInt64 : 0;
+			element.Changeset = doc.Contains("changeset") ? (ulong)doc["changeset"].AsInt64 : 0;
+			element.Timestamp = doc.Contains("timestamp") ? doc["timestamp"].AsBsonDateTime.ToUniversalTime() : DateTime.UnixEpoch;
 
 			if (element is OSMWay wayElement) {
 				wayElement.NodeRefs.Clear();
@@ -130,11 +131,13 @@ namespace OSMDataPrimitives.BSON
 				relationElement.Members.Clear();
 				if (doc.Contains("members")) {
 					var membersArray = doc["members"].AsBsonArray;
-					foreach (var member in membersArray) {
+					var filteredMembers = membersArray.Where(member => {
+						return member.AsBsonDocument.Contains("type") &&
+							member.AsBsonDocument.Contains("ref") &&
+							member.AsBsonDocument.Contains("role");
+					});
+					foreach (var member in filteredMembers) {
 						var memberDoc = member.AsBsonDocument;
-						if (!memberDoc.Contains("type") || !memberDoc.Contains("ref") || !memberDoc.Contains("role")) {
-							continue;
-						}
 						MemberType? memberType = null;
 						switch (memberDoc["type"].AsString) {
 							case "node":

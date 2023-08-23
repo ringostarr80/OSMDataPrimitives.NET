@@ -66,22 +66,19 @@ namespace OSMDataPrimitives.Spatial
                     nodeElement.Longitude = Convert.ToDouble(lonAttribute.Value, CultureInfo.InvariantCulture);
                 }
             }
-            else if (osmElement is OSMWaySpatial wayElement)
+            else if (osmElement is OSMWaySpatial wayElement && element.HasChildNodes)
             {
-                if (element.HasChildNodes)
+                foreach (XmlNode childNode in element.ChildNodes)
                 {
-                    foreach (XmlNode childNode in element.ChildNodes)
+                    if (childNode.Name != "nd")
                     {
-                        if (childNode.Name != "nd")
-                        {
-                            continue;
-                        }
+                        continue;
+                    }
 
-                        var refAttribute = childNode.Attributes.GetNamedItem("ref");
-                        if (refAttribute != null)
-                        {
-                            wayElement.NodeRefs.Add(Convert.ToUInt64(refAttribute.Value));
-                        }
+                    var refAttribute = childNode.Attributes.GetNamedItem("ref");
+                    if (refAttribute != null)
+                    {
+                        wayElement.NodeRefs.Add(Convert.ToUInt64(refAttribute.Value));
                     }
                 }
             }
