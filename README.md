@@ -2,6 +2,7 @@
 ![codeql_analysis](https://img.shields.io/github/actions/workflow/status/ringostarr80/OSMDataPrimitives.NET/codeql-analysis.yml)
 ![nuget_version](https://img.shields.io/nuget/v/OSMDataPrimitives)
 ![github_tag](https://img.shields.io/github/v/tag/ringostarr80/OSMDataPrimitives.NET?sort=semver)
+[![codecov](https://codecov.io/gh/ringostarr80/OSMDataPrimitives.NET/graph/badge.svg?token=TAOL82MFYD)](https://codecov.io/gh/ringostarr80/OSMDataPrimitives.NET)
 
 # OSMDataPrimitives
 
