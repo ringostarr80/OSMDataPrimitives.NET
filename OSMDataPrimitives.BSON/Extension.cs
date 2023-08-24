@@ -136,8 +136,7 @@ namespace OSMDataPrimitives.BSON
 							member.AsBsonDocument.Contains("ref") &&
 							member.AsBsonDocument.Contains("role");
 					});
-					foreach (var member in filteredMembers) {
-						var memberDoc = member.AsBsonDocument;
+					foreach (var memberDoc in filteredMembers.Select(member => member.AsBsonDocument)) {
 						MemberType? memberType = null;
 						switch (memberDoc["type"].AsString) {
 							case "node":

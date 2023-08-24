@@ -13,6 +13,6 @@
 
 
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <DocumentationFile>bin\Release\net6.0\OSMDataPrimitives.xml</DocumentationFile>
+    <DocumentationFile>bin/Release/net6.0/OSMDataPrimitives.xml</DocumentationFile>
   </PropertyGroup>
 </Project>

@@ -10,7 +10,6 @@ namespace OSMDataPrimitives.Spatial
 	public class OSMWaySpatial : OSMWay
 	{
 		private List<OSMNodeSpatial> _nodes = new();
-		private string _role = "outer";
 
 		/// <summary>
 		/// Gets or sets the nodes.
@@ -23,17 +22,17 @@ namespace OSMDataPrimitives.Spatial
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets the role.
-		/// </summary>
-		/// <value>The role.</value>
-		public string Role { get { return this._role; } set { this._role = value; } }
+        /// <summary>
+        /// Gets or sets the role.
+        /// </summary>
+        /// <value>The role.</value>
+        public string Role { get; set; } = "outer";
 
-		/// <summary>
-		/// Gets a value indicating whether this <see cref="T:OSMDataPrimitives.Spatial.OSMWaySpatial"/> is closed.
-		/// </summary>
-		/// <value><c>true</c> if this way is a closed line (polygon); otherwise, <c>false</c>.</value>
-		public bool IsClosed {
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="T:OSMDataPrimitives.Spatial.OSMWaySpatial"/> is closed.
+        /// </summary>
+        /// <value><c>true</c> if this way is a closed line (polygon); otherwise, <c>false</c>.</value>
+        public bool IsClosed {
 			get {
 				if (this._nodes.Count < 3) {
 					return false;

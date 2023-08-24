@@ -142,7 +142,6 @@ namespace OSMDataPrimitives.Spatial
 				}
 				if(this[i].Nodes.Count == 3 && Math.Abs(this[i].Nodes[0].Latitude - this[i].Nodes[2].Latitude) < double.Epsilon && Math.Abs(this[i].Nodes[0].Longitude - this[i].Nodes[2].Longitude) < double.Epsilon) {
 					this.RemoveAt(i);
-					continue;
 				}
 			}
 		}
