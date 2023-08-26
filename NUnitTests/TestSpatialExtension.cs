@@ -54,6 +54,29 @@ namespace NUnit
 			return xmlWay;
 		}
 
+		private static XmlElement BuildOsmXmlRelation()
+		{
+			var xml = new XmlDocument();
+			var xmlRelation = xml.CreateElement("relation");
+			xmlRelation.SetAttribute("id", "1");
+			xmlRelation.SetAttribute("changeset", "2");
+			xmlRelation.SetAttribute("version", "3");
+			xmlRelation.SetAttribute("uid", "4");
+			xmlRelation.SetAttribute("user", "unknown");
+			xmlRelation.SetAttribute("timestamp", "2023-06-01T12:00:00");
+			var xmlTag = xml.CreateElement("tag");
+			xmlTag.SetAttribute("k", "building");
+			xmlTag.SetAttribute("v", "house");
+			xmlRelation.AppendChild(xmlTag);
+			var xmlMember = xml.CreateElement("member");
+			xmlMember.SetAttribute("type", "way");
+			xmlMember.SetAttribute("ref", "1");
+			xmlMember.SetAttribute("role", "");
+			xmlRelation.AppendChild(xmlMember);
+
+			return xmlRelation;
+		}
+
 		[Test]
 		public void TestXmlNodeToOSMSpatialElement()
 		{
@@ -143,5 +166,41 @@ namespace NUnit
 			way.Nodes.Add(new OSMNodeSpatial(3, 52.4321, 10.1234));
 			Assert.AreEqual("LINESTRING (10.4321 52.1234, 10.1234 52.4321)", way.ToWkt());
 		}
+
+		[Test]
+		public void TestXmlRelationToOSMSpatialElement()
+		{
+			var xmlRelation = BuildOsmXmlRelation();
+			var spatialElement = xmlRelation.ToOSMSpatialElement();
+			if (spatialElement is OSMRelation osmRelation) {
+				Assert.AreEqual(1, osmRelation.Id);
+				Assert.AreEqual(2, osmRelation.Changeset);
+				Assert.AreEqual(3, osmRelation.Version);
+				Assert.AreEqual(4, osmRelation.UserId);
+				Assert.AreEqual("unknown", osmRelation.UserName);
+				Assert.AreEqual(new DateTime(2023, 6, 1, 12, 0, 0), osmRelation.Timestamp);
+				Assert.AreEqual(1, osmRelation.Tags.Count);
+				Assert.AreEqual("house", osmRelation.Tags["building"]);
+				Assert.AreEqual(1, osmRelation.Members.Count);
+			}
+        }
+
+		[Test]
+		public void TestXmlRelationStringToOSMSpatialElement()
+		{
+			var xmlRelation = BuildOsmXmlRelation();
+			var spatialElement = xmlRelation.OuterXml.ToOSMSpatialElement();
+			if (spatialElement is OSMRelation osmRelation) {
+				Assert.AreEqual(1, osmRelation.Id);
+				Assert.AreEqual(2, osmRelation.Changeset);
+				Assert.AreEqual(3, osmRelation.Version);
+				Assert.AreEqual(4, osmRelation.UserId);
+				Assert.AreEqual("unknown", osmRelation.UserName);
+				Assert.AreEqual(new DateTime(2023, 6, 1, 12, 0, 0), osmRelation.Timestamp);
+				Assert.AreEqual(1, osmRelation.Tags.Count);
+				Assert.AreEqual("house", osmRelation.Tags["building"]);
+				Assert.AreEqual(1, osmRelation.Members.Count);
+			}
+        }
     }
 }
