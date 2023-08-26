@@ -123,6 +123,13 @@ namespace NUnit
 		}
 
 		[Test]
+		public void TestOSMNodeSpatialToWKT()
+		{
+			var node = new OSMNodeSpatial(1, 52.1234, 12.4321);
+			Assert.AreEqual("POINT (12.4321 52.1234)", node.ToWkt());
+		}
+
+		[Test]
 		public void TestXmlWayToOSMSpatialElement()
 		{
 			var xmlWay = BuildOsmXmlWay();
@@ -164,7 +171,7 @@ namespace NUnit
 			var way = new OSMWaySpatial(1);
 			way.Nodes.Add(new OSMNodeSpatial(2, 52.1234, 10.4321));
 			way.Nodes.Add(new OSMNodeSpatial(3, 52.4321, 10.1234));
-			Assert.AreEqual("LINESTRING (10.4321 52.1234, 10.1234 52.4321)", way.ToWkt());
+			Assert.AreEqual("LINESTRING (10.4321 52.1234, 10.1234 52.4321)", way.ToWkt(WktType.LineString));
 		}
 
 		[Test]
