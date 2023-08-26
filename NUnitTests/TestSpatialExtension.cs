@@ -68,11 +68,21 @@ namespace NUnit
 			xmlTag.SetAttribute("k", "building");
 			xmlTag.SetAttribute("v", "house");
 			xmlRelation.AppendChild(xmlTag);
-			var xmlMember = xml.CreateElement("member");
-			xmlMember.SetAttribute("type", "way");
-			xmlMember.SetAttribute("ref", "1");
-			xmlMember.SetAttribute("role", "");
-			xmlRelation.AppendChild(xmlMember);
+			var xmlNodeMember = xml.CreateElement("member");
+			xmlNodeMember.SetAttribute("type", "node");
+			xmlNodeMember.SetAttribute("ref", "10");
+			xmlNodeMember.SetAttribute("role", "");
+			var xmlWayMember = xml.CreateElement("member");
+			xmlWayMember.SetAttribute("type", "way");
+			xmlWayMember.SetAttribute("ref", "20");
+			xmlWayMember.SetAttribute("role", "");
+			var xmlRelationMember = xml.CreateElement("member");
+			xmlRelationMember.SetAttribute("type", "relation");
+			xmlRelationMember.SetAttribute("ref", "20");
+			xmlRelationMember.SetAttribute("role", "");
+			xmlRelation.AppendChild(xmlNodeMember);
+			xmlRelation.AppendChild(xmlWayMember);
+			xmlRelation.AppendChild(xmlRelationMember);
 
 			return xmlRelation;
 		}
@@ -188,7 +198,7 @@ namespace NUnit
 				Assert.AreEqual(new DateTime(2023, 6, 1, 12, 0, 0), osmRelation.Timestamp);
 				Assert.AreEqual(1, osmRelation.Tags.Count);
 				Assert.AreEqual("house", osmRelation.Tags["building"]);
-				Assert.AreEqual(1, osmRelation.Members.Count);
+				Assert.AreEqual(3, osmRelation.Members.Count);
 			}
         }
 
@@ -206,7 +216,7 @@ namespace NUnit
 				Assert.AreEqual(new DateTime(2023, 6, 1, 12, 0, 0), osmRelation.Timestamp);
 				Assert.AreEqual(1, osmRelation.Tags.Count);
 				Assert.AreEqual("house", osmRelation.Tags["building"]);
-				Assert.AreEqual(1, osmRelation.Members.Count);
+				Assert.AreEqual(3, osmRelation.Members.Count);
 			}
         }
     }
