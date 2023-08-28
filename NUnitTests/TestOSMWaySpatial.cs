@@ -8,7 +8,7 @@ namespace NUnit
 	[TestFixture]
 	public class TestOSMWaySpatial
 	{
-		private OSMWay GetDefaultOSMWay()
+		private static OSMWay GetDefaultOSMWay()
 		{
 			var way = new OSMWay(2) {
 				UserId = 5,
@@ -29,7 +29,7 @@ namespace NUnit
 			return way;
 		}
 
-		private OSMWaySpatial GetDefaultOSMWaySpatial()
+		private static OSMWaySpatial GetDefaultOSMWaySpatial()
 		{
 			var way = new OSMWaySpatial(19410366) {
 				Version = 11,
@@ -54,7 +54,7 @@ namespace NUnit
 			return way;
 		}
 
-		private OSMWaySpatial GetClosedOSMWaySpatial()
+		private static OSMWaySpatial GetClosedOSMWaySpatial()
 		{
 			var way = new OSMWaySpatial(39857589) {
 				Version = 6,
@@ -86,7 +86,7 @@ namespace NUnit
 			return way;
 		}
 
-		private OSMWaySpatial GetClockwiseOSMWaySpatial()
+		private static OSMWaySpatial GetClockwiseOSMWaySpatial()
 		{
 			var way = new OSMWaySpatial(90105666) {
 				Version = 3,
@@ -111,7 +111,7 @@ namespace NUnit
 			return way;
 		}
 
-		private OSMWaySpatial GetCounterClockwiseOSMWaySpatial()
+		private static OSMWaySpatial GetCounterClockwiseOSMWaySpatial()
 		{
 			var way = new OSMWaySpatial(273579651) {
 				Version = 2,
@@ -138,7 +138,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMWaySpatialClone()
 		{
-			var defaultWay = this.GetDefaultOSMWaySpatial();
+			var defaultWay = GetDefaultOSMWaySpatial();
 			var clonedWay = (OSMWaySpatial)defaultWay.Clone();
 			clonedWay.Nodes[0].Latitude += 0.02;
 			clonedWay.Nodes[0].Longitude += 0.01;
@@ -153,7 +153,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMWaySpatialConstructorWithOSMWay()
 		{
-			var way = this.GetDefaultOSMWay();
+			var way = GetDefaultOSMWay();
 			var waySpatial = new OSMWaySpatial(way);
 
 			waySpatial.Changeset += 1;
@@ -204,35 +204,35 @@ namespace NUnit
 		[Test]
 		public void TestOSMWaySpatialIsNotClosed()
 		{
-			var defaultWay = this.GetDefaultOSMWaySpatial();
+			var defaultWay = GetDefaultOSMWaySpatial();
 			Assert.AreEqual(false, defaultWay.IsClosed);
 		}
 
 		[Test]
 		public void TestOSMWaySpatialIsClosed()
 		{
-			var closedWay = this.GetClosedOSMWaySpatial();
+			var closedWay = GetClosedOSMWaySpatial();
 			Assert.AreEqual(true, closedWay.IsClosed);
 		}
 
 		[Test]
 		public void TestOSMWaySpatialDirectionClockwise()
 		{
-			var counterClockwiseWay = this.GetCounterClockwiseOSMWaySpatial();
+			var counterClockwiseWay = GetCounterClockwiseOSMWaySpatial();
 			Assert.AreEqual(PolygonDirection.CounterClockwise, counterClockwiseWay.Direction);
 		}
 
 		[Test]
 		public void TestOSMWaySpatialDirectionCounterClockwise()
 		{
-			var clockwiseWay = this.GetClockwiseOSMWaySpatial();
+			var clockwiseWay = GetClockwiseOSMWaySpatial();
 			Assert.AreEqual(PolygonDirection.Clockwise, clockwiseWay.Direction);
 		}
 
 		[Test]
 		public void TestOSMWaySpatialReverse()
 		{
-			var clockwiseWay = this.GetClockwiseOSMWaySpatial();
+			var clockwiseWay = GetClockwiseOSMWaySpatial();
 			var counterClockwiseWay = clockwiseWay.Reverse();
 			Assert.AreEqual(PolygonDirection.CounterClockwise, counterClockwiseWay.Direction);
 		}
@@ -240,7 +240,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMWaySpatialToWkt()
 		{
-			var way = this.GetDefaultOSMWaySpatial();
+			var way = GetDefaultOSMWaySpatial();
 			var wkt = way.ToWkt();
 			var expectedWkt = "LINESTRING (9.9936292 53.5510746, 9.9937873 53.5511904, 9.9943703 53.5515143, 9.994567 53.5516129)";
 			Assert.AreEqual(expectedWkt, wkt);
@@ -249,7 +249,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMWaySpatialPointIsInPolygon()
 		{
-			var polygon = this.GetClosedOSMWaySpatial();
+			var polygon = GetClosedOSMWaySpatial();
 
 			Assert.True(polygon.PointInPolygon(53.5514198, 9.9944637));
 			Assert.True(polygon.PointInPolygon(53.5511411, 9.9948384));

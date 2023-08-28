@@ -8,7 +8,7 @@ namespace NUnit
 	[TestFixture]
 	public class TestOSMNodeSpatial
 	{
-		private OSMNode GetDefaultOSMNode()
+		private static OSMNode GetDefaultOSMNode()
 		{
 			var node = new OSMNode(2) {
 				Latitude = 52.123456,
@@ -25,14 +25,14 @@ namespace NUnit
 			return node;
 		}
 
-		private OSMNodeSpatial GetOSMNodeSpatial1()
+		private static OSMNodeSpatial GetOSMNodeSpatial1()
 		{
 			// Position of Hamburg.
 			var node = new OSMNodeSpatial(2, 53.553345, 9.992475);
 			return node;
 		}
 
-		private OSMNodeSpatial GetOSMNodeSpatial2()
+		private static OSMNodeSpatial GetOSMNodeSpatial2()
 		{
 			// Position of Munich
 			var node = new OSMNodeSpatial(2, 48.136385, 11.577624);
@@ -42,7 +42,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMNodeSpatialConstructorWithOSMNode()
 		{
-			var node = this.GetDefaultOSMNode();
+			var node = GetDefaultOSMNode();
 			var nodeSpatial = new OSMNodeSpatial(node);
 
 			nodeSpatial.Changeset += 1;
@@ -78,8 +78,8 @@ namespace NUnit
 		[Test]
 		public void TestNodeDistanceCalculation()
 		{
-			var node1 = this.GetOSMNodeSpatial1();
-			var node2 = this.GetOSMNodeSpatial2();
+			var node1 = GetOSMNodeSpatial1();
+			var node2 = GetOSMNodeSpatial2();
 
 			var distance = node1.GetDistance(node2);
 			Assert.AreEqual(613178, (int)distance);
@@ -88,8 +88,8 @@ namespace NUnit
 		[Test]
 		public void TestNodeDirectionCalculation()
 		{
-			var node1 = this.GetOSMNodeSpatial1();
-			var node2 = this.GetOSMNodeSpatial2();
+			var node1 = GetOSMNodeSpatial1();
+			var node2 = GetOSMNodeSpatial2();
 
 			var direction = node1.GetDirection(node2);
 			Assert.AreEqual(168, (int)direction);
@@ -97,7 +97,7 @@ namespace NUnit
 
 		public void TestNodeToWkt()
 		{
-			var node = this.GetOSMNodeSpatial1();
+			var node = GetOSMNodeSpatial1();
 			var wkt = node.ToWkt();
 			var expectedWkt = "POINT (53.553345 9.992475)";
 			Assert.AreEqual(expectedWkt, wkt);

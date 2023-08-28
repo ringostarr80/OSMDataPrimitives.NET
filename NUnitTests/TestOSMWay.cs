@@ -11,7 +11,7 @@ namespace NUnit
 	[TestFixture]
 	public class TestOSMWay
 	{
-		private OSMWay GetDefaultOSMWay()
+		private static OSMWay GetDefaultOSMWay()
 		{
 			var way = new OSMWay(2) {
 				UserId = 5,
@@ -35,7 +35,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMWayClone()
 		{
-			var way = this.GetDefaultOSMWay();
+			var way = GetDefaultOSMWay();
 			var wayClone = (OSMWay)way.Clone();
 			wayClone.Changeset += 1;
 			wayClone.Version += 1;
@@ -85,7 +85,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMWayToXmlString()
 		{
-			var way = this.GetDefaultOSMWay();
+			var way = GetDefaultOSMWay();
 
 			var expectedXmlString = "<way id=\"2\" version=\"3\" uid=\"5\" user=\"foo\" changeset=\"7\" timestamp=\"2017-01-20T12:03:43Z\">";
 			expectedXmlString += "<nd ref=\"5\" />";
@@ -103,7 +103,7 @@ namespace NUnit
 		[Test]
 		public void TestXmlElementToOSMWay()
 		{
-			var way = this.GetDefaultOSMWay();
+			var way = GetDefaultOSMWay();
 			var xmlWay = way.ToXml();
 			var convertedWay = (OSMWay)xmlWay.ToOSMElement();
 
@@ -127,7 +127,7 @@ namespace NUnit
 		[Test]
 		public void TestXmlStringToOSMWay()
 		{
-			var way = this.GetDefaultOSMWay();
+			var way = GetDefaultOSMWay();
 			var xmlString = way.ToXmlString();
 			var convertedWay = (OSMWay)xmlString.ToOSMElement();
 
@@ -151,7 +151,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMWayToPostgreSQLInsertString()
 		{
-			var way = this.GetDefaultOSMWay();
+			var way = GetDefaultOSMWay();
 			var sqlInsert = way.ToPostgreSQLInsert(out NameValueCollection sqlParameters);
 			var expectedSql = "INSERT INTO ways (osm_id, tags, node_refs) ";
 			expectedSql += "VALUES(@osm_id::bigint, @tags::hstore, @node_refs::bigint[])";
@@ -171,7 +171,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMWayToPostgreSQLSelectString()
 		{
-			var way = this.GetDefaultOSMWay();
+			var way = GetDefaultOSMWay();
 			var sqlSelect = way.ToPostgreSQLSelect();
 			var expectedSql = "SELECT osm_id, tags::text, node_refs::text FROM ways WHERE osm_id = 2";
 			Assert.AreEqual(expectedSql, sqlSelect);
@@ -189,7 +189,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMWayToPostgreSQLDeleteString()
 		{
-			var way = this.GetDefaultOSMWay();
+			var way = GetDefaultOSMWay();
 			var expectedSql = "DELETE FROM ways WHERE osm_id = 2";
 			Assert.AreEqual(expectedSql, way.ToPostgreSQLDelete());
 		}
@@ -197,7 +197,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMWayToBson()
 		{
-			var way = this.GetDefaultOSMWay();
+			var way = GetDefaultOSMWay();
 
 			var bsonDoc = way.ToBson();
 			var idElement = bsonDoc.GetElement("id");
@@ -235,7 +235,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMWayParseBsonDocument()
 		{
-			var way = this.GetDefaultOSMWay();
+			var way = GetDefaultOSMWay();
 			var bsonDoc = way.ToBson();
 
 			var parsedWay = new OSMWay(0);
@@ -262,7 +262,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMWayParseEmptyBsonDocument()
 		{
-			var way = this.GetDefaultOSMWay();
+			var way = GetDefaultOSMWay();
 			var bsonDoc = new MongoDB.Bson.BsonDocument();
 
 			way.ParseBsonDocument(bsonDoc);

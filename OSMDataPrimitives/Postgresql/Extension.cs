@@ -141,7 +141,7 @@ namespace OSMDataPrimitives.PostgreSQL
 			}
 
 			var tagsSB = new StringBuilder();
-			if (element.Tags.Count >= 0) {
+			if (element.Tags.Count > 0) {
 				var tagCounter = 0;
 				foreach (string tagKey in element.Tags) {
 					tagCounter++;
@@ -212,7 +212,6 @@ namespace OSMDataPrimitives.PostgreSQL
 			var hstore = new NameValueCollection();
             var startIndex = 0;
 
-            bool tagFound;
             do
             {
                 var beginKeyQuoteIndex = hstoreString.IndexOf("\"", startIndex, StringComparison.InvariantCulture);
@@ -268,8 +267,7 @@ namespace OSMDataPrimitives.PostgreSQL
                 hstore.Add(tagKey, tagValue);
 
                 startIndex = endValueQuoteIndex + 1;
-                tagFound = true;
-            } while (tagFound);
+            } while (true);
 
             return hstore;
 		}

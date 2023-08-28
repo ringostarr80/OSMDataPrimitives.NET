@@ -11,7 +11,7 @@ namespace NUnit
 	[TestFixture]
 	public class TestOSMNode
 	{
-		private OSMNode GetDefaultOSMNode()
+		private static OSMNode GetDefaultOSMNode()
 		{
 			var node = new OSMNode(2) {
 				Latitude = 52.123456,
@@ -31,7 +31,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMNodeClone()
 		{
-			var node = this.GetDefaultOSMNode();
+			var node = GetDefaultOSMNode();
 			var nodeClone = (OSMNode)node.Clone();
 			nodeClone.Changeset += 1;
 			nodeClone.Version += 1;
@@ -66,7 +66,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMNodeToXmlString()
 		{
-			var node = this.GetDefaultOSMNode();
+			var node = GetDefaultOSMNode();
 
 			var expectedXmlString = "<node id=\"2\" lat=\"52.123456\" lon=\"12.654321\" version=\"3\" uid=\"5\" user=\"foo\" changeset=\"7\" timestamp=\"2017-01-20T12:03:43Z\">";
 			expectedXmlString += "<tag k=\"name\" v=\"bar\" />";
@@ -78,7 +78,7 @@ namespace NUnit
 		[Test]
 		public void TestXmlElementToOSMNode()
 		{
-			var node = this.GetDefaultOSMNode();
+			var node = GetDefaultOSMNode();
 			var xmlNode = node.ToXml();
 			var convertedNode = xmlNode.ToOSMElement();
 
@@ -97,7 +97,7 @@ namespace NUnit
 		[Test]
 		public void TestXmlStringToOSMNode()
 		{
-			var node = this.GetDefaultOSMNode();
+			var node = GetDefaultOSMNode();
 			var xmlString = node.ToXmlString();
 			var convertedNode = xmlString.ToOSMElement();
 
@@ -116,7 +116,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMNodeToPostgreSQLInsertString()
 		{
-			var node = this.GetDefaultOSMNode();
+			var node = GetDefaultOSMNode();
 			var sqlInsert = node.ToPostgreSQLInsert(out NameValueCollection sqlParameters);
 			var expectedSql = "INSERT INTO nodes (osm_id, lat, lon, tags) ";
 			expectedSql += "VALUES(@osm_id::bigint, @lat::double precision, @lon::double precision, @tags::hstore)";
@@ -137,7 +137,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMNodeToPostgreSQLSelectString()
 		{
-			var node = this.GetDefaultOSMNode();
+			var node = GetDefaultOSMNode();
 			var sqlSelect = node.ToPostgreSQLSelect();
 			var expectedSql = "SELECT osm_id, lat, lon, tags::text FROM nodes WHERE osm_id = 2";
 			Assert.AreEqual(expectedSql, sqlSelect);
@@ -155,7 +155,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMNodeToPostgreSQLDeleteString()
 		{
-			var node = this.GetDefaultOSMNode();
+			var node = GetDefaultOSMNode();
 			var expectedSql = "DELETE FROM nodes WHERE osm_id = 2";
 			Assert.AreEqual(expectedSql, node.ToPostgreSQLDelete());
 		}
@@ -163,7 +163,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMNodeToBson()
 		{
-			var node = this.GetDefaultOSMNode();
+			var node = GetDefaultOSMNode();
 
 			var bsonDoc = node.ToBson();
 			var idElement = bsonDoc.GetElement("id");
@@ -196,7 +196,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMNodeParseBsonDocument()
 		{
-			var node = this.GetDefaultOSMNode();
+			var node = GetDefaultOSMNode();
 			var bsonDoc = node.ToBson();
 
 			var parsedNode = new OSMNode(0);
@@ -220,7 +220,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMNodeParseEmptyBsonDocument()
 		{
-			var node = this.GetDefaultOSMNode();
+			var node = GetDefaultOSMNode();
 			var bsonDoc = new MongoDB.Bson.BsonDocument();
 
 			node.ParseBsonDocument(bsonDoc);

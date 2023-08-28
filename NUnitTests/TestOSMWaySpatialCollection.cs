@@ -6,7 +6,7 @@ namespace NUnit
 	[TestFixture]
 	public class TestOSMWaySpatialCollection
 	{
-		private OSMWaySpatial GetDefaultLine1()
+		private static OSMWaySpatial GetDefaultLine1()
 		{
 			var line = new OSMWaySpatial(1);
 			line.Nodes.Add(new OSMNodeSpatial(1, 10, 10));
@@ -16,7 +16,7 @@ namespace NUnit
 			return line;
 		}
 
-		private OSMWaySpatial GetDefaultLine2()
+		private static OSMWaySpatial GetDefaultLine2()
 		{
 			var line = new OSMWaySpatial(2);
 			line.Nodes.Add(new OSMNodeSpatial(4, 40, 40));
@@ -27,7 +27,7 @@ namespace NUnit
 			return line;
 		}
 
-		private OSMWaySpatial GetOuterPolygon1()
+		private static OSMWaySpatial GetOuterPolygon1()
 		{
 			var polygon = new OSMWaySpatial(3);
 			polygon.Nodes.Add(new OSMNodeSpatial(8, 20, 30));
@@ -38,7 +38,7 @@ namespace NUnit
 			return polygon;
 		}
 
-		private OSMWaySpatial GetOuterPolygon2()
+		private static OSMWaySpatial GetOuterPolygon2()
 		{
 			var polygon = new OSMWaySpatial(4);
 			polygon.Nodes.Add(new OSMNodeSpatial(12, 5, 15));
@@ -50,7 +50,7 @@ namespace NUnit
 			return polygon;
 		}
 
-		private OSMWaySpatial GetOuterPolygon3()
+		private static OSMWaySpatial GetOuterPolygon3()
 		{
 			var polygon = new OSMWaySpatial(5);
 			polygon.Nodes.Add(new OSMNodeSpatial(17, 40, 40));
@@ -61,7 +61,7 @@ namespace NUnit
 			return polygon;
 		}
 
-		private OSMWaySpatial GetOuterPolygon4()
+		private static OSMWaySpatial GetOuterPolygon4()
 		{
 			var polygon = new OSMWaySpatial(6);
 			polygon.Nodes.Add(new OSMNodeSpatial(21, 35, 20));
@@ -74,7 +74,7 @@ namespace NUnit
 			return polygon;
 		}
 
-		private OSMWaySpatial GetInnerPolygon1()
+		private static OSMWaySpatial GetInnerPolygon1()
 		{
 			var polygon = new OSMWaySpatial(7) {
 				Role = "inner"
@@ -90,8 +90,8 @@ namespace NUnit
 		[Test]
 		public void TestOSMWaySpatialCollectionMultiLineString()
 		{
-			var line1 = this.GetDefaultLine1();
-			var line2 = this.GetDefaultLine2();
+			var line1 = GetDefaultLine1();
+			var line2 = GetDefaultLine2();
 			var multiLine = new OSMWaySpatialCollection {
 				line1,
 				line2
@@ -103,8 +103,8 @@ namespace NUnit
 		[Test]
 		public void TestOSMWaySpatialCollectionMultiPolygon1()
 		{
-			var polygon1 = this.GetOuterPolygon1();
-			var polygon2 = this.GetOuterPolygon2();
+			var polygon1 = GetOuterPolygon1();
+			var polygon2 = GetOuterPolygon2();
 			var multiPolygon = new OSMWaySpatialCollection {
 				polygon1,
 				polygon2
@@ -116,9 +116,9 @@ namespace NUnit
 		[Test]
 		public void TestOSMWaySpatialCollectionMultiPolygonWithInner()
 		{
-			var outerPolygon1 = this.GetOuterPolygon3();
-			var outerPolygon2 = this.GetOuterPolygon4();
-			var innerPolygon1 = this.GetInnerPolygon1();
+			var outerPolygon1 = GetOuterPolygon3();
+			var outerPolygon2 = GetOuterPolygon4();
+			var innerPolygon1 = GetInnerPolygon1();
 			var multiPolygon = new OSMWaySpatialCollection {
 				outerPolygon1,
 				outerPolygon2,

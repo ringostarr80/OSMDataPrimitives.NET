@@ -11,7 +11,7 @@ namespace NUnit
 	[TestFixture]
 	public class TestOSMRelation
 	{
-		private OSMRelation GetDefaultOSMRelation()
+		private static OSMRelation GetDefaultOSMRelation()
 		{
 			var relation = new OSMRelation(2) {
 				UserId = 5,
@@ -31,7 +31,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMRelationClone()
 		{
-			var relation = this.GetDefaultOSMRelation();
+			var relation = GetDefaultOSMRelation();
 			var relationClone = (OSMRelation)relation.Clone();
 			relationClone.Changeset += 1;
 			relationClone.Version += 1;
@@ -73,7 +73,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMRelationToXmlString()
 		{
-			var relation = this.GetDefaultOSMRelation();
+			var relation = GetDefaultOSMRelation();
 
 			var expectedXmlString = "<relation id=\"2\" version=\"3\" uid=\"5\" user=\"foo\" changeset=\"7\" timestamp=\"2017-01-20T12:03:43Z\">";
 			expectedXmlString += "<member type=\"way\" ref=\"123\" role=\"inner\" />";
@@ -87,7 +87,7 @@ namespace NUnit
 		[Test]
 		public void TestXmlElementToOSMRelation()
 		{
-			var relation = this.GetDefaultOSMRelation();
+			var relation = GetDefaultOSMRelation();
 			var xmlRelation = relation.ToXml();
 			var convertedRelation = (OSMRelation)xmlRelation.ToOSMElement();
 
@@ -107,7 +107,7 @@ namespace NUnit
 		[Test]
 		public void TestXmlStringToOSMRelation()
 		{
-			var relation = this.GetDefaultOSMRelation();
+			var relation = GetDefaultOSMRelation();
 			var xmlString = relation.ToXmlString();
 			var convertedRelation = (OSMRelation)xmlString.ToOSMElement();
 
@@ -127,7 +127,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMRelationToPostgreSQLInsertString()
 		{
-			var relation = this.GetDefaultOSMRelation();
+			var relation = GetDefaultOSMRelation();
 			var sqlInsert = relation.ToPostgreSQLInsert(out NameValueCollection sqlParameters);
 			var expectedSql = "INSERT INTO relations (osm_id, tags, members) ";
 			expectedSql += "VALUES(@osm_id::bigint, @tags::hstore, ARRAY[@member_1::hstore, @member_2::hstore])";
@@ -148,9 +148,9 @@ namespace NUnit
 		[Test]
 		public void TestOSMRelationWithoutMembersToPostgreSQLInsertString()
 		{
-			var relation = this.GetDefaultOSMRelation();
+			var relation = GetDefaultOSMRelation();
 			relation.Members.Clear();
-			var sqlInsert = relation.ToPostgreSQLInsert(out NameValueCollection sqlParameters);
+            var sqlInsert = relation.ToPostgreSQLInsert(out _);
 			var expectedSql = "INSERT INTO relations (osm_id, tags, members) ";
 			expectedSql += "VALUES(@osm_id::bigint, @tags::hstore, '{}')";
 			Assert.AreEqual(expectedSql, sqlInsert);
@@ -159,7 +159,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMRelationToPostgreSQLSelectString()
 		{
-			var relation = this.GetDefaultOSMRelation();
+			var relation = GetDefaultOSMRelation();
 			var sqlSelect = relation.ToPostgreSQLSelect();
 			var expectedSql = "SELECT osm_id, tags::text, members::text FROM relations WHERE osm_id = 2";
 			Assert.AreEqual(expectedSql, sqlSelect);
@@ -177,7 +177,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMRelationToPostgreSQLDeleteString()
 		{
-			var relation = this.GetDefaultOSMRelation();
+			var relation = GetDefaultOSMRelation();
 			var expectedSql = "DELETE FROM relations WHERE osm_id = 2";
 			Assert.AreEqual(expectedSql, relation.ToPostgreSQLDelete());
 		}
@@ -185,7 +185,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMRelationToBson()
 		{
-			var relation = this.GetDefaultOSMRelation();
+			var relation = GetDefaultOSMRelation();
 
 			var bsonDoc = relation.ToBson();
 			var idElement = bsonDoc.GetElement("id");
@@ -225,7 +225,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMRelationParseBsonDocument()
 		{
-			var relation = this.GetDefaultOSMRelation();
+			var relation = GetDefaultOSMRelation();
 			var bsonDoc = relation.ToBson();
 
 			var parsedRelation = new OSMRelation(0);
@@ -266,7 +266,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMRelationParseEmptyBsonDocument()
 		{
-			var relation = this.GetDefaultOSMRelation();
+			var relation = GetDefaultOSMRelation();
 			var bsonDoc = new MongoDB.Bson.BsonDocument();
 
 			relation.ParseBsonDocument(bsonDoc);
