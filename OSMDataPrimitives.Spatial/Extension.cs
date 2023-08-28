@@ -11,6 +11,75 @@ namespace OSMDataPrimitives.Spatial
     /// </summary>
     public static class Extension
     {
+        private static void SetOSMNodeProperties(OSMNodeSpatial node, XmlElement element)
+        {
+            var latAttribute = element.Attributes.GetNamedItem("lat");
+            if (latAttribute != null)
+            {
+                node.Latitude = Convert.ToDouble(latAttribute.Value, CultureInfo.InvariantCulture);
+            }
+            var lonAttribute = element.Attributes.GetNamedItem("lon");
+            if (lonAttribute != null)
+            {
+                node.Longitude = Convert.ToDouble(lonAttribute.Value, CultureInfo.InvariantCulture);
+            }
+        }
+
+        private static void SetOSMWayProperties(OSMWaySpatial way, XmlElement element)
+        {
+            foreach (XmlNode childNode in element.ChildNodes)
+            {
+                if (childNode.Name != "nd")
+                {
+                    continue;
+                }
+
+                var refAttribute = childNode.Attributes.GetNamedItem("ref");
+                if (refAttribute != null)
+                {
+                    way.NodeRefs.Add(Convert.ToUInt64(refAttribute.Value));
+                }
+            }
+        }
+
+        private static void SetOSMRelationProperties(OSMRelation relation, XmlElement element)
+        {
+            foreach (XmlNode childNode in element.ChildNodes)
+            {
+                if (childNode.Name != "member")
+                {
+                    continue;
+                }
+
+                var typeAttribute = childNode.Attributes.GetNamedItem("type");
+                var refAttribute = childNode.Attributes.GetNamedItem("ref");
+                var roleAttribute = childNode.Attributes.GetNamedItem("role");
+                if (typeAttribute != null && refAttribute != null && roleAttribute != null)
+                {
+                    MemberType? memberType = null;
+                    switch (typeAttribute.Value)
+                    {
+                        case "node":
+                            memberType = MemberType.Node;
+                            break;
+                        case "way":
+                            memberType = MemberType.Way;
+                            break;
+                        case "relation":
+                            memberType = MemberType.Relation;
+                            break;
+                    }
+                    if (!memberType.HasValue)
+                    {
+                        throw new XmlException("invalid xml-attribute value (" + typeAttribute.Value + ") for 'member[@type]'.");
+                    }
+
+                    var refValue = Convert.ToUInt64(refAttribute.Value);
+                    relation.Members.Add(new OSMMember(memberType.Value, refValue, roleAttribute.Value));
+                }
+            }
+        }
+
         /// <summary>
         /// Converts the XmlElement to an OSMElement.
         /// </summary>
@@ -55,86 +124,29 @@ namespace OSMDataPrimitives.Spatial
 
             if (osmElement is OSMNodeSpatial nodeElement)
             {
-                var latAttribute = element.Attributes.GetNamedItem("lat");
-                if (latAttribute != null)
-                {
-                    nodeElement.Latitude = Convert.ToDouble(latAttribute.Value, CultureInfo.InvariantCulture);
-                }
-                var lonAttribute = element.Attributes.GetNamedItem("lon");
-                if (lonAttribute != null)
-                {
-                    nodeElement.Longitude = Convert.ToDouble(lonAttribute.Value, CultureInfo.InvariantCulture);
-                }
+                SetOSMNodeProperties(nodeElement, element);
             }
             else if (osmElement is OSMWaySpatial wayElement && element.HasChildNodes)
             {
-                foreach (XmlNode childNode in element.ChildNodes)
-                {
-                    if (childNode.Name != "nd")
-                    {
-                        continue;
-                    }
-
-                    var refAttribute = childNode.Attributes.GetNamedItem("ref");
-                    if (refAttribute != null)
-                    {
-                        wayElement.NodeRefs.Add(Convert.ToUInt64(refAttribute.Value));
-                    }
-                }
+                SetOSMWayProperties(wayElement, element);
             }
             else if (osmElement is OSMRelation relationElement && element.HasChildNodes)
             {
-                foreach (XmlNode childNode in element.ChildNodes)
-                {
-                    if (childNode.Name != "member")
-                    {
-                        continue;
-                    }
-
-                    var typeAttribute = childNode.Attributes.GetNamedItem("type");
-                    var refAttribute = childNode.Attributes.GetNamedItem("ref");
-                    var roleAttribute = childNode.Attributes.GetNamedItem("role");
-                    if (typeAttribute != null && refAttribute != null && roleAttribute != null)
-                    {
-                        MemberType? memberType = null;
-                        switch (typeAttribute.Value)
-                        {
-                            case "node":
-                                memberType = MemberType.Node;
-                                break;
-                            case "way":
-                                memberType = MemberType.Way;
-                                break;
-                            case "relation":
-                                memberType = MemberType.Relation;
-                                break;
-                        }
-                        if (!memberType.HasValue)
-                        {
-                            throw new XmlException("invalid xml-attribute value (" + typeAttribute.Value + ") for 'member[@type]'.");
-                        }
-
-                        var refValue = Convert.ToUInt64(refAttribute.Value);
-                        relationElement.Members.Add(new OSMMember(memberType.Value, refValue, roleAttribute.Value));
-                    }
-                }
+                SetOSMRelationProperties(relationElement, element);
             }
 
-            if (element.HasChildNodes)
+            foreach (XmlNode childNode in element.ChildNodes)
             {
-                foreach (XmlNode childNode in element.ChildNodes)
+                switch (childNode.Name)
                 {
-                    switch (childNode.Name)
-                    {
-                        case "tag":
-                            var kAttribute = childNode.Attributes.GetNamedItem("k");
-                            var vAttribute = childNode.Attributes.GetNamedItem("v");
-                            if (kAttribute != null && vAttribute != null)
-                            {
-                                osmElement.Tags.Add(kAttribute.Value, vAttribute.Value);
-                            }
-                            break;
-                    }
+                    case "tag":
+                        var kAttribute = childNode.Attributes.GetNamedItem("k");
+                        var vAttribute = childNode.Attributes.GetNamedItem("v");
+                        if (kAttribute != null && vAttribute != null)
+                        {
+                            osmElement.Tags.Add(kAttribute.Value, vAttribute.Value);
+                        }
+                        break;
                 }
             }
 
