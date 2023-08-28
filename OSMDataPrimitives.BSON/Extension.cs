@@ -93,16 +93,7 @@ namespace OSMDataPrimitives.BSON
 			}
 
 			if (element is OSMNode nodeElement) {
-				if (doc.Contains("location")) {
-					var locationDoc = doc["location"].AsBsonDocument;
-					if (locationDoc.Contains("lat") && locationDoc.Contains("lon")) {
-						nodeElement.Latitude = locationDoc["lat"].AsDouble;
-						nodeElement.Longitude = locationDoc["lon"].AsDouble;
-					}
-				} else {
-					nodeElement.Latitude = 0.0;
-					nodeElement.Longitude = 0.0;
-				}
+				ParseBsonDocumentForOSMNode(nodeElement, doc);
 			}
 
 			if (doc.Contains("uid")) {
@@ -118,44 +109,11 @@ namespace OSMDataPrimitives.BSON
 			element.Timestamp = doc.Contains("timestamp") ? doc["timestamp"].AsBsonDateTime.ToUniversalTime() : DateTime.UnixEpoch;
 
 			if (element is OSMWay wayElement) {
-				wayElement.NodeRefs.Clear();
-				if (doc.Contains("node_refs")) {
-					var nodeRefsArray = doc["node_refs"].AsBsonArray;
-					foreach (var nodeRef in nodeRefsArray) {
-						wayElement.NodeRefs.Add((ulong)nodeRef.AsInt64);
-					}
-				}
+				ParseBsonDocumentForOSMWay(wayElement, doc);
 			}
 
 			if (element is OSMRelation relationElement) {
-				relationElement.Members.Clear();
-				if (doc.Contains("members")) {
-					var membersArray = doc["members"].AsBsonArray;
-					var filteredMembers = membersArray.Where(member => {
-						return member.AsBsonDocument.Contains("type") &&
-							member.AsBsonDocument.Contains("ref") &&
-							member.AsBsonDocument.Contains("role");
-					});
-					foreach (var memberDoc in filteredMembers.Select(member => member.AsBsonDocument)) {
-						MemberType? memberType = null;
-						switch (memberDoc["type"].AsString) {
-							case "node":
-								memberType = MemberType.Node;
-								break;
-							case "way":
-								memberType = MemberType.Way;
-								break;
-							case "relation":
-								memberType = MemberType.Relation;
-								break;
-						}
-						if (!memberType.HasValue) {
-							continue;
-						}
-
-						relationElement.Members.Add(new OSMMember(memberType.Value, (ulong)memberDoc["ref"].AsInt64, memberDoc["role"].AsString));
-					}
-				}
+				ParseBsonDocumentForOSMRelation(relationElement, doc);
 			}
 
 			element.Tags.Clear();
@@ -163,6 +121,63 @@ namespace OSMDataPrimitives.BSON
 				var tags = doc["tags"].AsBsonDocument;
 				foreach (string key in tags.Names) {
 					element.Tags.Add(key, tags[key].AsString);
+				}
+			}
+		}
+
+		public static void ParseBsonDocumentForOSMNode(OSMNode node, BsonDocument doc)
+		{
+			if (doc.Contains("location")) {
+				var locationDoc = doc["location"].AsBsonDocument;
+				if (locationDoc.Contains("lat") && locationDoc.Contains("lon")) {
+					node.Latitude = locationDoc["lat"].AsDouble;
+					node.Longitude = locationDoc["lon"].AsDouble;
+				}
+			} else {
+				node.Latitude = 0.0;
+				node.Longitude = 0.0;
+			}
+		}
+
+		public static void ParseBsonDocumentForOSMWay(OSMWay way, BsonDocument doc)
+		{
+			way.NodeRefs.Clear();
+			if (doc.Contains("node_refs")) {
+				var nodeRefsArray = doc["node_refs"].AsBsonArray;
+				foreach (var nodeRef in nodeRefsArray) {
+					way.NodeRefs.Add((ulong)nodeRef.AsInt64);
+				}
+			}
+		}
+
+		public static void ParseBsonDocumentForOSMRelation(OSMRelation relation, BsonDocument doc)
+		{
+			relation.Members.Clear();
+			if (doc.Contains("members")) {
+				var membersArray = doc["members"].AsBsonArray;
+				var filteredMembers = membersArray.Where(member => {
+					return member.AsBsonDocument.Contains("type") &&
+						member.AsBsonDocument.Contains("ref") &&
+						member.AsBsonDocument.Contains("role");
+				});
+				foreach (var memberDoc in filteredMembers.Select(member => member.AsBsonDocument)) {
+					MemberType? memberType = null;
+					switch (memberDoc["type"].AsString) {
+						case "node":
+							memberType = MemberType.Node;
+							break;
+						case "way":
+							memberType = MemberType.Way;
+							break;
+						case "relation":
+							memberType = MemberType.Relation;
+							break;
+					}
+					if (!memberType.HasValue) {
+						continue;
+					}
+
+					relation.Members.Add(new OSMMember(memberType.Value, (ulong)memberDoc["ref"].AsInt64, memberDoc["role"].AsString));
 				}
 			}
 		}

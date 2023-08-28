@@ -95,11 +95,12 @@ namespace NUnit
 			Assert.AreEqual(168, (int)direction);
 		}
 
+		[Test]
 		public void TestNodeToWkt()
 		{
 			var node = GetOSMNodeSpatial1();
 			var wkt = node.ToWkt();
-			var expectedWkt = "POINT (53.553345 9.992475)";
+			var expectedWkt = "POINT (9.992475 53.553345)";
 			Assert.AreEqual(expectedWkt, wkt);
 		}
 	}
