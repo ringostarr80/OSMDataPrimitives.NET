@@ -11,6 +11,35 @@ namespace OSMDataPrimitives.Spatial
     /// </summary>
     public static class Extension
     {
+        private static void SetOSMGeneralProperties(IOSMElement osmElement, XmlElement element)
+        {
+            var changesetAttribute = element.Attributes.GetNamedItem("changeset");
+            if (changesetAttribute != null)
+            {
+                osmElement.Changeset = Convert.ToUInt64(changesetAttribute.Value);
+            }
+            var versionAttribute = element.Attributes.GetNamedItem("version");
+            if (versionAttribute != null)
+            {
+                osmElement.Version = Convert.ToUInt64(versionAttribute.Value);
+            }
+            var uidAttribute = element.Attributes.GetNamedItem("uid");
+            if (uidAttribute != null)
+            {
+                osmElement.UserId = Convert.ToUInt64(uidAttribute.Value);
+            }
+            var userAttribute = element.Attributes.GetNamedItem("user");
+            if (userAttribute != null)
+            {
+                osmElement.UserName = userAttribute.Value;
+            }
+            var timestampAttribute = element.Attributes.GetNamedItem("timestamp");
+            if (timestampAttribute != null)
+            {
+                osmElement.Timestamp = DateTime.Parse(timestampAttribute.Value, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
+            }
+        }
+
         private static void SetOSMNodeProperties(OSMNodeSpatial node, XmlElement element)
         {
             var latAttribute = element.Attributes.GetNamedItem("lat");
@@ -96,31 +125,8 @@ namespace OSMDataPrimitives.Spatial
                 "relation" => new OSMRelation(id),
                 _ => throw new XmlException("Invalid xml-element name '" + element.Name + "'. Expected 'node', 'way' or 'relation'."),
             };
-            var changesetAttribute = element.Attributes.GetNamedItem("changeset");
-            if (changesetAttribute != null)
-            {
-                osmElement.Changeset = Convert.ToUInt64(changesetAttribute.Value);
-            }
-            var versionAttribute = element.Attributes.GetNamedItem("version");
-            if (versionAttribute != null)
-            {
-                osmElement.Version = Convert.ToUInt64(versionAttribute.Value);
-            }
-            var uidAttribute = element.Attributes.GetNamedItem("uid");
-            if (uidAttribute != null)
-            {
-                osmElement.UserId = Convert.ToUInt64(uidAttribute.Value);
-            }
-            var userAttribute = element.Attributes.GetNamedItem("user");
-            if (userAttribute != null)
-            {
-                osmElement.UserName = userAttribute.Value;
-            }
-            var timestampAttribute = element.Attributes.GetNamedItem("timestamp");
-            if (timestampAttribute != null)
-            {
-                osmElement.Timestamp = DateTime.Parse(timestampAttribute.Value, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
-            }
+
+            SetOSMGeneralProperties(osmElement, element);
 
             if (osmElement is OSMNodeSpatial nodeElement)
             {
@@ -219,77 +225,78 @@ namespace OSMDataPrimitives.Spatial
         /// <param name="wktType">WktType.</param>
         public static string ToWkt(this OSMWaySpatialCollection ways, WktType? wktType = null)
         {
-            var wktTypeString = "MULTILINESTRING";
-            var openingBrace = "(";
-            var closingBrace = ")";
-            if (wktType.HasValue)
-            {
-                switch (wktType.Value)
-                {
-                    case WktType.MultiLineString:
-                        wktTypeString = wktType.Value.ToString().ToUpper();
-                        break;
-                    case WktType.MultiPolygon:
-                        wktTypeString = wktType.Value.ToString().ToUpper();
-                        openingBrace = "((";
-                        closingBrace = "))";
-                        break;
-
-                    default:
-                        throw new XmlException("invalid wktType-value (" + wktType.Value + ") for 'OSMWaySpatialCollection.ToWkt(WktType? wktType = null)'.");
-                }
+            if (wktType.HasValue) {
+                return wktType.Value switch {
+                    WktType.MultiLineString => ToWktMultiLineString(ways),
+                    WktType.MultiPolygon => ToWktMultiPolygon(ways),
+                    _ => throw new XmlException("invalid wktType-value (" + wktType.Value + ") for 'OSMWaySpatialCollection.ToWkt(WktType? wktType = null)'.")
+                };
             }
 
+            return ToWktMultiLineString(ways);
+        }
+
+        public static string ToWktMultiLineString(this OSMWaySpatialCollection ways)
+        {
             var resultSB = new StringBuilder();
-            resultSB.Append(wktTypeString);
+            resultSB.Append("MULTILINESTRING");
             resultSB.Append(" (");
             var wayCounter = 0;
-            if (wktTypeString == "MULTIPOLYGON")
+
+            foreach (var way in ways)
             {
-                var outerWays = new OSMWaySpatialCollection(ways.Where(w => w.Role == "outer")).Merge();
-                outerWays.RemoveInvalidPolygons();
-                outerWays.EnsurePolygonDirection();
-                var innerWays = new OSMWaySpatialCollection(ways.Where(w => w.Role == "inner")).Merge();
-                innerWays.RemoveInvalidPolygons();
-                innerWays.EnsurePolygonDirection();
-
-                if (outerWays.Count == 0)
+                wayCounter++;
+                if (wayCounter > 1)
                 {
-                    throw new DataException("invalid polygon data.");
+                    resultSB.Append(", ");
                 }
-
-                foreach (var outerWay in outerWays)
-                {
-                    wayCounter++;
-                    if (wayCounter > 1)
-                    {
-                        resultSB.Append(", ");
-                    }
-                    resultSB.Append("((" + outerWay.ToWktPart() + ")");
-                    foreach (var innerWay in innerWays)
-                    {
-                        if (!outerWay.PointInPolygon(innerWay.Nodes[0].Latitude, innerWay.Nodes[0].Longitude))
-                        {
-                            continue;
-                        }
-
-                        resultSB.Append(", (" + innerWay.ToWktPart() + ")");
-                    }
-                    resultSB.Append(')');
-                }
+                resultSB.Append("(" + way.ToWktPart() + ")");
             }
-            else
+
+            resultSB.Append(')');
+
+            return resultSB.ToString();
+        }
+
+        public static string ToWktMultiPolygon(this OSMWaySpatialCollection ways)
+        {
+            var resultSB = new StringBuilder();
+            resultSB.Append("MULTIPOLYGON");
+            resultSB.Append(" (");
+            var wayCounter = 0;
+
+            var outerWays = new OSMWaySpatialCollection(ways.Where(w => w.Role == "outer")).Merge();
+            outerWays.RemoveInvalidPolygons();
+            outerWays.EnsurePolygonDirection();
+            var innerWays = new OSMWaySpatialCollection(ways.Where(w => w.Role == "inner")).Merge();
+            innerWays.RemoveInvalidPolygons();
+            innerWays.EnsurePolygonDirection();
+
+            if (outerWays.Count == 0)
             {
-                foreach (var way in ways)
-                {
-                    wayCounter++;
-                    if (wayCounter > 1)
-                    {
-                        resultSB.Append(", ");
-                    }
-                    resultSB.Append(openingBrace + way.ToWktPart() + closingBrace);
-                }
+                throw new DataException("invalid polygon data.");
             }
+
+            foreach (var outerWay in outerWays)
+            {
+                wayCounter++;
+                if (wayCounter > 1)
+                {
+                    resultSB.Append(", ");
+                }
+                resultSB.Append("((" + outerWay.ToWktPart() + ")");
+                foreach (var innerWay in innerWays)
+                {
+                    if (!outerWay.PointInPolygon(innerWay.Nodes[0].Latitude, innerWay.Nodes[0].Longitude))
+                    {
+                        continue;
+                    }
+
+                    resultSB.Append(", (" + innerWay.ToWktPart() + ")");
+                }
+                resultSB.Append(')');
+            }
+
             resultSB.Append(')');
 
             return resultSB.ToString();
