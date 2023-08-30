@@ -83,21 +83,14 @@ namespace OSMDataPrimitives.Spatial
                 var typeAttribute = childNode.Attributes.GetNamedItem("type");
                 var refAttribute = childNode.Attributes.GetNamedItem("ref");
                 var roleAttribute = childNode.Attributes.GetNamedItem("role");
-                if (typeAttribute != null && refAttribute != null && roleAttribute != null)
+                if (typeAttribute is not null && refAttribute is not null && roleAttribute is not null)
                 {
-                    MemberType? memberType = null;
-                    switch (typeAttribute.Value)
-                    {
-                        case "node":
-                            memberType = MemberType.Node;
-                            break;
-                        case "way":
-                            memberType = MemberType.Way;
-                            break;
-                        case "relation":
-                            memberType = MemberType.Relation;
-                            break;
-                    }
+                    MemberType? memberType = typeAttribute.Value switch {
+                        "node" => MemberType.Node,
+                        "way" => MemberType.Way,
+                        "relation" => MemberType.Relation,
+                        _ => null
+                    };
                     if (!memberType.HasValue)
                     {
                         throw new XmlException("invalid xml-attribute value (" + typeAttribute.Value + ") for 'member[@type]'.");
@@ -148,7 +141,7 @@ namespace OSMDataPrimitives.Spatial
                     case "tag":
                         var kAttribute = childNode.Attributes.GetNamedItem("k");
                         var vAttribute = childNode.Attributes.GetNamedItem("v");
-                        if (kAttribute != null && vAttribute != null)
+                        if (kAttribute is not null && vAttribute is not null)
                         {
                             osmElement.Tags.Add(kAttribute.Value, vAttribute.Value);
                         }

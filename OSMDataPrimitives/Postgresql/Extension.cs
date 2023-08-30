@@ -18,15 +18,15 @@ namespace OSMDataPrimitives.PostgreSQL
 		/// <param name="parameters">Parameters.</param>
 		public static void ParsePostgreSQLFields(this IOSMElement element, NameValueCollection parameters)
 		{
-			if (parameters["osm_id"] != null) {
+			if (parameters["osm_id"] is not null) {
 				element.OverrideId(Convert.ToUInt64(parameters["osm_id"]));
 			}
 
-			if (parameters["tags"] != null) {
+			if (parameters["tags"] is not null) {
 				element.Tags = ParseHstore(parameters["tags"]);
 			}
 
-			if (element is OSMWay wayElement && parameters["node_refs"] != null) {
+			if (element is OSMWay wayElement && parameters["node_refs"] is not null) {
 				wayElement.NodeRefs = ParseNodeRefs(parameters["node_refs"]);
 			}
 		}
