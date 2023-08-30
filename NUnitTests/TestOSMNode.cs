@@ -117,12 +117,17 @@ namespace NUnit
 		public void TestOSMNodeToPostgreSQLInsertString()
 		{
 			var node = GetDefaultOSMNode();
-			var sqlInsert = node.ToPostgreSQLInsert(out NameValueCollection sqlParameters);
-			var expectedSql = "INSERT INTO nodes (osm_id, lat, lon, tags) ";
-			expectedSql += "VALUES(@osm_id::bigint, @lat::double precision, @lon::double precision, @tags::hstore)";
+			var sqlInsert = node.ToPostgreSQLInsert(out NameValueCollection sqlParameters, true);
+			var expectedSql = "INSERT INTO nodes (osm_id, version, changeset, uid, user, timestamp, lat, lon, tags) ";
+			expectedSql += "VALUES(@osm_id::bigint, @version::bigint, @changeset::bigint, @uid::bigint, @user, TIMESTAMP @timestamp, @lat::double precision, @lon::double precision, @tags::hstore)";
 			Assert.AreEqual(expectedSql, sqlInsert);
 			var expectedSqlParameters = new NameValueCollection {
 				{"osm_id", "2"},
+				{"version", "3"},
+				{"changeset", "7"},
+				{"uid", "5"},
+				{"user", "foo"},
+				{"timestamp", "2017-01-20 12:03:43"},
 				{"lat", "52.123456"},
 				{"lon", "12.654321"},
 				{"tags", "\"name\"=>\"bar\", \"ref\"=>\"baz\""}
