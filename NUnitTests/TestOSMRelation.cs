@@ -24,6 +24,8 @@ namespace NUnit
 			relation.Tags.Add("ref", "DE");
 			relation.Members.Add(new OSMMember(MemberType.Way, 123, "inner"));
 			relation.Members.Add(new OSMMember(MemberType.Way, 234, "outer"));
+			relation.Members.Add(new OSMMember(MemberType.Node, 345, ""));
+			relation.Members.Add(new OSMMember(MemberType.Relation, 456, ""));
 
 			return relation;
 		}
@@ -59,11 +61,12 @@ namespace NUnit
 			Assert.AreEqual("that country", relationClone.Tags["name"]);
 			Assert.AreEqual("DE", relation.Tags["ref"]);
 			Assert.AreEqual("GB", relationClone.Tags["ref"]);
-			Assert.AreEqual(2, relation.Members.Count);
+			Assert.AreEqual(4, relation.Members.Count);
 			Assert.AreEqual(3, relationClone.Members.Count);
 
 			Assert.AreEqual(new OSMMember(MemberType.Way, 123, "inner"), relation.Members[0]);
 			Assert.AreEqual(new OSMMember(MemberType.Way, 234, "outer"), relation.Members[1]);
+			Assert.AreEqual(new OSMMember(MemberType.Node, 345, ""), relation.Members[2]);
 
 			Assert.AreEqual(new OSMMember(MemberType.Node, 321, "inner"), relationClone.Members[0]);
 			Assert.AreEqual(new OSMMember(MemberType.Way, 432, "inner"), relationClone.Members[1]);
@@ -78,6 +81,8 @@ namespace NUnit
 			var expectedXmlString = "<relation id=\"2\" version=\"3\" uid=\"5\" user=\"foo\" changeset=\"7\" timestamp=\"2017-01-20T12:03:43Z\">";
 			expectedXmlString += "<member type=\"way\" ref=\"123\" role=\"inner\" />";
 			expectedXmlString += "<member type=\"way\" ref=\"234\" role=\"outer\" />";
+			expectedXmlString += "<member type=\"node\" ref=\"345\" role=\"\" />";
+			expectedXmlString += "<member type=\"relation\" ref=\"456\" role=\"\" />";
 			expectedXmlString += "<tag k=\"name\" v=\"this country\" />";
 			expectedXmlString += "<tag k=\"ref\" v=\"DE\" />";
 			expectedXmlString += "</relation>";
@@ -99,9 +104,11 @@ namespace NUnit
 			Assert.AreEqual(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc), convertedRelation.Timestamp);
 			Assert.AreEqual("this country", convertedRelation.Tags["name"]);
 			Assert.AreEqual("DE", convertedRelation.Tags["ref"]);
-			Assert.AreEqual(2, convertedRelation.Members.Count);
+			Assert.AreEqual(4, convertedRelation.Members.Count);
 			Assert.AreEqual(new OSMMember(MemberType.Way, 123, "inner"), convertedRelation.Members[0]);
 			Assert.AreEqual(new OSMMember(MemberType.Way, 234, "outer"), convertedRelation.Members[1]);
+			Assert.AreEqual(new OSMMember(MemberType.Node, 345, ""), convertedRelation.Members[2]);
+			Assert.AreEqual(new OSMMember(MemberType.Relation, 456, ""), convertedRelation.Members[3]);
 		}
 
 		[Test]
@@ -119,9 +126,11 @@ namespace NUnit
 			Assert.AreEqual(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc), convertedRelation.Timestamp);
 			Assert.AreEqual("this country", convertedRelation.Tags["name"]);
 			Assert.AreEqual("DE", convertedRelation.Tags["ref"]);
-			Assert.AreEqual(2, convertedRelation.Members.Count);
+			Assert.AreEqual(4, convertedRelation.Members.Count);
 			Assert.AreEqual(new OSMMember(MemberType.Way, 123, "inner"), convertedRelation.Members[0]);
 			Assert.AreEqual(new OSMMember(MemberType.Way, 234, "outer"), convertedRelation.Members[1]);
+			Assert.AreEqual(new OSMMember(MemberType.Node, 345, ""), convertedRelation.Members[2]);
+			Assert.AreEqual(new OSMMember(MemberType.Relation, 456, ""), convertedRelation.Members[3]);
 		}
 
 		[Test]
@@ -130,13 +139,15 @@ namespace NUnit
 			var relation = GetDefaultOSMRelation();
 			var sqlInsert = relation.ToPostgreSQLInsert(out NameValueCollection sqlParameters);
 			var expectedSql = "INSERT INTO relations (osm_id, tags, members) ";
-			expectedSql += "VALUES(@osm_id::bigint, @tags::hstore, ARRAY[@member_1::hstore, @member_2::hstore])";
+			expectedSql += "VALUES(@osm_id::bigint, @tags::hstore, ARRAY[@member_1::hstore, @member_2::hstore, @member_3::hstore, @member_4::hstore])";
 			Assert.AreEqual(expectedSql, sqlInsert);
 			var expectedSqlParameters = new NameValueCollection {
 				{"osm_id", "2"},
 				{"tags", "\"name\"=>\"this country\", \"ref\"=>\"DE\""},
 				{"member_1", "\"type\"=>\"way\",\"ref\"=>\"123\",\"role\"=>\"inner\""},
-				{"member_2", "\"type\"=>\"way\",\"ref\"=>\"234\",\"role\"=>\"outer\""}
+				{"member_2", "\"type\"=>\"way\",\"ref\"=>\"234\",\"role\"=>\"outer\""},
+				{"member_3", "\"type\"=>\"node\",\"ref\"=>\"345\",\"role\"=>\"\""},
+				{"member_4", "\"type\"=>\"relation\",\"ref\"=>\"456\",\"role\"=>\"\""}
 			};
 			Assert.AreEqual(expectedSqlParameters.Count, sqlParameters.Count);
 			foreach (string key in expectedSqlParameters) {
@@ -204,7 +215,7 @@ namespace NUnit
 			Assert.AreEqual(7, changesetElement.Value.AsInt64);
 			Assert.AreEqual(new MongoDB.Bson.BsonDateTime(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc)), timestampElement.Value.AsBsonDateTime);
 			Assert.AreEqual(2, tagsElement.Value.AsBsonDocument.ElementCount);
-			Assert.AreEqual(2, membersElement.Value.AsBsonArray.Count);
+			Assert.AreEqual(4, membersElement.Value.AsBsonArray.Count);
 
 			var tagName = tagsElement.Value.AsBsonDocument.GetElement("name");
 			var tagRef = tagsElement.Value.AsBsonDocument.GetElement("ref");
@@ -214,12 +225,20 @@ namespace NUnit
 			var membersBsonArray = membersElement.Value.AsBsonArray;
 			var member1Doc = membersBsonArray[0].AsBsonDocument;
 			var member2Doc = membersBsonArray[1].AsBsonDocument;
+			var member3Doc = membersBsonArray[2].AsBsonDocument;
+			var member4Doc = membersBsonArray[3].AsBsonDocument;
 			Assert.AreEqual("way", member1Doc.GetElement("type").Value.AsString);
 			Assert.AreEqual(123, member1Doc.GetElement("ref").Value.AsInt64);
 			Assert.AreEqual("inner", member1Doc.GetElement("role").Value.AsString);
 			Assert.AreEqual("way", member2Doc.GetElement("type").Value.AsString);
 			Assert.AreEqual(234, member2Doc.GetElement("ref").Value.AsInt64);
 			Assert.AreEqual("outer", member2Doc.GetElement("role").Value.AsString);
+			Assert.AreEqual("node", member3Doc.GetElement("type").Value.AsString);
+			Assert.AreEqual(345, member3Doc.GetElement("ref").Value.AsInt64);
+			Assert.AreEqual("", member3Doc.GetElement("role").Value.AsString);
+			Assert.AreEqual("relation", member4Doc.GetElement("type").Value.AsString);
+			Assert.AreEqual(456, member4Doc.GetElement("ref").Value.AsInt64);
+			Assert.AreEqual("", member4Doc.GetElement("role").Value.AsString);
 		}
 
 		[Test]

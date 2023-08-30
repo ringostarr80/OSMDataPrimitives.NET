@@ -156,28 +156,18 @@ namespace OSMDataPrimitives.BSON
 			if (doc.Contains("members")) {
 				var membersArray = doc["members"].AsBsonArray;
 				var filteredMembers = membersArray.Where(member => {
-					return member.AsBsonDocument.Contains("type") &&
-						member.AsBsonDocument.Contains("ref") &&
-						member.AsBsonDocument.Contains("role");
+					return member.AsBsonDocument.Contains("type") && member.AsBsonDocument.Contains("ref") && member.AsBsonDocument.Contains("role");
 				});
 				foreach (var memberDoc in filteredMembers.Select(member => member.AsBsonDocument)) {
-					MemberType? memberType = null;
-					switch (memberDoc["type"].AsString) {
-						case "node":
-							memberType = MemberType.Node;
-							break;
-						case "way":
-							memberType = MemberType.Way;
-							break;
-						case "relation":
-							memberType = MemberType.Relation;
-							break;
+					MemberType? memberType = memberDoc["type"].AsString switch {
+						"node" => MemberType.Node,
+						"way" => MemberType.Way,
+						"relation" => MemberType.Relation,
+						_ => null
+					};
+					if (memberType.HasValue) {
+						relation.Members.Add(new OSMMember(memberType.Value, (ulong)memberDoc["ref"].AsInt64, memberDoc["role"].AsString));
 					}
-					if (!memberType.HasValue) {
-						continue;
-					}
-
-					relation.Members.Add(new OSMMember(memberType.Value, (ulong)memberDoc["ref"].AsInt64, memberDoc["role"].AsString));
 				}
 			}
 		}
