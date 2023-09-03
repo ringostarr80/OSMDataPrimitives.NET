@@ -100,5 +100,19 @@ namespace NUnit
 
             Assert.AreEqual(new NameValueCollection(), osmNode.Tags);
         }
+
+        [Test]
+		public void TestOSMNodeParsePostgreSQLFieldsFailed5()
+		{
+            var parameters = new NameValueCollection() {
+                { "osm_id", "2" },
+                { "tags", "\"foo\"=>\"bar\\baz\"" }
+            };
+            var osmNode = new OSMNode(1, 52.1234, 10.1234);
+            osmNode.ParsePostgreSQLFields(parameters);
+
+            Assert.AreEqual("foo", osmNode.Tags.GetKey(0));
+            Assert.AreEqual("bar\\baz", osmNode.Tags[0]);
+        }
     }
 }
