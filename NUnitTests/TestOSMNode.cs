@@ -140,6 +140,33 @@ namespace NUnit
 		}
 
 		[Test]
+		public void TestOSMNodeToPostgreSQLInsertWithoutTagsString()
+		{
+			var node = GetDefaultOSMNode();
+			node.Tags.Clear();
+			var sqlInsert = node.ToPostgreSQLInsert(out NameValueCollection sqlParameters, true);
+			var expectedSql = "INSERT INTO nodes (osm_id, version, changeset, uid, user, timestamp, lat, lon, tags) ";
+			expectedSql += "VALUES(@osm_id::bigint, @version::bigint, @changeset::bigint, @uid::bigint, @user, TIMESTAMP @timestamp, @lat::double precision, @lon::double precision, @tags::hstore)";
+			Assert.AreEqual(expectedSql, sqlInsert);
+			var expectedSqlParameters = new NameValueCollection {
+				{"osm_id", "2"},
+				{"version", "3"},
+				{"changeset", "7"},
+				{"uid", "5"},
+				{"user", "foo"},
+				{"timestamp", "2017-01-20 12:03:43"},
+				{"lat", "52.123456"},
+				{"lon", "12.654321"},
+				{"tags", "''"}
+			};
+			Assert.AreEqual(expectedSqlParameters.Count, sqlParameters.Count);
+			foreach (string key in expectedSqlParameters) {
+				Assert.NotNull(sqlParameters[key]);
+				Assert.AreEqual(expectedSqlParameters[key], sqlParameters[key]);
+			}
+		}
+
+		[Test]
 		public void TestOSMNodeToPostgreSQLSelectString()
 		{
 			var node = GetDefaultOSMNode();
@@ -163,6 +190,14 @@ namespace NUnit
 			var node = GetDefaultOSMNode();
 			var expectedSql = "DELETE FROM nodes WHERE osm_id = 2";
 			Assert.AreEqual(expectedSql, node.ToPostgreSQLDelete());
+		}
+
+		[Test]
+		public void TestOSMNodeToPostgreSQLDeleteWithCustomTableString()
+		{
+			var node = GetDefaultOSMNode();
+			var expectedSql = "DELETE FROM foo_nodes WHERE osm_id = 2";
+			Assert.AreEqual(expectedSql, node.ToPostgreSQLDelete("foo_nodes"));
 		}
 
 		[Test]

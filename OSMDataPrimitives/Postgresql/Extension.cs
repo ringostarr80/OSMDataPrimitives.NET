@@ -225,11 +225,15 @@ namespace OSMDataPrimitives.PostgreSQL
                     break;
                 }
                 var tagKey = hstoreString.Substring(beginKeyQuoteIndex + 1, endKeyQuoteIndex - beginKeyQuoteIndex - 1);
-                if (hstoreString.Substring(endKeyQuoteIndex + 1, 2) != "=>")
+                if (hstoreString.Length >= endKeyQuoteIndex + 1 + 2 && hstoreString.Substring(endKeyQuoteIndex + 1, 2) != "=>")
                 {
                     break;
                 }
 
+				if (hstoreString.Length < endKeyQuoteIndex + 2)
+				{
+					break;
+				}
                 var beginValueQuoteIndex = hstoreString.IndexOf("\"", endKeyQuoteIndex + 2, StringComparison.InvariantCulture);
                 if (beginValueQuoteIndex == -1)
                 {

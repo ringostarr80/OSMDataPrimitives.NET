@@ -48,5 +48,57 @@ namespace NUnit
             Assert.AreEqual(expectedTags, osmWay.Tags);
             Assert.AreEqual(expectedList, osmWay.NodeRefs);
         }
+
+        [Test]
+		public void TestOSMNodeParsePostgreSQLFieldsFailed1()
+		{
+            var parameters = new NameValueCollection() {
+                { "osm_id", "2" },
+                { "tags", "\"foo" }
+            };
+            var osmNode = new OSMNode(1, 52.1234, 10.1234);
+            osmNode.ParsePostgreSQLFields(parameters);
+
+            Assert.AreEqual(new NameValueCollection(), osmNode.Tags);
+        }
+
+        [Test]
+		public void TestOSMNodeParsePostgreSQLFieldsFailed2()
+		{
+            var parameters = new NameValueCollection() {
+                { "osm_id", "2" },
+                { "tags", "\"foo\"" }
+            };
+            var osmNode = new OSMNode(1, 52.1234, 10.1234);
+            osmNode.ParsePostgreSQLFields(parameters);
+
+            Assert.AreEqual(new NameValueCollection(), osmNode.Tags);
+        }
+
+        [Test]
+		public void TestOSMNodeParsePostgreSQLFieldsFailed3()
+		{
+            var parameters = new NameValueCollection() {
+                { "osm_id", "2" },
+                { "tags", "\"foo\"=>" }
+            };
+            var osmNode = new OSMNode(1, 52.1234, 10.1234);
+            osmNode.ParsePostgreSQLFields(parameters);
+
+            Assert.AreEqual(new NameValueCollection(), osmNode.Tags);
+        }
+
+        [Test]
+		public void TestOSMNodeParsePostgreSQLFieldsFailed4()
+		{
+            var parameters = new NameValueCollection() {
+                { "osm_id", "2" },
+                { "tags", "\"foo\"=>\"bar" }
+            };
+            var osmNode = new OSMNode(1, 52.1234, 10.1234);
+            osmNode.ParsePostgreSQLFields(parameters);
+
+            Assert.AreEqual(new NameValueCollection(), osmNode.Tags);
+        }
     }
 }
