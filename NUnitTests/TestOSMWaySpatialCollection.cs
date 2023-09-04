@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using OSMDataPrimitives;
 using OSMDataPrimitives.Spatial;
 
 namespace NUnit
@@ -126,6 +127,15 @@ namespace NUnit
 			};
 			var expectedWkt = "MULTIPOLYGON (((40 40, 45 30, 20 45, 40 40)), ((20 35, 45 20, 30 5, 10 10, 10 30, 20 35), (30 20, 20 25, 20 15, 30 20)))";
 			Assert.AreEqual(expectedWkt, multiPolygon.ToWkt(WktType.MultiPolygon));
+		}
+
+		[Test]
+		public void TestOSMWaySpatialCollectionMultiPolygonWithNoData()
+		{
+			Assert.Throws<DataException>(() => {
+				var multiPolygon = new OSMWaySpatialCollection();
+				multiPolygon.ToWkt(WktType.MultiPolygon);
+			});
 		}
 	}
 }
