@@ -102,7 +102,7 @@ namespace NUnit
         }
 
         [Test]
-		public void TestOSMNodeParsePostgreSQLFieldsFailed5()
+		public void TestOSMNodeParsePostgreSQLFieldsWithEscapedBackslash()
 		{
             var parameters = new NameValueCollection() {
                 { "osm_id", "2" },
