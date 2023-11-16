@@ -193,7 +193,7 @@ namespace OSMDataPrimitives.PostgreSQL
 				nodeRefsString = nodeRefsString[1..^1];
 			}
 
-			var nodeRefsArray = nodeRefsString.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+			var nodeRefsArray = nodeRefsString.Split(',', StringSplitOptions.RemoveEmptyEntries);
 			var nodeRefs = new List<ulong>();
 			foreach (var nodeRef in nodeRefsArray) {
 				nodeRefs.Add(Convert.ToUInt64(nodeRef));
