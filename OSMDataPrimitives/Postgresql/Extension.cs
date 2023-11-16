@@ -189,7 +189,7 @@ namespace OSMDataPrimitives.PostgreSQL
 
 		private static List<ulong> ParseNodeRefs(string nodeRefsString)
 		{
-			if (nodeRefsString.StartsWith("{", StringComparison.InvariantCulture) && nodeRefsString.EndsWith("}", StringComparison.InvariantCulture)) {
+			if (nodeRefsString.StartsWith('{') && nodeRefsString.EndsWith('}')) {
 				nodeRefsString = nodeRefsString[1..^1];
 			}
 
@@ -214,12 +214,12 @@ namespace OSMDataPrimitives.PostgreSQL
 
             do
             {
-                var beginKeyQuoteIndex = hstoreString.IndexOf("\"", startIndex, StringComparison.InvariantCulture);
+                var beginKeyQuoteIndex = hstoreString.IndexOf('"', startIndex);
                 if (beginKeyQuoteIndex == -1)
                 {
                     break;
                 }
-                var endKeyQuoteIndex = hstoreString.IndexOf("\"", beginKeyQuoteIndex + 1, StringComparison.InvariantCulture);
+                var endKeyQuoteIndex = hstoreString.IndexOf('"', beginKeyQuoteIndex + 1);
                 if (endKeyQuoteIndex == -1)
                 {
                     break;
@@ -234,12 +234,12 @@ namespace OSMDataPrimitives.PostgreSQL
 				{
 					break;
 				}
-                var beginValueQuoteIndex = hstoreString.IndexOf("\"", endKeyQuoteIndex + 2, StringComparison.InvariantCulture);
+                var beginValueQuoteIndex = hstoreString.IndexOf('"', endKeyQuoteIndex + 2);
                 if (beginValueQuoteIndex == -1)
                 {
                     break;
                 }
-                var endValueQuoteIndex = hstoreString.IndexOf("\"", beginValueQuoteIndex + 1, StringComparison.InvariantCulture);
+                var endValueQuoteIndex = hstoreString.IndexOf('"', beginValueQuoteIndex + 1);
                 if (endValueQuoteIndex == -1)
                 {
                     break;
@@ -251,7 +251,7 @@ namespace OSMDataPrimitives.PostgreSQL
                     do
                     {
                         realValueFinishQuoteFound = false;
-                        endValueQuoteIndex = hstoreString.IndexOf("\"", valueStartIndex, StringComparison.InvariantCulture);
+                        endValueQuoteIndex = hstoreString.IndexOf('"', valueStartIndex);
                         if (endValueQuoteIndex == -1)
                         {
                             break;
