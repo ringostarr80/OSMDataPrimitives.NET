@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace OSMDataPrimitives.PostgreSQL
 {
@@ -11,6 +13,64 @@ namespace OSMDataPrimitives.PostgreSQL
 	/// </summary>
 	public static class Extension
 	{
+		private static string GetTableNameByElementType(IOSMElement element)
+		{
+			if (element is OSMNode) {
+				return "nodes";
+			} else if (element is OSMWay) {
+				return "ways";
+			} else if (element is OSMRelation) {
+				return "relations";
+			}
+
+			return string.Empty;
+		}
+
+		private static StringBuilder GetRelationSpecificInsert(OSMRelation relationElement, NameValueCollection parameters)
+		{
+			var insertSB = new StringBuilder();
+			if (relationElement.Members.Count > 0) {
+				insertSB.Append(", ARRAY[");
+				var membersCounter = 0;
+				foreach (var member in relationElement.Members) {
+					membersCounter++;
+					if (membersCounter > 1) {
+						insertSB.Append(", ");
+					}
+					insertSB.Append("@member_" + membersCounter + "::hstore");
+					var memberSB = new StringBuilder();
+					memberSB.Append("\"type\"=>\"" + member.Type.ToString().ToLower() + "\",");
+					memberSB.Append("\"ref\"=>\"" + member.Ref + "\",");
+					memberSB.Append("\"role\"=>\"" + ReplaceHstoreValue(member.Role) + "\"");
+					parameters.Add("member_" + membersCounter, memberSB.ToString());
+				}
+				insertSB.Append(']');
+			} else {
+				insertSB.Append(", '{}'");
+			}
+
+			return insertSB;
+		}
+
+		private static string GetTagsSpecificInsert(IOSMElement element)
+		{
+			var tagsSB = new StringBuilder();
+			if (element.Tags.Count > 0) {
+				var tagCounter = 0;
+				foreach (string tagKey in element.Tags) {
+					tagCounter++;
+					if (tagCounter > 1) {
+						tagsSB.Append(", ");
+					}
+					tagsSB.Append("\"" + ReplaceHstoreValue(tagKey) + "\"=>\"" + ReplaceHstoreValue(element.Tags[tagKey]) + "\"");
+				}
+			} else {
+				tagsSB.Append("''");
+			}
+
+			return tagsSB.ToString();
+		}
+
 		/// <summary>
 		/// Parses the PostgreSQL Fields.
 		/// </summary>
@@ -72,17 +132,11 @@ namespace OSMDataPrimitives.PostgreSQL
 		/// <param name="tableName">TableName.</param>
 		public static string ToPostgreSQLDelete(this IOSMElement element, string tableName = null)
 		{
-			var table = string.Empty;
-			if (tableName != null) {
+            string table;
+            if (tableName != null) {
 				table = tableName;
 			} else {
-				if (element is OSMNode) {
-					table = "nodes";
-				} else if (element is OSMWay) {
-					table = "ways";
-				} else if (element is OSMRelation) {
-					table = "relations";
-				}
+				table = GetTableNameByElementType(element);
 			}
 
 			return string.Format("DELETE FROM {0} WHERE osm_id = {1}", table, element.Id);
@@ -101,16 +155,9 @@ namespace OSMDataPrimitives.PostgreSQL
 				{"osm_id", element.Id.ToString()}
 			};
 
-			var tableName = "";
-			if (element is OSMNode) {
-				tableName = "nodes";
-			} else if (element is OSMWay) {
-				tableName = "ways";
-			} else if (element is OSMRelation) {
-				tableName = "relations";
-			}
+			var tableName = GetTableNameByElementType(element);
 
-			var insertSB = new StringBuilder("INSERT INTO " + tableName + " (osm_id");
+			var insertSB = new StringBuilder($"INSERT INTO {tableName} (osm_id");
 			if (inclusiveMetaFields) {
 				insertSB.Append(", version, changeset, uid, user, timestamp");
 			}
@@ -140,20 +187,7 @@ namespace OSMDataPrimitives.PostgreSQL
 				insertSB.Append(", @lat::double precision, @lon::double precision");
 			}
 
-			var tagsSB = new StringBuilder();
-			if (element.Tags.Count > 0) {
-				var tagCounter = 0;
-				foreach (string tagKey in element.Tags) {
-					tagCounter++;
-					if (tagCounter > 1) {
-						tagsSB.Append(", ");
-					}
-					tagsSB.Append("\"" + ReplaceHstoreValue(tagKey) + "\"=>\"" + ReplaceHstoreValue(element.Tags[tagKey]) + "\"");
-				}
-			} else {
-				tagsSB.Append("''");
-			}
-			parameters.Add("tags", tagsSB.ToString());
+			parameters.Add("tags", GetTagsSpecificInsert(element));
 
 			insertSB.Append(", @tags::hstore");
 			if (element is OSMWay way) {
@@ -162,25 +196,7 @@ namespace OSMDataPrimitives.PostgreSQL
 				parameters.Add("node_refs", "{" + string.Join(", ", wayElement.NodeRefs) + "}");
 			}
 			if (element is OSMRelation relationElement) {
-				if (relationElement.Members.Count > 0) {
-					insertSB.Append(", ARRAY[");
-					var membersCounter = 0;
-					foreach (var member in relationElement.Members) {
-						membersCounter++;
-						if (membersCounter > 1) {
-							insertSB.Append(", ");
-						}
-						insertSB.Append("@member_" + membersCounter + "::hstore");
-						var memberSB = new StringBuilder();
-						memberSB.Append("\"type\"=>\"" + member.Type.ToString().ToLower() + "\",");
-						memberSB.Append("\"ref\"=>\"" + member.Ref + "\",");
-						memberSB.Append("\"role\"=>\"" + ReplaceHstoreValue(member.Role) + "\"");
-						parameters.Add("member_" + membersCounter, memberSB.ToString());
-					}
-					insertSB.Append(']');
-				} else {
-					insertSB.Append(", '{}'");
-				}
+				insertSB.Append(GetRelationSpecificInsert(relationElement, parameters));
 			}
 			insertSB.Append(')');
 
