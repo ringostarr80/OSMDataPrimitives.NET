@@ -229,6 +229,11 @@ namespace OSMDataPrimitives.Spatial
             return ToWktMultiLineString(ways);
         }
 
+        /// <summary>
+        /// Converts the OSMWaySpatialCollection to WKT-string.
+        /// </summary>
+        /// <returns>The WKT-string.</returns>
+        /// <param name="ways">Ways.</param>
         public static string ToWktMultiLineString(this OSMWaySpatialCollection ways)
         {
             var resultSB = new StringBuilder();
@@ -251,6 +256,11 @@ namespace OSMDataPrimitives.Spatial
             return resultSB.ToString();
         }
 
+        /// <summary>
+        /// Converts the OSMWaySpatialCollection to WKT-string.
+        /// </summary>
+        /// <returns>The WKT-string.</returns>
+        /// <param name="ways">Ways.</param>
         public static string ToWktMultiPolygon(this OSMWaySpatialCollection ways)
         {
             var resultSB = new StringBuilder();

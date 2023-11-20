@@ -125,6 +125,11 @@ namespace OSMDataPrimitives.BSON
 			}
 		}
 
+		/// <summary>
+		/// Parses the BsonDocument and writes the data into the node.
+		/// </summary>
+		/// <param name="node">OSMNode.</param>
+		/// <param name="doc">BsonDocument.</param>
 		public static void ParseBsonDocumentForOSMNode(OSMNode node, BsonDocument doc)
 		{
 			if (doc.Contains("location")) {
@@ -139,6 +144,11 @@ namespace OSMDataPrimitives.BSON
 			}
 		}
 
+		/// <summary>
+		/// Parses the BsonDocument and writes the data into the way.
+		/// </summary>
+		/// <param name="way">OSMWay.</param>
+		/// <param name="doc">BsonDocument.</param>
 		public static void ParseBsonDocumentForOSMWay(OSMWay way, BsonDocument doc)
 		{
 			way.NodeRefs.Clear();
@@ -150,6 +160,11 @@ namespace OSMDataPrimitives.BSON
 			}
 		}
 
+		/// <summary>
+		/// Parses the BsonDocument and writes the data into the relation.
+		/// </summary>
+		/// <param name="relation">OSMRelation.</param>
+		/// <param name="doc">BsonDocument.</param>
 		public static void ParseBsonDocumentForOSMRelation(OSMRelation relation, BsonDocument doc)
 		{
 			relation.Members.Clear();
