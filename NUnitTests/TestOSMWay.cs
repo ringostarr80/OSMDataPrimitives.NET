@@ -52,34 +52,34 @@ namespace NUnit
 			wayClone.NodeRefs.Add(143);
 			wayClone.NodeRefs.Add(11234151);
 
-			Assert.AreEqual(7, way.Changeset);
-			Assert.AreEqual(8, wayClone.Changeset);
-			Assert.AreEqual(3, way.Version);
-			Assert.AreEqual(4, wayClone.Version);
-			Assert.AreEqual(5, way.UserId);
-			Assert.AreEqual(2, wayClone.UserId);
-			Assert.AreEqual("foo", way.UserName);
-			Assert.AreEqual("bar", wayClone.UserName);
-			Assert.AreEqual(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc), way.Timestamp);
-			Assert.AreEqual(new DateTime(2017, 1, 25, 15, 20, 55, DateTimeKind.Utc), wayClone.Timestamp);
-			Assert.AreEqual("this road", way.Tags["name"]);
-			Assert.AreEqual("that street", wayClone.Tags["name"]);
-			Assert.AreEqual("A1", way.Tags["ref"]);
-			Assert.AreEqual("B2", wayClone.Tags["ref"]);
+			Assert.That(way.Changeset, Is.EqualTo(7));
+			Assert.That(wayClone.Changeset, Is.EqualTo(8));
+			Assert.That(way.Version, Is.EqualTo(3));
+			Assert.That(wayClone.Version, Is.EqualTo(4));
+			Assert.That(way.UserId, Is.EqualTo(5));
+			Assert.That(wayClone.UserId, Is.EqualTo(2));
+			Assert.That(way.UserName, Is.EqualTo("foo"));
+			Assert.That(wayClone.UserName, Is.EqualTo("bar"));
+			Assert.That(way.Timestamp, Is.EqualTo(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc)));
+			Assert.That(wayClone.Timestamp, Is.EqualTo(new DateTime(2017, 1, 25, 15, 20, 55, DateTimeKind.Utc)));
+			Assert.That(way.Tags["name"], Is.EqualTo("this road"));
+			Assert.That(wayClone.Tags["name"], Is.EqualTo("that street"));
+			Assert.That(way.Tags["ref"], Is.EqualTo("A1"));
+			Assert.That(wayClone.Tags["ref"], Is.EqualTo("B2"));
 
-			Assert.AreEqual(5, way.NodeRefs[0]);
-			Assert.AreEqual(9, way.NodeRefs[1]);
-			Assert.AreEqual(12, way.NodeRefs[2]);
-			Assert.AreEqual(543, way.NodeRefs[3]);
-			Assert.AreEqual(43, way.NodeRefs[4]);
-			Assert.AreEqual(1234151, way.NodeRefs[5]);
+			Assert.That(way.NodeRefs[0], Is.EqualTo(5));
+			Assert.That(way.NodeRefs[1], Is.EqualTo(9));
+			Assert.That(way.NodeRefs[2], Is.EqualTo(12));
+			Assert.That(way.NodeRefs[3], Is.EqualTo(543));
+			Assert.That(way.NodeRefs[4], Is.EqualTo(43));
+			Assert.That(way.NodeRefs[5], Is.EqualTo(1234151));
 
-			Assert.AreEqual(15, wayClone.NodeRefs[0]);
-			Assert.AreEqual(19, wayClone.NodeRefs[1]);
-			Assert.AreEqual(112, wayClone.NodeRefs[2]);
-			Assert.AreEqual(1543, wayClone.NodeRefs[3]);
-			Assert.AreEqual(143, wayClone.NodeRefs[4]);
-			Assert.AreEqual(11234151, wayClone.NodeRefs[5]);
+			Assert.That(wayClone.NodeRefs[0], Is.EqualTo(15));
+			Assert.That(wayClone.NodeRefs[1], Is.EqualTo(19));
+			Assert.That(wayClone.NodeRefs[2], Is.EqualTo(112));
+			Assert.That(wayClone.NodeRefs[3], Is.EqualTo(1543));
+			Assert.That(wayClone.NodeRefs[4], Is.EqualTo(143));
+			Assert.That(wayClone.NodeRefs[5], Is.EqualTo(11234151));
 		}
 
 		[Test]
@@ -97,7 +97,7 @@ namespace NUnit
 			expectedXmlString += "<tag k=\"name\" v=\"this road\" />";
 			expectedXmlString += "<tag k=\"ref\" v=\"A1\" />";
 			expectedXmlString += "</way>";
-			Assert.AreEqual(expectedXmlString, way.ToXmlString());
+			Assert.That(way.ToXmlString(), Is.EqualTo(expectedXmlString));
 		}
 
 		[Test]
@@ -107,21 +107,21 @@ namespace NUnit
 			var xmlWay = way.ToXml();
 			var convertedWay = (OSMWay)xmlWay.ToOSMElement();
 
-			Assert.AreEqual(2, convertedWay.Id);
-			Assert.AreEqual(7, convertedWay.Changeset);
-			Assert.AreEqual(3, convertedWay.Version);
-			Assert.AreEqual(5, convertedWay.UserId);
-			Assert.AreEqual("foo", convertedWay.UserName);
-			Assert.AreEqual(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc), convertedWay.Timestamp);
-			Assert.AreEqual("this road", convertedWay.Tags["name"]);
-			Assert.AreEqual("A1", convertedWay.Tags["ref"]);
-			Assert.AreEqual(6, convertedWay.NodeRefs.Count);
-			Assert.AreEqual(5, convertedWay.NodeRefs[0]);
-			Assert.AreEqual(9, convertedWay.NodeRefs[1]);
-			Assert.AreEqual(12, convertedWay.NodeRefs[2]);
-			Assert.AreEqual(543, convertedWay.NodeRefs[3]);
-			Assert.AreEqual(43, convertedWay.NodeRefs[4]);
-			Assert.AreEqual(1234151, convertedWay.NodeRefs[5]);
+			Assert.That(convertedWay.Id, Is.EqualTo(2));
+			Assert.That(convertedWay.Changeset, Is.EqualTo(7));
+			Assert.That(convertedWay.Version, Is.EqualTo(3));
+			Assert.That(convertedWay.UserId, Is.EqualTo(5));
+			Assert.That(convertedWay.UserName, Is.EqualTo("foo"));
+			Assert.That(convertedWay.Timestamp, Is.EqualTo(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc)));
+			Assert.That(convertedWay.Tags["name"], Is.EqualTo("this road"));
+			Assert.That(convertedWay.Tags["ref"], Is.EqualTo("A1"));
+			Assert.That(convertedWay.NodeRefs.Count, Is.EqualTo(6));
+			Assert.That(convertedWay.NodeRefs[0], Is.EqualTo(5));
+			Assert.That(convertedWay.NodeRefs[1], Is.EqualTo(9));
+			Assert.That(convertedWay.NodeRefs[2], Is.EqualTo(12));
+			Assert.That(convertedWay.NodeRefs[3], Is.EqualTo(543));
+			Assert.That(convertedWay.NodeRefs[4], Is.EqualTo(43));
+			Assert.That(convertedWay.NodeRefs[5], Is.EqualTo(1234151));
 		}
 
 		[Test]
@@ -131,21 +131,21 @@ namespace NUnit
 			var xmlString = way.ToXmlString();
 			var convertedWay = (OSMWay)xmlString.ToOSMElement();
 
-			Assert.AreEqual(2, convertedWay.Id);
-			Assert.AreEqual(7, convertedWay.Changeset);
-			Assert.AreEqual(3, convertedWay.Version);
-			Assert.AreEqual(5, convertedWay.UserId);
-			Assert.AreEqual("foo", convertedWay.UserName);
-			Assert.AreEqual(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc), convertedWay.Timestamp);
-			Assert.AreEqual("this road", convertedWay.Tags["name"]);
-			Assert.AreEqual("A1", convertedWay.Tags["ref"]);
-			Assert.AreEqual(6, convertedWay.NodeRefs.Count);
-			Assert.AreEqual(5, convertedWay.NodeRefs[0]);
-			Assert.AreEqual(9, convertedWay.NodeRefs[1]);
-			Assert.AreEqual(12, convertedWay.NodeRefs[2]);
-			Assert.AreEqual(543, convertedWay.NodeRefs[3]);
-			Assert.AreEqual(43, convertedWay.NodeRefs[4]);
-			Assert.AreEqual(1234151, convertedWay.NodeRefs[5]);
+			Assert.That(convertedWay.Id, Is.EqualTo(2));
+			Assert.That(convertedWay.Changeset, Is.EqualTo(7));
+			Assert.That(convertedWay.Version, Is.EqualTo(3));
+			Assert.That(convertedWay.UserId, Is.EqualTo(5));
+			Assert.That(convertedWay.UserName, Is.EqualTo("foo"));
+			Assert.That(convertedWay.Timestamp, Is.EqualTo(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc)));
+			Assert.That(convertedWay.Tags["name"], Is.EqualTo("this road"));
+			Assert.That(convertedWay.Tags["ref"], Is.EqualTo("A1"));
+			Assert.That(convertedWay.NodeRefs.Count, Is.EqualTo(6));
+			Assert.That(convertedWay.NodeRefs[0], Is.EqualTo(5));
+			Assert.That(convertedWay.NodeRefs[1], Is.EqualTo(9));
+			Assert.That(convertedWay.NodeRefs[2], Is.EqualTo(12));
+			Assert.That(convertedWay.NodeRefs[3], Is.EqualTo(543));
+			Assert.That(convertedWay.NodeRefs[4], Is.EqualTo(43));
+			Assert.That(convertedWay.NodeRefs[5], Is.EqualTo(1234151));
 		}
 
 		[Test]
@@ -155,16 +155,16 @@ namespace NUnit
 			var sqlInsert = way.ToPostgreSQLInsert(out NameValueCollection sqlParameters);
 			var expectedSql = "INSERT INTO ways (osm_id, tags, node_refs) ";
 			expectedSql += "VALUES(@osm_id::bigint, @tags::hstore, @node_refs::bigint[])";
-			Assert.AreEqual(expectedSql, sqlInsert);
+			Assert.That(sqlInsert, Is.EqualTo(expectedSql));
 			var expectedSqlParameters = new NameValueCollection {
 				{"osm_id", "2"},
 				{"tags", "\"name\"=>\"this road\", \"ref\"=>\"A1\""},
 				{"node_refs", "{5, 9, 12, 543, 43, 1234151}"}
 			};
-			Assert.AreEqual(expectedSqlParameters.Count, sqlParameters.Count);
+			Assert.That(sqlParameters.Count, Is.EqualTo(expectedSqlParameters.Count));
 			foreach (string key in expectedSqlParameters) {
-				Assert.NotNull(sqlParameters[key]);
-				Assert.AreEqual(expectedSqlParameters[key], sqlParameters[key]);
+				Assert.That(sqlParameters[key], !Is.Null);
+				Assert.That(sqlParameters[key], Is.EqualTo(expectedSqlParameters[key]));
 			}
 		}
 
@@ -174,16 +174,16 @@ namespace NUnit
 			var way = GetDefaultOSMWay();
 			var sqlSelect = way.ToPostgreSQLSelect();
 			var expectedSql = "SELECT osm_id, tags::text, node_refs::text FROM ways WHERE osm_id = 2";
-			Assert.AreEqual(expectedSql, sqlSelect);
+			Assert.That(sqlSelect, Is.EqualTo(expectedSql));
 
 			sqlSelect = way.ToPostgreSQLSelect(inclusiveMetaField: true);
 			expectedSql = "SELECT osm_id, version, changeset, uid, user, timestamp, tags::text, node_refs::text FROM ways WHERE osm_id = 2";
-			Assert.AreEqual(expectedSql, sqlSelect);
+			Assert.That(sqlSelect, Is.EqualTo(expectedSql));
 
 			way.OverrideId(6);
 			sqlSelect = way.ToPostgreSQLSelect();
 			expectedSql = "SELECT osm_id, tags::text, node_refs::text FROM ways WHERE osm_id = 6";
-			Assert.AreEqual(expectedSql, sqlSelect);
+			Assert.That(sqlSelect, Is.EqualTo(expectedSql));
 		}
 
 		[Test]
@@ -191,7 +191,7 @@ namespace NUnit
 		{
 			var way = GetDefaultOSMWay();
 			var expectedSql = "DELETE FROM ways WHERE osm_id = 2";
-			Assert.AreEqual(expectedSql, way.ToPostgreSQLDelete());
+			Assert.That(way.ToPostgreSQLDelete(), Is.EqualTo(expectedSql));
 		}
 
 		[Test]
@@ -209,27 +209,27 @@ namespace NUnit
 			var tagsElement = bsonDoc.GetElement("tags");
 			var nodeRefsElement = bsonDoc.GetElement("node_refs");
 
-			Assert.AreEqual(2, idElement.Value.AsInt64);
-			Assert.AreEqual(3, versionElement.Value.AsInt64);
-			Assert.AreEqual(5, uidElement.Value.AsInt64);
-			Assert.AreEqual("foo", userElement.Value.AsString);
-			Assert.AreEqual(7, changesetElement.Value.AsInt64);
-			Assert.AreEqual(new MongoDB.Bson.BsonDateTime(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc)), timestampElement.Value.AsBsonDateTime);
-			Assert.AreEqual(2, tagsElement.Value.AsBsonDocument.ElementCount);
-			Assert.AreEqual(6, nodeRefsElement.Value.AsBsonArray.Count);
+			Assert.That(idElement.Value.AsInt64, Is.EqualTo(2));
+			Assert.That(versionElement.Value.AsInt64, Is.EqualTo(3));
+			Assert.That(uidElement.Value.AsInt64, Is.EqualTo(5));
+			Assert.That(userElement.Value.AsString, Is.EqualTo("foo"));
+			Assert.That(changesetElement.Value.AsInt64, Is.EqualTo(7));
+			Assert.That(timestampElement.Value.AsBsonDateTime, Is.EqualTo(new MongoDB.Bson.BsonDateTime(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc))));
+			Assert.That(tagsElement.Value.AsBsonDocument.ElementCount, Is.EqualTo(2));
+			Assert.That(nodeRefsElement.Value.AsBsonArray.Count, Is.EqualTo(6));
 
 			var tagName = tagsElement.Value.AsBsonDocument.GetElement("name");
 			var tagRef = tagsElement.Value.AsBsonDocument.GetElement("ref");
-			Assert.AreEqual("this road", tagName.Value.AsString);
-			Assert.AreEqual("A1", tagRef.Value.AsString);
+			Assert.That(tagName.Value.AsString, Is.EqualTo("this road"));
+			Assert.That(tagRef.Value.AsString, Is.EqualTo("A1"));
 
 			var nodeRefsBsonArray = nodeRefsElement.Value.AsBsonArray;
-			Assert.AreEqual(5, nodeRefsBsonArray[0].AsInt64);
-			Assert.AreEqual(9, nodeRefsBsonArray[1].AsInt64);
-			Assert.AreEqual(12, nodeRefsBsonArray[2].AsInt64);
-			Assert.AreEqual(543, nodeRefsBsonArray[3].AsInt64);
-			Assert.AreEqual(43, nodeRefsBsonArray[4].AsInt64);
-			Assert.AreEqual(1234151, nodeRefsBsonArray[5].AsInt64);
+			Assert.That(nodeRefsBsonArray[0].AsInt64, Is.EqualTo(5));
+			Assert.That(nodeRefsBsonArray[1].AsInt64, Is.EqualTo(9));
+			Assert.That(nodeRefsBsonArray[2].AsInt64, Is.EqualTo(12));
+			Assert.That(nodeRefsBsonArray[3].AsInt64, Is.EqualTo(543));
+			Assert.That(nodeRefsBsonArray[4].AsInt64, Is.EqualTo(43));
+			Assert.That(nodeRefsBsonArray[5].AsInt64, Is.EqualTo(1234151));
 		}
 
 		[Test]
@@ -241,21 +241,21 @@ namespace NUnit
 			var parsedWay = new OSMWay(0);
 			parsedWay.ParseBsonDocument(bsonDoc);
 
-			Assert.AreEqual(way.Id, parsedWay.Id);
-			Assert.AreEqual(way.UserId, parsedWay.UserId);
-			Assert.AreEqual(way.UserName, parsedWay.UserName);
-			Assert.AreEqual(way.Version, parsedWay.Version);
-			Assert.AreEqual(way.Changeset, parsedWay.Changeset);
-			Assert.AreEqual(way.Timestamp, parsedWay.Timestamp);
-			Assert.AreEqual(way.Tags.Count, parsedWay.Tags.Count);
-			Assert.AreEqual(way.NodeRefs.Count, parsedWay.NodeRefs.Count);
+			Assert.That(parsedWay.Id, Is.EqualTo(way.Id));
+			Assert.That(parsedWay.UserId, Is.EqualTo(way.UserId));
+			Assert.That(parsedWay.UserName, Is.EqualTo(way.UserName));
+			Assert.That(parsedWay.Version, Is.EqualTo(way.Version));
+			Assert.That(parsedWay.Changeset, Is.EqualTo(way.Changeset));
+			Assert.That(parsedWay.Timestamp, Is.EqualTo(way.Timestamp));
+			Assert.That(parsedWay.Tags.Count, Is.EqualTo(way.Tags.Count));
+			Assert.That(parsedWay.NodeRefs.Count, Is.EqualTo(way.NodeRefs.Count));
 
 			foreach (string key in way.Tags) {
-				Assert.AreEqual(way.Tags[key], parsedWay.Tags[key]);
+				Assert.That(parsedWay.Tags[key], Is.EqualTo(way.Tags[key]));
 			}
 
 			for (var i = 0; i < way.NodeRefs.Count; i++) {
-				Assert.AreEqual(way.NodeRefs[i], parsedWay.NodeRefs[i]);
+				Assert.That(parsedWay.NodeRefs[i], Is.EqualTo(way.NodeRefs[i]));
 			}
 		}
 
@@ -267,14 +267,14 @@ namespace NUnit
 
 			way.ParseBsonDocument(bsonDoc);
 
-			Assert.AreEqual(0, way.Id);
-			Assert.AreEqual(0, way.UserId);
-			Assert.AreEqual(string.Empty, way.UserName);
-			Assert.AreEqual(0, way.Version);
-			Assert.AreEqual(0, way.Changeset);
-			Assert.AreEqual(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc), way.Timestamp);
-			Assert.AreEqual(0, way.Tags.Count);
-			Assert.AreEqual(0, way.NodeRefs.Count);
+			Assert.That(way.Id, Is.Zero);
+			Assert.That(way.UserId, Is.Zero);
+			Assert.That(way.UserName, Is.Empty);
+			Assert.That(way.Version, Is.Zero);
+			Assert.That(way.Changeset, Is.Zero);
+			Assert.That(way.Timestamp, Is.EqualTo(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)));
+			Assert.That(way.Tags.Count, Is.Zero);
+			Assert.That(way.NodeRefs.Count, Is.Zero);
 		}
 	}
 }

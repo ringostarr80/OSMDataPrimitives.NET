@@ -55,24 +55,24 @@ namespace NUnit
 			nodeSpatial.Tags["name"] = "hello";
 			nodeSpatial.Tags["ref"] = "world";
 
-			Assert.AreEqual(7, node.Changeset);
-			Assert.AreEqual(8, nodeSpatial.Changeset);
-			Assert.AreEqual(3, node.Version);
-			Assert.AreEqual(4, nodeSpatial.Version);
-			Assert.AreEqual(52.123456, node.Latitude);
-			Assert.AreEqual(54.464456, nodeSpatial.Latitude);
-			Assert.AreEqual(12.654321, node.Longitude);
-			Assert.AreEqual(10.899996, nodeSpatial.Longitude);
-			Assert.AreEqual(5, node.UserId);
-			Assert.AreEqual(2, nodeSpatial.UserId);
-			Assert.AreEqual("foo", node.UserName);
-			Assert.AreEqual("bar", nodeSpatial.UserName);
-			Assert.AreEqual(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc), node.Timestamp);
-			Assert.AreEqual(new DateTime(2017, 1, 25, 15, 20, 55, DateTimeKind.Utc), nodeSpatial.Timestamp);
-			Assert.AreEqual("bar", node.Tags["name"]);
-			Assert.AreEqual("hello", nodeSpatial.Tags["name"]);
-			Assert.AreEqual("baz", node.Tags["ref"]);
-			Assert.AreEqual("world", nodeSpatial.Tags["ref"]);
+			Assert.That(node.Changeset, Is.EqualTo(7));
+			Assert.That(nodeSpatial.Changeset, Is.EqualTo(8));
+			Assert.That(node.Version, Is.EqualTo(3));
+			Assert.That(nodeSpatial.Version, Is.EqualTo(4));
+			Assert.That(node.Latitude, Is.EqualTo(52.123456));
+			Assert.That(nodeSpatial.Latitude, Is.EqualTo(54.464456));
+			Assert.That(node.Longitude, Is.EqualTo(12.654321));
+			Assert.That(nodeSpatial.Longitude, Is.EqualTo(10.899996));
+			Assert.That(node.UserId, Is.EqualTo(5));
+			Assert.That(nodeSpatial.UserId, Is.EqualTo(2));
+			Assert.That(node.UserName, Is.EqualTo("foo"));
+			Assert.That(nodeSpatial.UserName, Is.EqualTo("bar"));
+			Assert.That(node.Timestamp, Is.EqualTo(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc)));
+			Assert.That(nodeSpatial.Timestamp, Is.EqualTo(new DateTime(2017, 1, 25, 15, 20, 55, DateTimeKind.Utc)));
+			Assert.That(node.Tags["name"], Is.EqualTo("bar"));
+			Assert.That(nodeSpatial.Tags["name"], Is.EqualTo("hello"));
+			Assert.That(node.Tags["ref"], Is.EqualTo("baz"));
+			Assert.That(nodeSpatial.Tags["ref"], Is.EqualTo("world"));
 		}
 
 		[Test]
@@ -82,7 +82,7 @@ namespace NUnit
 			var node2 = GetOSMNodeSpatial2();
 
 			var distance = node1.GetDistance(node2);
-			Assert.AreEqual(613178, (int)distance);
+			Assert.That((int)distance, Is.EqualTo(613178));
 		}
 
 		[Test]
@@ -92,7 +92,7 @@ namespace NUnit
 			var node2 = GetOSMNodeSpatial2();
 
 			var direction = node1.GetDirection(node2);
-			Assert.AreEqual(168, (int)direction);
+			Assert.That((int)direction, Is.EqualTo(168));
 		}
 
 		[Test]
@@ -101,7 +101,7 @@ namespace NUnit
 			var node = GetOSMNodeSpatial1();
 			var wkt = node.ToWkt();
 			var expectedWkt = "POINT (9.992475 53.553345)";
-			Assert.AreEqual(expectedWkt, wkt);
+			Assert.That(wkt, Is.EqualTo(expectedWkt));
 		}
 	}
 }

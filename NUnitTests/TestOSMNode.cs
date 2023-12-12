@@ -43,24 +43,24 @@ namespace NUnit
 			nodeClone.Tags["name"] = "hello";
 			nodeClone.Tags["ref"] = "world";
 
-			Assert.AreEqual(7, node.Changeset);
-			Assert.AreEqual(8, nodeClone.Changeset);
-			Assert.AreEqual(3, node.Version);
-			Assert.AreEqual(4, nodeClone.Version);
-			Assert.AreEqual(52.123456, node.Latitude);
-			Assert.AreEqual(54.464456, nodeClone.Latitude);
-			Assert.AreEqual(12.654321, node.Longitude);
-			Assert.AreEqual(10.899996, nodeClone.Longitude);
-			Assert.AreEqual(5, node.UserId);
-			Assert.AreEqual(2, nodeClone.UserId);
-			Assert.AreEqual("foo", node.UserName);
-			Assert.AreEqual("bar", nodeClone.UserName);
-			Assert.AreEqual(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc), node.Timestamp);
-			Assert.AreEqual(new DateTime(2017, 1, 25, 15, 20, 55, DateTimeKind.Utc), nodeClone.Timestamp);
-			Assert.AreEqual("bar", node.Tags["name"]);
-			Assert.AreEqual("hello", nodeClone.Tags["name"]);
-			Assert.AreEqual("baz", node.Tags["ref"]);
-			Assert.AreEqual("world", nodeClone.Tags["ref"]);
+			Assert.That(node.Changeset, Is.EqualTo(7));
+			Assert.That(nodeClone.Changeset, Is.EqualTo(8));
+			Assert.That(node.Version, Is.EqualTo(3));
+			Assert.That(nodeClone.Version, Is.EqualTo(4));
+			Assert.That(node.Latitude, Is.EqualTo(52.123456));
+			Assert.That(nodeClone.Latitude, Is.EqualTo(54.464456));
+			Assert.That(node.Longitude, Is.EqualTo(12.654321));
+			Assert.That(nodeClone.Longitude, Is.EqualTo(10.899996));
+			Assert.That(node.UserId, Is.EqualTo(5));
+			Assert.That(nodeClone.UserId, Is.EqualTo(2));
+			Assert.That(node.UserName, Is.EqualTo("foo"));
+			Assert.That(nodeClone.UserName, Is.EqualTo("bar"));
+			Assert.That(node.Timestamp, Is.EqualTo(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc)));
+			Assert.That(nodeClone.Timestamp, Is.EqualTo(new DateTime(2017, 1, 25, 15, 20, 55, DateTimeKind.Utc)));
+			Assert.That(node.Tags["name"], Is.EqualTo("bar"));
+			Assert.That(nodeClone.Tags["name"], Is.EqualTo("hello"));
+			Assert.That(node.Tags["ref"], Is.EqualTo("baz"));
+			Assert.That(nodeClone.Tags["ref"], Is.EqualTo("world"));
 		}
 
 		[Test]
@@ -72,7 +72,7 @@ namespace NUnit
 			expectedXmlString += "<tag k=\"name\" v=\"bar\" />";
 			expectedXmlString += "<tag k=\"ref\" v=\"baz\" />";
 			expectedXmlString += "</node>";
-			Assert.AreEqual(expectedXmlString, node.ToXmlString());
+			Assert.That(node.ToXmlString(), Is.EqualTo(expectedXmlString));
 		}
 
 		[Test]
@@ -82,16 +82,16 @@ namespace NUnit
 			var xmlNode = node.ToXml();
 			var convertedNode = xmlNode.ToOSMElement();
 
-			Assert.AreEqual(2, convertedNode.Id);
-			Assert.AreEqual(7, convertedNode.Changeset);
-			Assert.AreEqual(3, convertedNode.Version);
-			Assert.AreEqual(52.123456, ((OSMNode)convertedNode).Latitude);
-			Assert.AreEqual(12.654321, ((OSMNode)convertedNode).Longitude);
-			Assert.AreEqual(5, convertedNode.UserId);
-			Assert.AreEqual("foo", convertedNode.UserName);
-			Assert.AreEqual(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc), convertedNode.Timestamp);
-			Assert.AreEqual("bar", convertedNode.Tags["name"]);
-			Assert.AreEqual("baz", convertedNode.Tags["ref"]);
+			Assert.That(convertedNode.Id, Is.EqualTo(2));
+			Assert.That(convertedNode.Changeset, Is.EqualTo(7));
+			Assert.That(convertedNode.Version, Is.EqualTo(3));
+			Assert.That(((OSMNode)convertedNode).Latitude, Is.EqualTo(52.123456));
+			Assert.That(((OSMNode)convertedNode).Longitude, Is.EqualTo(12.654321));
+			Assert.That(convertedNode.UserId, Is.EqualTo(5));
+			Assert.That(convertedNode.UserName, Is.EqualTo("foo"));
+			Assert.That(convertedNode.Timestamp, Is.EqualTo(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc)));
+			Assert.That(convertedNode.Tags["name"], Is.EqualTo("bar"));
+			Assert.That(convertedNode.Tags["ref"], Is.EqualTo("baz"));
 		}
 
 		[Test]
@@ -101,16 +101,16 @@ namespace NUnit
 			var xmlString = node.ToXmlString();
 			var convertedNode = xmlString.ToOSMElement();
 
-			Assert.AreEqual(2, convertedNode.Id);
-			Assert.AreEqual(7, convertedNode.Changeset);
-			Assert.AreEqual(3, convertedNode.Version);
-			Assert.AreEqual(52.123456, ((OSMNode)convertedNode).Latitude);
-			Assert.AreEqual(12.654321, ((OSMNode)convertedNode).Longitude);
-			Assert.AreEqual(5, convertedNode.UserId);
-			Assert.AreEqual("foo", convertedNode.UserName);
-			Assert.AreEqual(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc), convertedNode.Timestamp);
-			Assert.AreEqual("bar", convertedNode.Tags["name"]);
-			Assert.AreEqual("baz", convertedNode.Tags["ref"]);
+			Assert.That(convertedNode.Id, Is.EqualTo(2));
+			Assert.That(convertedNode.Changeset, Is.EqualTo(7));
+			Assert.That(convertedNode.Version, Is.EqualTo(3));
+			Assert.That(((OSMNode)convertedNode).Latitude, Is.EqualTo(52.123456));
+			Assert.That(((OSMNode)convertedNode).Longitude, Is.EqualTo(12.654321));
+			Assert.That(convertedNode.UserId, Is.EqualTo(5));
+			Assert.That(convertedNode.UserName, Is.EqualTo("foo"));
+			Assert.That(convertedNode.Timestamp, Is.EqualTo(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc)));
+			Assert.That(convertedNode.Tags["name"], Is.EqualTo("bar"));
+			Assert.That(convertedNode.Tags["ref"], Is.EqualTo("baz"));
 		}
 
 		[Test]
@@ -120,7 +120,7 @@ namespace NUnit
 			var sqlInsert = node.ToPostgreSQLInsert(out NameValueCollection sqlParameters, true);
 			var expectedSql = "INSERT INTO nodes (osm_id, version, changeset, uid, user, timestamp, lat, lon, tags) ";
 			expectedSql += "VALUES(@osm_id::bigint, @version::bigint, @changeset::bigint, @uid::bigint, @user, TIMESTAMP @timestamp, @lat::double precision, @lon::double precision, @tags::hstore)";
-			Assert.AreEqual(expectedSql, sqlInsert);
+			Assert.That(sqlInsert, Is.EqualTo(expectedSql));
 			var expectedSqlParameters = new NameValueCollection {
 				{"osm_id", "2"},
 				{"version", "3"},
@@ -132,10 +132,10 @@ namespace NUnit
 				{"lon", "12.654321"},
 				{"tags", "\"name\"=>\"bar\", \"ref\"=>\"baz\""}
 			};
-			Assert.AreEqual(expectedSqlParameters.Count, sqlParameters.Count);
+			Assert.That(sqlParameters.Count, Is.EqualTo(expectedSqlParameters.Count));
 			foreach (string key in expectedSqlParameters) {
-				Assert.NotNull(sqlParameters[key]);
-				Assert.AreEqual(expectedSqlParameters[key], sqlParameters[key]);
+				Assert.That(sqlParameters[key], !Is.Null);
+				Assert.That(sqlParameters[key], Is.EqualTo(expectedSqlParameters[key]));
 			}
 		}
 
@@ -147,7 +147,7 @@ namespace NUnit
 			var sqlInsert = node.ToPostgreSQLInsert(out NameValueCollection sqlParameters, true);
 			var expectedSql = "INSERT INTO nodes (osm_id, version, changeset, uid, user, timestamp, lat, lon, tags) ";
 			expectedSql += "VALUES(@osm_id::bigint, @version::bigint, @changeset::bigint, @uid::bigint, @user, TIMESTAMP @timestamp, @lat::double precision, @lon::double precision, @tags::hstore)";
-			Assert.AreEqual(expectedSql, sqlInsert);
+			Assert.That(sqlInsert, Is.EqualTo(expectedSql));
 			var expectedSqlParameters = new NameValueCollection {
 				{"osm_id", "2"},
 				{"version", "3"},
@@ -159,10 +159,10 @@ namespace NUnit
 				{"lon", "12.654321"},
 				{"tags", "''"}
 			};
-			Assert.AreEqual(expectedSqlParameters.Count, sqlParameters.Count);
+			Assert.That(sqlParameters.Count, Is.EqualTo(expectedSqlParameters.Count));
 			foreach (string key in expectedSqlParameters) {
-				Assert.NotNull(sqlParameters[key]);
-				Assert.AreEqual(expectedSqlParameters[key], sqlParameters[key]);
+				Assert.That(sqlParameters[key], !Is.Null);
+				Assert.That(sqlParameters[key], Is.EqualTo(expectedSqlParameters[key]));
 			}
 		}
 
@@ -172,16 +172,16 @@ namespace NUnit
 			var node = GetDefaultOSMNode();
 			var sqlSelect = node.ToPostgreSQLSelect();
 			var expectedSql = "SELECT osm_id, lat, lon, tags::text FROM nodes WHERE osm_id = 2";
-			Assert.AreEqual(expectedSql, sqlSelect);
+			Assert.That(sqlSelect, Is.EqualTo(expectedSql));
 
 			sqlSelect = node.ToPostgreSQLSelect(inclusiveMetaField: true);
 			expectedSql = "SELECT osm_id, version, changeset, uid, user, timestamp, lat, lon, tags::text FROM nodes WHERE osm_id = 2";
-			Assert.AreEqual(expectedSql, sqlSelect);
+			Assert.That(sqlSelect, Is.EqualTo(expectedSql));
 
 			node.OverrideId(5);
 			sqlSelect = node.ToPostgreSQLSelect();
 			expectedSql = "SELECT osm_id, lat, lon, tags::text FROM nodes WHERE osm_id = 5";
-			Assert.AreEqual(expectedSql, sqlSelect);
+			Assert.That(sqlSelect, Is.EqualTo(expectedSql));
 		}
 
 		[Test]
@@ -189,7 +189,7 @@ namespace NUnit
 		{
 			var node = GetDefaultOSMNode();
 			var expectedSql = "DELETE FROM nodes WHERE osm_id = 2";
-			Assert.AreEqual(expectedSql, node.ToPostgreSQLDelete());
+			Assert.That(node.ToPostgreSQLDelete(), Is.EqualTo(expectedSql));
 		}
 
 		[Test]
@@ -197,7 +197,7 @@ namespace NUnit
 		{
 			var node = GetDefaultOSMNode();
 			var expectedSql = "DELETE FROM foo_nodes WHERE osm_id = 2";
-			Assert.AreEqual(expectedSql, node.ToPostgreSQLDelete("foo_nodes"));
+			Assert.That(node.ToPostgreSQLDelete("foo_nodes"), Is.EqualTo(expectedSql));
 		}
 
 		[Test]
@@ -217,20 +217,20 @@ namespace NUnit
 			var timestampElement = bsonDoc.GetElement("timestamp");
 			var tagsElement = bsonDoc.GetElement("tags");
 
-			Assert.AreEqual(2, idElement.Value.AsInt64);
-			Assert.AreEqual(52.123456, latElement.Value.AsDouble);
-			Assert.AreEqual(12.654321, lonElement.Value.AsDouble);
-			Assert.AreEqual(3, versionElement.Value.AsInt64);
-			Assert.AreEqual(5, uidElement.Value.AsInt64);
-			Assert.AreEqual("foo", userElement.Value.AsString);
-			Assert.AreEqual(7, changesetElement.Value.AsInt64);
-			Assert.AreEqual(new MongoDB.Bson.BsonDateTime(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc)), timestampElement.Value.AsBsonDateTime);
-			Assert.AreEqual(2, tagsElement.Value.AsBsonDocument.ElementCount);
+			Assert.That(idElement.Value.AsInt64, Is.EqualTo(2));
+			Assert.That(latElement.Value.AsDouble, Is.EqualTo(52.123456));
+			Assert.That(lonElement.Value.AsDouble, Is.EqualTo(12.654321));
+			Assert.That(versionElement.Value.AsInt64, Is.EqualTo(3));
+			Assert.That(uidElement.Value.AsInt64, Is.EqualTo(5));
+			Assert.That(userElement.Value.AsString, Is.EqualTo("foo"));
+			Assert.That(changesetElement.Value.AsInt64, Is.EqualTo(7));
+			Assert.That(timestampElement.Value.AsBsonDateTime, Is.EqualTo(new MongoDB.Bson.BsonDateTime(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc))));
+			Assert.That(tagsElement.Value.AsBsonDocument.ElementCount, Is.EqualTo(2));
 
 			var tagName = tagsElement.Value.AsBsonDocument.GetElement("name");
 			var tagRef = tagsElement.Value.AsBsonDocument.GetElement("ref");
-			Assert.AreEqual("bar", tagName.Value.AsString);
-			Assert.AreEqual("baz", tagRef.Value.AsString);
+			Assert.That(tagName.Value.AsString, Is.EqualTo("bar"));
+			Assert.That(tagRef.Value.AsString, Is.EqualTo("baz"));
 		}
 
 		[Test]
@@ -242,18 +242,18 @@ namespace NUnit
 			var parsedNode = new OSMNode(0);
 			parsedNode.ParseBsonDocument(bsonDoc);
 
-			Assert.AreEqual(node.Id, parsedNode.Id);
-			Assert.AreEqual(node.Latitude, parsedNode.Latitude);
-			Assert.AreEqual(node.Longitude, parsedNode.Longitude);
-			Assert.AreEqual(node.UserId, parsedNode.UserId);
-			Assert.AreEqual(node.UserName, parsedNode.UserName);
-			Assert.AreEqual(node.Version, parsedNode.Version);
-			Assert.AreEqual(node.Changeset, parsedNode.Changeset);
-			Assert.AreEqual(node.Timestamp, parsedNode.Timestamp);
-			Assert.AreEqual(node.Tags.Count, parsedNode.Tags.Count);
+			Assert.That(parsedNode.Id, Is.EqualTo(node.Id));
+			Assert.That(parsedNode.Latitude, Is.EqualTo(node.Latitude));
+			Assert.That(parsedNode.Longitude, Is.EqualTo(node.Longitude));
+			Assert.That(parsedNode.UserId, Is.EqualTo(node.UserId));
+			Assert.That(parsedNode.UserName, Is.EqualTo(node.UserName));
+			Assert.That(parsedNode.Version, Is.EqualTo(node.Version));
+			Assert.That(parsedNode.Changeset, Is.EqualTo(node.Changeset));
+			Assert.That(parsedNode.Timestamp, Is.EqualTo(node.Timestamp));
+			Assert.That(parsedNode.Tags.Count, Is.EqualTo(node.Tags.Count));
 
 			foreach (string key in node.Tags) {
-				Assert.AreEqual(node.Tags[key], parsedNode.Tags[key]);
+				Assert.That(parsedNode.Tags[key], Is.EqualTo(node.Tags[key]));
 			}
 		}
 
@@ -265,15 +265,15 @@ namespace NUnit
 
 			node.ParseBsonDocument(bsonDoc);
 
-			Assert.AreEqual(0, node.Id);
-			Assert.AreEqual(0.0, node.Latitude);
-			Assert.AreEqual(0.0, node.Longitude);
-			Assert.AreEqual(0, node.UserId);
-			Assert.AreEqual(string.Empty, node.UserName);
-			Assert.AreEqual(0, node.Version);
-			Assert.AreEqual(0, node.Changeset);
-			Assert.AreEqual(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc), node.Timestamp);
-			Assert.AreEqual(0, node.Tags.Count);
+			Assert.That(node.Id, Is.Zero);
+			Assert.That(node.Latitude, Is.Zero);
+			Assert.That(node.Longitude, Is.Zero);
+			Assert.That(node.UserId, Is.Zero);
+			Assert.That(node.UserName, Is.Empty);
+			Assert.That(node.Version, Is.Zero);
+			Assert.That(node.Changeset, Is.Zero);
+			Assert.That(node.Timestamp, Is.EqualTo(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)));
+			Assert.That(node.Tags.Count, Is.Zero);
 		}
 	}
 }

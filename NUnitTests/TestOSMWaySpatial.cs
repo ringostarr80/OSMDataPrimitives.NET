@@ -143,11 +143,11 @@ namespace NUnit
 			clonedWay.Nodes[0].Latitude += 0.02;
 			clonedWay.Nodes[0].Longitude += 0.01;
 
-			Assert.AreEqual(53.5710746, clonedWay.Nodes[0].Latitude);
-			Assert.AreEqual(10.0036292, clonedWay.Nodes[0].Longitude);
+			Assert.That(clonedWay.Nodes[0].Latitude, Is.EqualTo(53.5710746));
+			Assert.That(clonedWay.Nodes[0].Longitude, Is.EqualTo(10.0036292));
 
-			Assert.AreEqual(53.5510746, defaultWay.Nodes[0].Latitude);
-			Assert.AreEqual(9.9936292, defaultWay.Nodes[0].Longitude);
+			Assert.That(defaultWay.Nodes[0].Latitude, Is.EqualTo(53.5510746));
+			Assert.That(defaultWay.Nodes[0].Longitude, Is.EqualTo(9.9936292));
 		}
 
 		[Test]
@@ -171,62 +171,62 @@ namespace NUnit
 			waySpatial.NodeRefs.Add(143);
 			waySpatial.NodeRefs.Add(11234151);
 
-			Assert.AreEqual(7, way.Changeset);
-			Assert.AreEqual(8, waySpatial.Changeset);
-			Assert.AreEqual(3, way.Version);
-			Assert.AreEqual(4, waySpatial.Version);
-			Assert.AreEqual(5, way.UserId);
-			Assert.AreEqual(2, waySpatial.UserId);
-			Assert.AreEqual("foo", way.UserName);
-			Assert.AreEqual("bar", waySpatial.UserName);
-			Assert.AreEqual(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc), way.Timestamp);
-			Assert.AreEqual(new DateTime(2017, 1, 25, 15, 20, 55, DateTimeKind.Utc), waySpatial.Timestamp);
-			Assert.AreEqual("this road", way.Tags["name"]);
-			Assert.AreEqual("that street", waySpatial.Tags["name"]);
-			Assert.AreEqual("A1", way.Tags["ref"]);
-			Assert.AreEqual("B2", waySpatial.Tags["ref"]);
+			Assert.That(way.Changeset, Is.EqualTo(7));
+			Assert.That(waySpatial.Changeset, Is.EqualTo(8));
+			Assert.That(way.Version, Is.EqualTo(3));
+			Assert.That(waySpatial.Version, Is.EqualTo(4));
+			Assert.That(way.UserId, Is.EqualTo(5));
+			Assert.That(waySpatial.UserId, Is.EqualTo(2));
+			Assert.That(way.UserName, Is.EqualTo("foo"));
+			Assert.That(waySpatial.UserName, Is.EqualTo("bar"));
+			Assert.That(way.Timestamp, Is.EqualTo(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc)));
+			Assert.That(waySpatial.Timestamp, Is.EqualTo(new DateTime(2017, 1, 25, 15, 20, 55, DateTimeKind.Utc)));
+			Assert.That(way.Tags["name"], Is.EqualTo("this road"));
+			Assert.That(waySpatial.Tags["name"], Is.EqualTo("that street"));
+			Assert.That(way.Tags["ref"], Is.EqualTo("A1"));
+			Assert.That(waySpatial.Tags["ref"], Is.EqualTo("B2"));
 
-			Assert.AreEqual(5, way.NodeRefs[0]);
-			Assert.AreEqual(9, way.NodeRefs[1]);
-			Assert.AreEqual(12, way.NodeRefs[2]);
-			Assert.AreEqual(543, way.NodeRefs[3]);
-			Assert.AreEqual(43, way.NodeRefs[4]);
-			Assert.AreEqual(1234151, way.NodeRefs[5]);
+			Assert.That(way.NodeRefs[0], Is.EqualTo(5));
+			Assert.That(way.NodeRefs[1], Is.EqualTo(9));
+			Assert.That(way.NodeRefs[2], Is.EqualTo(12));
+			Assert.That(way.NodeRefs[3], Is.EqualTo(543));
+			Assert.That(way.NodeRefs[4], Is.EqualTo(43));
+			Assert.That(way.NodeRefs[5], Is.EqualTo(1234151));
 
-			Assert.AreEqual(15, waySpatial.NodeRefs[0]);
-			Assert.AreEqual(19, waySpatial.NodeRefs[1]);
-			Assert.AreEqual(112, waySpatial.NodeRefs[2]);
-			Assert.AreEqual(1543, waySpatial.NodeRefs[3]);
-			Assert.AreEqual(143, waySpatial.NodeRefs[4]);
-			Assert.AreEqual(11234151, waySpatial.NodeRefs[5]);
+			Assert.That(waySpatial.NodeRefs[0], Is.EqualTo(15));
+			Assert.That(waySpatial.NodeRefs[1], Is.EqualTo(19));
+			Assert.That(waySpatial.NodeRefs[2], Is.EqualTo(112));
+			Assert.That(waySpatial.NodeRefs[3], Is.EqualTo(1543));
+			Assert.That(waySpatial.NodeRefs[4], Is.EqualTo(143));
+			Assert.That(waySpatial.NodeRefs[5], Is.EqualTo(11234151));
 		}
 
 		[Test]
 		public void TestOSMWaySpatialIsNotClosed()
 		{
 			var defaultWay = GetDefaultOSMWaySpatial();
-			Assert.AreEqual(false, defaultWay.IsClosed);
+			Assert.That(defaultWay.IsClosed, Is.False);
 		}
 
 		[Test]
 		public void TestOSMWaySpatialIsClosed()
 		{
 			var closedWay = GetClosedOSMWaySpatial();
-			Assert.AreEqual(true, closedWay.IsClosed);
+			Assert.That(closedWay.IsClosed, Is.True);
 		}
 
 		[Test]
 		public void TestOSMWaySpatialDirectionClockwise()
 		{
 			var counterClockwiseWay = GetCounterClockwiseOSMWaySpatial();
-			Assert.AreEqual(PolygonDirection.CounterClockwise, counterClockwiseWay.Direction);
+			Assert.That(counterClockwiseWay.Direction, Is.EqualTo(PolygonDirection.CounterClockwise));
 		}
 
 		[Test]
 		public void TestOSMWaySpatialDirectionCounterClockwise()
 		{
 			var clockwiseWay = GetClockwiseOSMWaySpatial();
-			Assert.AreEqual(PolygonDirection.Clockwise, clockwiseWay.Direction);
+			Assert.That(clockwiseWay.Direction, Is.EqualTo(PolygonDirection.Clockwise));
 		}
 
 		[Test]
@@ -234,7 +234,7 @@ namespace NUnit
 		{
 			var clockwiseWay = GetClockwiseOSMWaySpatial();
 			var counterClockwiseWay = clockwiseWay.Reverse();
-			Assert.AreEqual(PolygonDirection.CounterClockwise, counterClockwiseWay.Direction);
+			Assert.That(counterClockwiseWay.Direction, Is.EqualTo(PolygonDirection.CounterClockwise));
 		}
 
 		[Test]
@@ -243,7 +243,7 @@ namespace NUnit
 			var way = GetDefaultOSMWaySpatial();
 			var wkt = way.ToWkt();
 			var expectedWkt = "LINESTRING (9.9936292 53.5510746, 9.9937873 53.5511904, 9.9943703 53.5515143, 9.994567 53.5516129)";
-			Assert.AreEqual(expectedWkt, wkt);
+			Assert.That(wkt, Is.EqualTo(expectedWkt));
 		}
 
 		[Test]
@@ -251,15 +251,15 @@ namespace NUnit
 		{
 			var polygon = GetClosedOSMWaySpatial();
 
-			Assert.True(polygon.PointInPolygon(53.5514198, 9.9944637));
-			Assert.True(polygon.PointInPolygon(53.5511411, 9.9948384));
-			Assert.True(polygon.PointInPolygon(53.5509208, 9.9944416));
-			Assert.True(polygon.PointInPolygon(53.5510938, 9.9940587));
+			Assert.That(polygon.PointInPolygon(53.5514198, 9.9944637), Is.True);
+			Assert.That(polygon.PointInPolygon(53.5511411, 9.9948384), Is.True);
+			Assert.That(polygon.PointInPolygon(53.5509208, 9.9944416), Is.True);
+			Assert.That(polygon.PointInPolygon(53.5510938, 9.9940587), Is.True);
 
-			Assert.False(polygon.PointInPolygon(53.5512706, 9.9948439));
-			Assert.False(polygon.PointInPolygon(53.5507803, 9.9945476));
-			Assert.False(polygon.PointInPolygon(53.5509482, 9.9939608));
-			Assert.False(polygon.PointInPolygon(53.5513296, 9.9938440));
+			Assert.That(polygon.PointInPolygon(53.5512706, 9.9948439), Is.False);
+			Assert.That(polygon.PointInPolygon(53.5507803, 9.9945476), Is.False);
+			Assert.That(polygon.PointInPolygon(53.5509482, 9.9939608), Is.False);
+			Assert.That(polygon.PointInPolygon(53.5513296, 9.9938440), Is.False);
 		}
 	}
 }
