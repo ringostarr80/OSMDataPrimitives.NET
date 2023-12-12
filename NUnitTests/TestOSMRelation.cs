@@ -47,30 +47,30 @@ namespace NUnit
 			relationClone.Members.Add(new OSMMember(MemberType.Way, 432, "inner"));
 			relationClone.Members.Add(new OSMMember(MemberType.Relation, 98765, "outer"));
 
-			Assert.AreEqual(7, relation.Changeset);
-			Assert.AreEqual(8, relationClone.Changeset);
-			Assert.AreEqual(3, relation.Version);
-			Assert.AreEqual(4, relationClone.Version);
-			Assert.AreEqual(5, relation.UserId);
-			Assert.AreEqual(2, relationClone.UserId);
-			Assert.AreEqual("foo", relation.UserName);
-			Assert.AreEqual("bar", relationClone.UserName);
-			Assert.AreEqual(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc), relation.Timestamp);
-			Assert.AreEqual(new DateTime(2017, 1, 25, 15, 20, 55, DateTimeKind.Utc), relationClone.Timestamp);
-			Assert.AreEqual("this country", relation.Tags["name"]);
-			Assert.AreEqual("that country", relationClone.Tags["name"]);
-			Assert.AreEqual("DE", relation.Tags["ref"]);
-			Assert.AreEqual("GB", relationClone.Tags["ref"]);
-			Assert.AreEqual(4, relation.Members.Count);
-			Assert.AreEqual(3, relationClone.Members.Count);
+			Assert.That(relation.Changeset, Is.EqualTo(7));
+			Assert.That(relationClone.Changeset, Is.EqualTo(8));
+			Assert.That(relation.Version, Is.EqualTo(3));
+			Assert.That(relationClone.Version, Is.EqualTo(4));
+			Assert.That(relation.UserId, Is.EqualTo(5));
+			Assert.That(relationClone.UserId, Is.EqualTo(2));
+			Assert.That(relation.UserName, Is.EqualTo("foo"));
+			Assert.That(relationClone.UserName, Is.EqualTo("bar"));
+			Assert.That(relation.Timestamp, Is.EqualTo(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc)));
+			Assert.That(relationClone.Timestamp, Is.EqualTo(new DateTime(2017, 1, 25, 15, 20, 55, DateTimeKind.Utc)));
+			Assert.That(relation.Tags["name"], Is.EqualTo("this country"));
+			Assert.That(relationClone.Tags["name"], Is.EqualTo("that country"));
+			Assert.That(relation.Tags["ref"], Is.EqualTo("DE"));
+			Assert.That(relationClone.Tags["ref"], Is.EqualTo("GB"));
+			Assert.That(relation.Members.Count, Is.EqualTo(4));
+			Assert.That(relationClone.Members.Count, Is.EqualTo(3));
 
-			Assert.AreEqual(new OSMMember(MemberType.Way, 123, "inner"), relation.Members[0]);
-			Assert.AreEqual(new OSMMember(MemberType.Way, 234, "outer"), relation.Members[1]);
-			Assert.AreEqual(new OSMMember(MemberType.Node, 345, ""), relation.Members[2]);
+			Assert.That(relation.Members[0], Is.EqualTo(new OSMMember(MemberType.Way, 123, "inner")));
+			Assert.That(relation.Members[1], Is.EqualTo(new OSMMember(MemberType.Way, 234, "outer")));
+			Assert.That(relation.Members[2], Is.EqualTo(new OSMMember(MemberType.Node, 345, "")));
 
-			Assert.AreEqual(new OSMMember(MemberType.Node, 321, "inner"), relationClone.Members[0]);
-			Assert.AreEqual(new OSMMember(MemberType.Way, 432, "inner"), relationClone.Members[1]);
-			Assert.AreEqual(new OSMMember(MemberType.Relation, 98765, "outer"), relationClone.Members[2]);
+			Assert.That(relationClone.Members[0], Is.EqualTo(new OSMMember(MemberType.Node, 321, "inner")));
+			Assert.That(relationClone.Members[1], Is.EqualTo(new OSMMember(MemberType.Way, 432, "inner")));
+			Assert.That(relationClone.Members[2], Is.EqualTo(new OSMMember(MemberType.Relation, 98765, "outer")));
 		}
 
 		[Test]
@@ -86,7 +86,7 @@ namespace NUnit
 			expectedXmlString += "<tag k=\"name\" v=\"this country\" />";
 			expectedXmlString += "<tag k=\"ref\" v=\"DE\" />";
 			expectedXmlString += "</relation>";
-			Assert.AreEqual(expectedXmlString, relation.ToXmlString());
+			Assert.That(relation.ToXmlString(), Is.EqualTo(expectedXmlString));
 		}
 
 		[Test]
@@ -96,19 +96,19 @@ namespace NUnit
 			var xmlRelation = relation.ToXml();
 			var convertedRelation = (OSMRelation)xmlRelation.ToOSMElement();
 
-			Assert.AreEqual(2, convertedRelation.Id);
-			Assert.AreEqual(7, convertedRelation.Changeset);
-			Assert.AreEqual(3, convertedRelation.Version);
-			Assert.AreEqual(5, convertedRelation.UserId);
-			Assert.AreEqual("foo", convertedRelation.UserName);
-			Assert.AreEqual(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc), convertedRelation.Timestamp);
-			Assert.AreEqual("this country", convertedRelation.Tags["name"]);
-			Assert.AreEqual("DE", convertedRelation.Tags["ref"]);
-			Assert.AreEqual(4, convertedRelation.Members.Count);
-			Assert.AreEqual(new OSMMember(MemberType.Way, 123, "inner"), convertedRelation.Members[0]);
-			Assert.AreEqual(new OSMMember(MemberType.Way, 234, "outer"), convertedRelation.Members[1]);
-			Assert.AreEqual(new OSMMember(MemberType.Node, 345, ""), convertedRelation.Members[2]);
-			Assert.AreEqual(new OSMMember(MemberType.Relation, 456, ""), convertedRelation.Members[3]);
+			Assert.That(convertedRelation.Id, Is.EqualTo(2));
+			Assert.That(convertedRelation.Changeset, Is.EqualTo(7));
+			Assert.That(convertedRelation.Version, Is.EqualTo(3));
+			Assert.That(convertedRelation.UserId, Is.EqualTo(5));
+			Assert.That(convertedRelation.UserName, Is.EqualTo("foo"));
+			Assert.That(convertedRelation.Timestamp, Is.EqualTo(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc)));
+			Assert.That(convertedRelation.Tags["name"], Is.EqualTo("this country"));
+			Assert.That(convertedRelation.Tags["ref"], Is.EqualTo("DE"));
+			Assert.That(convertedRelation.Members.Count, Is.EqualTo(4));
+			Assert.That(convertedRelation.Members[0], Is.EqualTo(new OSMMember(MemberType.Way, 123, "inner")));
+			Assert.That(convertedRelation.Members[1], Is.EqualTo(new OSMMember(MemberType.Way, 234, "outer")));
+			Assert.That(convertedRelation.Members[2], Is.EqualTo(new OSMMember(MemberType.Node, 345, "")));
+			Assert.That(convertedRelation.Members[3], Is.EqualTo(new OSMMember(MemberType.Relation, 456, "")));
 		}
 
 		[Test]
@@ -118,19 +118,19 @@ namespace NUnit
 			var xmlString = relation.ToXmlString();
 			var convertedRelation = (OSMRelation)xmlString.ToOSMElement();
 
-			Assert.AreEqual(2, convertedRelation.Id);
-			Assert.AreEqual(7, convertedRelation.Changeset);
-			Assert.AreEqual(3, convertedRelation.Version);
-			Assert.AreEqual(5, convertedRelation.UserId);
-			Assert.AreEqual("foo", convertedRelation.UserName);
-			Assert.AreEqual(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc), convertedRelation.Timestamp);
-			Assert.AreEqual("this country", convertedRelation.Tags["name"]);
-			Assert.AreEqual("DE", convertedRelation.Tags["ref"]);
-			Assert.AreEqual(4, convertedRelation.Members.Count);
-			Assert.AreEqual(new OSMMember(MemberType.Way, 123, "inner"), convertedRelation.Members[0]);
-			Assert.AreEqual(new OSMMember(MemberType.Way, 234, "outer"), convertedRelation.Members[1]);
-			Assert.AreEqual(new OSMMember(MemberType.Node, 345, ""), convertedRelation.Members[2]);
-			Assert.AreEqual(new OSMMember(MemberType.Relation, 456, ""), convertedRelation.Members[3]);
+			Assert.That(convertedRelation.Id, Is.EqualTo(2));
+			Assert.That(convertedRelation.Changeset, Is.EqualTo(7));
+			Assert.That(convertedRelation.Version, Is.EqualTo(3));
+			Assert.That(convertedRelation.UserId, Is.EqualTo(5));
+			Assert.That(convertedRelation.UserName, Is.EqualTo("foo"));
+			Assert.That(convertedRelation.Timestamp, Is.EqualTo(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc)));
+			Assert.That(convertedRelation.Tags["name"], Is.EqualTo("this country"));
+			Assert.That(convertedRelation.Tags["ref"], Is.EqualTo("DE"));
+			Assert.That(convertedRelation.Members.Count, Is.EqualTo(4));
+			Assert.That(convertedRelation.Members[0], Is.EqualTo(new OSMMember(MemberType.Way, 123, "inner")));
+			Assert.That(convertedRelation.Members[1], Is.EqualTo(new OSMMember(MemberType.Way, 234, "outer")));
+			Assert.That(convertedRelation.Members[2], Is.EqualTo(new OSMMember(MemberType.Node, 345, "")));
+			Assert.That(convertedRelation.Members[3], Is.EqualTo(new OSMMember(MemberType.Relation, 456, "")));
 		}
 
 		[Test]
@@ -140,7 +140,7 @@ namespace NUnit
 			var sqlInsert = relation.ToPostgreSQLInsert(out NameValueCollection sqlParameters);
 			var expectedSql = "INSERT INTO relations (osm_id, tags, members) ";
 			expectedSql += "VALUES(@osm_id::bigint, @tags::hstore, ARRAY[@member_1::hstore, @member_2::hstore, @member_3::hstore, @member_4::hstore])";
-			Assert.AreEqual(expectedSql, sqlInsert);
+			Assert.That(sqlInsert, Is.EqualTo(expectedSql));
 			var expectedSqlParameters = new NameValueCollection {
 				{"osm_id", "2"},
 				{"tags", "\"name\"=>\"this country\", \"ref\"=>\"DE\""},
@@ -149,10 +149,10 @@ namespace NUnit
 				{"member_3", "\"type\"=>\"node\",\"ref\"=>\"345\",\"role\"=>\"\""},
 				{"member_4", "\"type\"=>\"relation\",\"ref\"=>\"456\",\"role\"=>\"\""}
 			};
-			Assert.AreEqual(expectedSqlParameters.Count, sqlParameters.Count);
+			Assert.That(sqlParameters.Count, Is.EqualTo(expectedSqlParameters.Count));
 			foreach (string key in expectedSqlParameters) {
-				Assert.NotNull(sqlParameters[key]);
-				Assert.AreEqual(expectedSqlParameters[key], sqlParameters[key]);
+				Assert.That(sqlParameters[key], !Is.Null);
+				Assert.That(sqlParameters[key], Is.EqualTo(expectedSqlParameters[key]));
 			}
 		}
 
@@ -164,7 +164,7 @@ namespace NUnit
             var sqlInsert = relation.ToPostgreSQLInsert(out _);
 			var expectedSql = "INSERT INTO relations (osm_id, tags, members) ";
 			expectedSql += "VALUES(@osm_id::bigint, @tags::hstore, '{}')";
-			Assert.AreEqual(expectedSql, sqlInsert);
+			Assert.That(sqlInsert, Is.EqualTo(expectedSql));
 		}
 
 		[Test]
@@ -173,16 +173,16 @@ namespace NUnit
 			var relation = GetDefaultOSMRelation();
 			var sqlSelect = relation.ToPostgreSQLSelect();
 			var expectedSql = "SELECT osm_id, tags::text, members::text FROM relations WHERE osm_id = 2";
-			Assert.AreEqual(expectedSql, sqlSelect);
+			Assert.That(sqlSelect, Is.EqualTo(expectedSql));
 
 			sqlSelect = relation.ToPostgreSQLSelect(inclusiveMetaField: true);
 			expectedSql = "SELECT osm_id, version, changeset, uid, user, timestamp, tags::text, members::text FROM relations WHERE osm_id = 2";
-			Assert.AreEqual(expectedSql, sqlSelect);
+			Assert.That(sqlSelect, Is.EqualTo(expectedSql));
 
 			relation.OverrideId(7);
 			sqlSelect = relation.ToPostgreSQLSelect();
 			expectedSql = "SELECT osm_id, tags::text, members::text FROM relations WHERE osm_id = 7";
-			Assert.AreEqual(expectedSql, sqlSelect);
+			Assert.That(sqlSelect, Is.EqualTo(expectedSql));
 		}
 
 		[Test]
@@ -190,7 +190,7 @@ namespace NUnit
 		{
 			var relation = GetDefaultOSMRelation();
 			var expectedSql = "DELETE FROM relations WHERE osm_id = 2";
-			Assert.AreEqual(expectedSql, relation.ToPostgreSQLDelete());
+			Assert.That(relation.ToPostgreSQLDelete(), Is.EqualTo(expectedSql));
 		}
 
 		[Test]
@@ -208,37 +208,37 @@ namespace NUnit
 			var tagsElement = bsonDoc.GetElement("tags");
 			var membersElement = bsonDoc.GetElement("members");
 
-			Assert.AreEqual(2, idElement.Value.AsInt64);
-			Assert.AreEqual(3, versionElement.Value.AsInt64);
-			Assert.AreEqual(5, uidElement.Value.AsInt64);
-			Assert.AreEqual("foo", userElement.Value.AsString);
-			Assert.AreEqual(7, changesetElement.Value.AsInt64);
-			Assert.AreEqual(new MongoDB.Bson.BsonDateTime(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc)), timestampElement.Value.AsBsonDateTime);
-			Assert.AreEqual(2, tagsElement.Value.AsBsonDocument.ElementCount);
-			Assert.AreEqual(4, membersElement.Value.AsBsonArray.Count);
+			Assert.That(idElement.Value.AsInt64, Is.EqualTo(2));
+			Assert.That(versionElement.Value.AsInt64, Is.EqualTo(3));
+			Assert.That(uidElement.Value.AsInt64, Is.EqualTo(5));
+			Assert.That(userElement.Value.AsString, Is.EqualTo("foo"));
+			Assert.That(changesetElement.Value.AsInt64, Is.EqualTo(7));
+			Assert.That(timestampElement.Value.AsBsonDateTime, Is.EqualTo(new MongoDB.Bson.BsonDateTime(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc))));
+			Assert.That(tagsElement.Value.AsBsonDocument.ElementCount, Is.EqualTo(2));
+			Assert.That(membersElement.Value.AsBsonArray.Count, Is.EqualTo(4));
 
 			var tagName = tagsElement.Value.AsBsonDocument.GetElement("name");
 			var tagRef = tagsElement.Value.AsBsonDocument.GetElement("ref");
-			Assert.AreEqual("this country", tagName.Value.AsString);
-			Assert.AreEqual("DE", tagRef.Value.AsString);
+			Assert.That(tagName.Value.AsString, Is.EqualTo("this country"));
+			Assert.That(tagRef.Value.AsString, Is.EqualTo("DE"));
 
 			var membersBsonArray = membersElement.Value.AsBsonArray;
 			var member1Doc = membersBsonArray[0].AsBsonDocument;
 			var member2Doc = membersBsonArray[1].AsBsonDocument;
 			var member3Doc = membersBsonArray[2].AsBsonDocument;
 			var member4Doc = membersBsonArray[3].AsBsonDocument;
-			Assert.AreEqual("way", member1Doc.GetElement("type").Value.AsString);
-			Assert.AreEqual(123, member1Doc.GetElement("ref").Value.AsInt64);
-			Assert.AreEqual("inner", member1Doc.GetElement("role").Value.AsString);
-			Assert.AreEqual("way", member2Doc.GetElement("type").Value.AsString);
-			Assert.AreEqual(234, member2Doc.GetElement("ref").Value.AsInt64);
-			Assert.AreEqual("outer", member2Doc.GetElement("role").Value.AsString);
-			Assert.AreEqual("node", member3Doc.GetElement("type").Value.AsString);
-			Assert.AreEqual(345, member3Doc.GetElement("ref").Value.AsInt64);
-			Assert.AreEqual("", member3Doc.GetElement("role").Value.AsString);
-			Assert.AreEqual("relation", member4Doc.GetElement("type").Value.AsString);
-			Assert.AreEqual(456, member4Doc.GetElement("ref").Value.AsInt64);
-			Assert.AreEqual("", member4Doc.GetElement("role").Value.AsString);
+			Assert.That(member1Doc.GetElement("type").Value.AsString, Is.EqualTo("way"));
+			Assert.That(member1Doc.GetElement("ref").Value.AsInt64, Is.EqualTo(123));
+			Assert.That(member1Doc.GetElement("role").Value.AsString, Is.EqualTo("inner"));
+			Assert.That(member2Doc.GetElement("type").Value.AsString, Is.EqualTo("way"));
+			Assert.That(member2Doc.GetElement("ref").Value.AsInt64, Is.EqualTo(234));
+			Assert.That(member2Doc.GetElement("role").Value.AsString, Is.EqualTo("outer"));
+			Assert.That(member3Doc.GetElement("type").Value.AsString, Is.EqualTo("node"));
+			Assert.That(member3Doc.GetElement("ref").Value.AsInt64, Is.EqualTo(345));
+			Assert.That(member3Doc.GetElement("role").Value.AsString, Is.Empty);
+			Assert.That(member4Doc.GetElement("type").Value.AsString, Is.EqualTo("relation"));
+			Assert.That(member4Doc.GetElement("ref").Value.AsInt64, Is.EqualTo(456));
+			Assert.That(member4Doc.GetElement("role").Value.AsString, Is.Empty);
 		}
 
 		[Test]
@@ -262,23 +262,23 @@ namespace NUnit
 			relation2.Members.Add(new OSMMember(MemberType.Way, 123, "inner"));
 			relation2.Members.Add(new OSMMember(MemberType.Way, 234, "outer"));
 
-			Assert.AreEqual(relation.Id, parsedRelation.Id);
-			Assert.AreEqual(relation.UserId, parsedRelation.UserId);
-			Assert.AreEqual(relation.UserName, parsedRelation.UserName);
-			Assert.AreEqual(relation.Version, parsedRelation.Version);
-			Assert.AreEqual(relation.Changeset, parsedRelation.Changeset);
-			Assert.AreEqual(relation.Timestamp, parsedRelation.Timestamp);
-			Assert.AreEqual(relation.Tags.Count, parsedRelation.Tags.Count);
-			Assert.AreEqual(relation.Members.Count, parsedRelation.Members.Count);
+			Assert.That(parsedRelation.Id, Is.EqualTo(relation.Id));
+			Assert.That(parsedRelation.UserId, Is.EqualTo(relation.UserId));
+			Assert.That(parsedRelation.UserName, Is.EqualTo(relation.UserName));
+			Assert.That(parsedRelation.Version, Is.EqualTo(relation.Version));
+			Assert.That(parsedRelation.Changeset, Is.EqualTo(relation.Changeset));
+			Assert.That(parsedRelation.Timestamp, Is.EqualTo(relation.Timestamp));
+			Assert.That(parsedRelation.Tags.Count, Is.EqualTo(relation.Tags.Count));
+			Assert.That(parsedRelation.Members.Count, Is.EqualTo(relation.Members.Count));
 
 			foreach (string key in relation.Tags) {
-				Assert.AreEqual(relation.Tags[key], parsedRelation.Tags[key]);
+				Assert.That(parsedRelation.Tags[key], Is.EqualTo(relation.Tags[key]));
 			}
 
 			for (var i = 0; i < relation.Members.Count; i++) {
-				Assert.AreEqual(relation.Members[i].Type, parsedRelation.Members[i].Type);
-				Assert.AreEqual(relation.Members[i].Ref, parsedRelation.Members[i].Ref);
-				Assert.AreEqual(relation.Members[i].Role, parsedRelation.Members[i].Role);
+				Assert.That(parsedRelation.Members[i].Type, Is.EqualTo(relation.Members[i].Type));
+				Assert.That(parsedRelation.Members[i].Ref, Is.EqualTo(relation.Members[i].Ref));
+				Assert.That(parsedRelation.Members[i].Role, Is.EqualTo(relation.Members[i].Role));
 			}
 		}
 
@@ -290,14 +290,14 @@ namespace NUnit
 
 			relation.ParseBsonDocument(bsonDoc);
 
-			Assert.AreEqual(0, relation.Id);
-			Assert.AreEqual(0, relation.UserId);
-			Assert.AreEqual(string.Empty, relation.UserName);
-			Assert.AreEqual(0, relation.Version);
-			Assert.AreEqual(0, relation.Changeset);
-			Assert.AreEqual(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc), relation.Timestamp);
-			Assert.AreEqual(0, relation.Tags.Count);
-			Assert.AreEqual(0, relation.Members.Count);
+			Assert.That(relation.Id, Is.Zero);
+			Assert.That(relation.UserId, Is.Zero);
+			Assert.That(relation.UserName, Is.Empty);
+			Assert.That(relation.Version, Is.Zero);
+			Assert.That(relation.Changeset, Is.Zero);
+			Assert.That(relation.Timestamp, Is.EqualTo(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)));
+			Assert.That(relation.Tags.Count, Is.Zero);
+			Assert.That(relation.Members.Count, Is.Zero);
 		}
 	}
 }

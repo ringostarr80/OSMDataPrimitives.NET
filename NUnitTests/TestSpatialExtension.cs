@@ -93,16 +93,16 @@ namespace NUnit
 			var xmlNode = BuildOsmXmlNode();
 			var spatialElement = xmlNode.ToOSMSpatialElement();
 			if (spatialElement is OSMNode osmNode) {
-				Assert.AreEqual(1, osmNode.Id);
-				Assert.AreEqual(2, osmNode.Changeset);
-				Assert.AreEqual(3, osmNode.Version);
-				Assert.AreEqual(4, osmNode.UserId);
-				Assert.AreEqual("unknown", osmNode.UserName);
-				Assert.AreEqual(new DateTime(2023, 6, 1, 12, 0, 0), osmNode.Timestamp);
-				Assert.AreEqual(52.1234, osmNode.Latitude);
-				Assert.AreEqual(12.4321, osmNode.Longitude);
-				Assert.AreEqual(1, osmNode.Tags.Count);
-				Assert.AreEqual("house", osmNode.Tags["building"]);
+				Assert.That(osmNode.Id, Is.EqualTo(1));
+				Assert.That(osmNode.Changeset, Is.EqualTo(2));
+				Assert.That(osmNode.Version, Is.EqualTo(3));
+				Assert.That(osmNode.UserId, Is.EqualTo(4));
+				Assert.That(osmNode.UserName, Is.EqualTo("unknown"));
+				Assert.That(osmNode.Timestamp, Is.EqualTo(new DateTime(2023, 6, 1, 12, 0, 0)));
+				Assert.That(osmNode.Latitude, Is.EqualTo(52.1234));
+				Assert.That(osmNode.Longitude, Is.EqualTo(12.4321));
+				Assert.That(osmNode.Tags.Count, Is.EqualTo(1));
+				Assert.That(osmNode.Tags["building"], Is.EqualTo("house"));
 			}
         }
 
@@ -112,16 +112,16 @@ namespace NUnit
 			var xmlNode = BuildOsmXmlNode();
 			var spatialElement = xmlNode.OuterXml.ToOSMSpatialElement();
 			if (spatialElement is OSMNode osmNode) {
-				Assert.AreEqual(1, osmNode.Id);
-				Assert.AreEqual(2, osmNode.Changeset);
-				Assert.AreEqual(3, osmNode.Version);
-				Assert.AreEqual(4, osmNode.UserId);
-				Assert.AreEqual("unknown", osmNode.UserName);
-				Assert.AreEqual(new DateTime(2023, 6, 1, 12, 0, 0), osmNode.Timestamp);
-				Assert.AreEqual(52.1234, osmNode.Latitude);
-				Assert.AreEqual(12.4321, osmNode.Longitude);
-				Assert.AreEqual(1, osmNode.Tags.Count);
-				Assert.AreEqual("house", osmNode.Tags["building"]);
+				Assert.That(osmNode.Id, Is.EqualTo(1));
+				Assert.That(osmNode.Changeset, Is.EqualTo(2));
+				Assert.That(osmNode.Version, Is.EqualTo(3));
+				Assert.That(osmNode.UserId, Is.EqualTo(4));
+				Assert.That(osmNode.UserName, Is.EqualTo("unknown"));
+				Assert.That(osmNode.Timestamp, Is.EqualTo(new DateTime(2023, 6, 1, 12, 0, 0)));
+				Assert.That(osmNode.Latitude, Is.EqualTo(52.1234));
+				Assert.That(osmNode.Longitude, Is.EqualTo(12.4321));
+				Assert.That(osmNode.Tags.Count, Is.EqualTo(1));
+				Assert.That(osmNode.Tags["building"], Is.EqualTo("house"));
 			}
         }
 
@@ -129,14 +129,14 @@ namespace NUnit
 		public void TestOSMNodeToWKT()
 		{
 			var node = new OSMNode(1, 52.1234, 12.4321);
-			Assert.AreEqual("POINT (12.4321 52.1234)", node.ToWkt());
+			Assert.That(node.ToWkt(), Is.EqualTo("POINT (12.4321 52.1234)"));
 		}
 
 		[Test]
 		public void TestOSMNodeSpatialToWKT()
 		{
 			var node = new OSMNodeSpatial(1, 52.1234, 12.4321);
-			Assert.AreEqual("POINT (12.4321 52.1234)", node.ToWkt());
+			Assert.That(node.ToWkt(), Is.EqualTo("POINT (12.4321 52.1234)"));
 		}
 
 		[Test]
@@ -145,15 +145,15 @@ namespace NUnit
 			var xmlWay = BuildOsmXmlWay();
 			var spatialElement = xmlWay.ToOSMSpatialElement();
 			if (spatialElement is OSMWay osmWay) {
-				Assert.AreEqual(1, osmWay.Id);
-				Assert.AreEqual(2, osmWay.Changeset);
-				Assert.AreEqual(3, osmWay.Version);
-				Assert.AreEqual(4, osmWay.UserId);
-				Assert.AreEqual("unknown", osmWay.UserName);
-				Assert.AreEqual(new DateTime(2023, 6, 1, 12, 0, 0), osmWay.Timestamp);
-				Assert.AreEqual(1, osmWay.Tags.Count);
-				Assert.AreEqual("house", osmWay.Tags["building"]);
-				Assert.AreEqual(2, osmWay.NodeRefs.Count);
+				Assert.That(osmWay.Id, Is.EqualTo(1));
+				Assert.That(osmWay.Changeset, Is.EqualTo(2));
+				Assert.That(osmWay.Version, Is.EqualTo(3));
+				Assert.That(osmWay.UserId, Is.EqualTo(4));
+				Assert.That(osmWay.UserName, Is.EqualTo("unknown"));
+				Assert.That(osmWay.Timestamp, Is.EqualTo(new DateTime(2023, 6, 1, 12, 0, 0)));
+				Assert.That(osmWay.Tags.Count, Is.EqualTo(1));
+				Assert.That(osmWay.Tags["building"], Is.EqualTo("house"));
+				Assert.That(osmWay.NodeRefs.Count, Is.EqualTo(2));
 			}
         }
 
@@ -163,15 +163,15 @@ namespace NUnit
 			var xmlWay = BuildOsmXmlWay();
 			var spatialElement = xmlWay.OuterXml.ToOSMSpatialElement();
 			if (spatialElement is OSMWay osmWay) {
-				Assert.AreEqual(1, osmWay.Id);
-				Assert.AreEqual(2, osmWay.Changeset);
-				Assert.AreEqual(3, osmWay.Version);
-				Assert.AreEqual(4, osmWay.UserId);
-				Assert.AreEqual("unknown", osmWay.UserName);
-				Assert.AreEqual(new DateTime(2023, 6, 1, 12, 0, 0), osmWay.Timestamp);
-				Assert.AreEqual(1, osmWay.Tags.Count);
-				Assert.AreEqual("house", osmWay.Tags["building"]);
-				Assert.AreEqual(2, osmWay.NodeRefs.Count);
+				Assert.That(osmWay.Id, Is.EqualTo(1));
+				Assert.That(osmWay.Changeset, Is.EqualTo(2));
+				Assert.That(osmWay.Version, Is.EqualTo(3));
+				Assert.That(osmWay.UserId, Is.EqualTo(4));
+				Assert.That(osmWay.UserName, Is.EqualTo("unknown"));
+				Assert.That(osmWay.Timestamp, Is.EqualTo(new DateTime(2023, 6, 1, 12, 0, 0)));
+				Assert.That(osmWay.Tags.Count, Is.EqualTo(1));
+				Assert.That(osmWay.Tags["building"], Is.EqualTo("house"));
+				Assert.That(osmWay.NodeRefs.Count, Is.EqualTo(2));
 			}
         }
 
@@ -181,7 +181,7 @@ namespace NUnit
 			var way = new OSMWaySpatial(1);
 			way.Nodes.Add(new OSMNodeSpatial(2, 52.1234, 10.4321));
 			way.Nodes.Add(new OSMNodeSpatial(3, 52.4321, 10.1234));
-			Assert.AreEqual("LINESTRING (10.4321 52.1234, 10.1234 52.4321)", way.ToWkt(WktType.LineString));
+			Assert.That(way.ToWkt(WktType.LineString), Is.EqualTo("LINESTRING (10.4321 52.1234, 10.1234 52.4321)"));
 		}
 
 		[Test]
@@ -190,15 +190,15 @@ namespace NUnit
 			var xmlRelation = BuildOsmXmlRelation();
 			var spatialElement = xmlRelation.ToOSMSpatialElement();
 			if (spatialElement is OSMRelation osmRelation) {
-				Assert.AreEqual(1, osmRelation.Id);
-				Assert.AreEqual(2, osmRelation.Changeset);
-				Assert.AreEqual(3, osmRelation.Version);
-				Assert.AreEqual(4, osmRelation.UserId);
-				Assert.AreEqual("unknown", osmRelation.UserName);
-				Assert.AreEqual(new DateTime(2023, 6, 1, 12, 0, 0), osmRelation.Timestamp);
-				Assert.AreEqual(1, osmRelation.Tags.Count);
-				Assert.AreEqual("house", osmRelation.Tags["building"]);
-				Assert.AreEqual(3, osmRelation.Members.Count);
+				Assert.That(osmRelation.Id, Is.EqualTo(1));
+				Assert.That(osmRelation.Changeset, Is.EqualTo(2));
+				Assert.That(osmRelation.Version, Is.EqualTo(3));
+				Assert.That(osmRelation.UserId, Is.EqualTo(4));
+				Assert.That(osmRelation.UserName, Is.EqualTo("unknown"));
+				Assert.That(osmRelation.Timestamp, Is.EqualTo(new DateTime(2023, 6, 1, 12, 0, 0)));
+				Assert.That(osmRelation.Tags.Count, Is.EqualTo(1));
+				Assert.That(osmRelation.Tags["building"], Is.EqualTo("house"));
+				Assert.That(osmRelation.Members.Count, Is.EqualTo(3));
 			}
         }
 
@@ -208,15 +208,15 @@ namespace NUnit
 			var xmlRelation = BuildOsmXmlRelation();
 			var spatialElement = xmlRelation.OuterXml.ToOSMSpatialElement();
 			if (spatialElement is OSMRelation osmRelation) {
-				Assert.AreEqual(1, osmRelation.Id);
-				Assert.AreEqual(2, osmRelation.Changeset);
-				Assert.AreEqual(3, osmRelation.Version);
-				Assert.AreEqual(4, osmRelation.UserId);
-				Assert.AreEqual("unknown", osmRelation.UserName);
-				Assert.AreEqual(new DateTime(2023, 6, 1, 12, 0, 0), osmRelation.Timestamp);
-				Assert.AreEqual(1, osmRelation.Tags.Count);
-				Assert.AreEqual("house", osmRelation.Tags["building"]);
-				Assert.AreEqual(3, osmRelation.Members.Count);
+				Assert.That(osmRelation.Id, Is.EqualTo(1));
+				Assert.That(osmRelation.Changeset, Is.EqualTo(2));
+				Assert.That(osmRelation.Version, Is.EqualTo(3));
+				Assert.That(osmRelation.UserId, Is.EqualTo(4));
+				Assert.That(osmRelation.UserName, Is.EqualTo("unknown"));
+				Assert.That(osmRelation.Timestamp, Is.EqualTo(new DateTime(2023, 6, 1, 12, 0, 0)));
+				Assert.That(osmRelation.Tags.Count, Is.EqualTo(1));
+				Assert.That(osmRelation.Tags["building"], Is.EqualTo("house"));
+				Assert.That(osmRelation.Members.Count, Is.EqualTo(3));
 			}
         }
     }

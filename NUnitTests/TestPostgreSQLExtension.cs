@@ -25,8 +25,8 @@ namespace NUnit
             var expectedTags = new NameValueCollection {
                 { "foo", "bar" }
             };
-            Assert.AreEqual(2, osmNode.Id);
-            Assert.AreEqual(expectedTags, osmNode.Tags);
+            Assert.That(osmNode.Id, Is.EqualTo(2));
+            Assert.That(osmNode.Tags, Is.EqualTo(expectedTags));
         }
 
         [Test]
@@ -44,9 +44,9 @@ namespace NUnit
                 { "foo", "bar" }
             };
             var expectedList = new List<ulong> { 10, 12, 15, 213, 18 };
-            Assert.AreEqual(2, osmWay.Id);
-            Assert.AreEqual(expectedTags, osmWay.Tags);
-            Assert.AreEqual(expectedList, osmWay.NodeRefs);
+            Assert.That(osmWay.Id, Is.EqualTo(2));
+            Assert.That(osmWay.Tags, Is.EqualTo(expectedTags));
+            Assert.That(osmWay.NodeRefs, Is.EqualTo(expectedList));
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace NUnit
             var osmNode = new OSMNode(1, 52.1234, 10.1234);
             osmNode.ParsePostgreSQLFields(parameters);
 
-            Assert.AreEqual(new NameValueCollection(), osmNode.Tags);
+            Assert.That(osmNode.Tags, Is.EqualTo(new NameValueCollection()));
         }
 
         [Test]
@@ -72,7 +72,7 @@ namespace NUnit
             var osmNode = new OSMNode(1, 52.1234, 10.1234);
             osmNode.ParsePostgreSQLFields(parameters);
 
-            Assert.AreEqual(new NameValueCollection(), osmNode.Tags);
+            Assert.That(osmNode.Tags, Is.EqualTo(new NameValueCollection()));
         }
 
         [Test]
@@ -85,7 +85,7 @@ namespace NUnit
             var osmNode = new OSMNode(1, 52.1234, 10.1234);
             osmNode.ParsePostgreSQLFields(parameters);
 
-            Assert.AreEqual(new NameValueCollection(), osmNode.Tags);
+            Assert.That(osmNode.Tags, Is.EqualTo(new NameValueCollection()));
         }
 
         [Test]
@@ -98,7 +98,7 @@ namespace NUnit
             var osmNode = new OSMNode(1, 52.1234, 10.1234);
             osmNode.ParsePostgreSQLFields(parameters);
 
-            Assert.AreEqual(new NameValueCollection(), osmNode.Tags);
+            Assert.That(osmNode.Tags, Is.EqualTo(new NameValueCollection()));
         }
 
         [Test]
@@ -111,8 +111,8 @@ namespace NUnit
             var osmNode = new OSMNode(1, 52.1234, 10.1234);
             osmNode.ParsePostgreSQLFields(parameters);
 
-            Assert.AreEqual("foo", osmNode.Tags.GetKey(0));
-            Assert.AreEqual("bar\\baz", osmNode.Tags[0]);
+            Assert.That(osmNode.Tags.GetKey(0), Is.EqualTo("foo"));
+            Assert.That(osmNode.Tags[0], Is.EqualTo("bar\\baz"));
         }
     }
 }
