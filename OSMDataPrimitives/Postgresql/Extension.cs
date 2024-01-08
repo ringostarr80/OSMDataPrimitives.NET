@@ -65,7 +65,7 @@ namespace OSMDataPrimitives.PostgreSQL
 					tagsSB.Append("\"" + ReplaceHstoreValue(tagKey) + "\"=>\"" + ReplaceHstoreValue(element.Tags[tagKey]) + "\"");
 				}
 			} else {
-				tagsSB.Append("''");
+				tagsSB.Append("");
 			}
 
 			return tagsSB.ToString();

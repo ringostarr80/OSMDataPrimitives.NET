@@ -157,7 +157,7 @@ namespace NUnit
 				{"timestamp", "2017-01-20 12:03:43"},
 				{"lat", "52.123456"},
 				{"lon", "12.654321"},
-				{"tags", "''"}
+				{"tags", ""}
 			};
 			Assert.That(sqlParameters.Count, Is.EqualTo(expectedSqlParameters.Count));
 			foreach (string key in expectedSqlParameters) {
