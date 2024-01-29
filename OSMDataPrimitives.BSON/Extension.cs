@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
@@ -70,8 +71,8 @@ namespace OSMDataPrimitives.BSON
 
 			if (element.Tags.Count > 0) {
 				var tagsDoc = new BsonDocument();
-				foreach (string tagKey in element.Tags) {
-					tagsDoc.Add(tagKey.Replace(".", "\uFF0E").Replace("$", "\uFF04"), element.Tags[tagKey]);
+				foreach (KeyValuePair<string, string> tag in element.Tags) {
+					tagsDoc.Add(tag.Key.Replace(".", "\uFF0E").Replace("$", "\uFF04"), tag.Value);
 				}
 				bsonDoc.Add("tags", tagsDoc);
 			}

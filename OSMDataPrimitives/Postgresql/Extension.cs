@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace OSMDataPrimitives.PostgreSQL
 {
@@ -57,12 +55,12 @@ namespace OSMDataPrimitives.PostgreSQL
 			var tagsSB = new StringBuilder();
 			if (element.Tags.Count > 0) {
 				var tagCounter = 0;
-				foreach (string tagKey in element.Tags) {
+				foreach (var tag in element.Tags) {
 					tagCounter++;
 					if (tagCounter > 1) {
 						tagsSB.Append(", ");
 					}
-					tagsSB.Append("\"" + ReplaceHstoreValue(tagKey) + "\"=>\"" + ReplaceHstoreValue(element.Tags[tagKey]) + "\"");
+					tagsSB.Append($"\"{ReplaceHstoreValue(tag.Key)}\"=>\"{ReplaceHstoreValue(tag.Value)}\"");
 				}
 			} else {
 				tagsSB.Append("");
@@ -223,9 +221,9 @@ namespace OSMDataPrimitives.PostgreSQL
 			return val.Replace("'", "''").Replace("\\", "\\\\").Replace("\"", "\\\"");
 		}
 
-		private static NameValueCollection ParseHstore(string hstoreString)
+		private static Dictionary<string, string> ParseHstore(string hstoreString)
 		{
-			var hstore = new NameValueCollection();
+			var hstore = new Dictionary<string, string>();
             var startIndex = 0;
 
             do

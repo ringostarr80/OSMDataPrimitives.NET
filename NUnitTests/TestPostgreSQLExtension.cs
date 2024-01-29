@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Xml;
 
 using NUnit.Framework;
 using OSMDataPrimitives;
@@ -22,7 +20,7 @@ namespace NUnit
             var osmNode = new OSMNode(1, 52.1234, 10.1234);
             osmNode.ParsePostgreSQLFields(parameters);
 
-            var expectedTags = new NameValueCollection {
+            var expectedTags = new Dictionary<string, string> {
                 { "foo", "bar" }
             };
             Assert.That(osmNode.Id, Is.EqualTo(2));
@@ -40,7 +38,7 @@ namespace NUnit
             var osmWay = new OSMWay(1);
             osmWay.ParsePostgreSQLFields(parameters);
 
-            var expectedTags = new NameValueCollection {
+            var expectedTags = new Dictionary<string, string> {
                 { "foo", "bar" }
             };
             var expectedList = new List<ulong> { 10, 12, 15, 213, 18 };
@@ -111,8 +109,7 @@ namespace NUnit
             var osmNode = new OSMNode(1, 52.1234, 10.1234);
             osmNode.ParsePostgreSQLFields(parameters);
 
-            Assert.That(osmNode.Tags.GetKey(0), Is.EqualTo("foo"));
-            Assert.That(osmNode.Tags[0], Is.EqualTo("bar\\baz"));
+            Assert.That(osmNode.Tags["foo"], Is.EqualTo("bar\\baz"));
         }
     }
 }

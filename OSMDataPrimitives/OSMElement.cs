@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 
 namespace OSMDataPrimitives
 {
@@ -8,14 +8,13 @@ namespace OSMDataPrimitives
 	/// </summary>
 	public abstract class OSMElement : IOSMElement, ICloneable
 	{
-		private ulong _id = 0;
-		private NameValueCollection _tags = new();
+		private Dictionary<string, string> tags = new();
 
 		/// <summary>
 		/// Gets or sets the identifier.
 		/// </summary>
 		/// <value>The identifier.</value>
-		public ulong Id { get { return this._id; } }
+		public ulong Id { get; private set; } = 0;
         /// <summary>
         /// Gets or sets the version.
         /// </summary>
@@ -45,10 +44,10 @@ namespace OSMDataPrimitives
         /// Gets or sets the tags.
         /// </summary>
         /// <value>The tags.</value>
-        public NameValueCollection Tags {
-			get { return this._tags; }
+        public Dictionary<string, string> Tags {
+			get { return this.tags; }
 			set {
-				this._tags = value ?? throw new NullReferenceException("Tags can't be null.");
+				this.tags = value ?? throw new NullReferenceException("Tags can't be null.");
 			}
 		}
 
@@ -58,7 +57,7 @@ namespace OSMDataPrimitives
 		/// <param name="id">Identifier.</param>
 		protected OSMElement(ulong id)
 		{
-			this._id = id;
+			this.Id = id;
 		}
 
 		/// <summary>
@@ -67,7 +66,7 @@ namespace OSMDataPrimitives
 		public object Clone()
 		{
 			var clone = (OSMElement)this.MemberwiseClone();
-			clone._tags = new NameValueCollection(this._tags);
+			clone.tags = new Dictionary<string, string>(this.tags);
 
 			return clone;
 		}
@@ -78,7 +77,7 @@ namespace OSMDataPrimitives
 		/// <param name="newId">New identifier.</param>
 		public void OverrideId(ulong newId)
 		{
-			this._id = newId;
+			this.Id = newId;
 		}
 	}
 }

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 
 namespace OSMDataPrimitives.Spatial
 {
@@ -43,7 +43,7 @@ namespace OSMDataPrimitives.Spatial
 			this.UserId = node.UserId;
 			this.UserName = node.UserName;
 			this.Version = node.Version;
-			this.Tags = new NameValueCollection(node.Tags);
+			this.Tags = new Dictionary<string, string>(node.Tags);
 		}
 
 		/// <summary>

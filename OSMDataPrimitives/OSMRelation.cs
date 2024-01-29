@@ -8,16 +8,16 @@ namespace OSMDataPrimitives
 	/// </summary>
 	public class OSMRelation : OSMElement
 	{
-		private List<OSMMember> _members = new();
+		private List<OSMMember> members = new();
 
 		/// <summary>
 		/// Gets or sets the members.
 		/// </summary>
 		/// <value>The members.</value>
 		public List<OSMMember> Members {
-			get { return this._members; }
+			get { return this.members; }
 			set {
-				this._members = value ?? throw new NullReferenceException("Members can't be null.");
+				this.members = value ?? throw new NullReferenceException("Members can't be null.");
 			}
 		}
 
@@ -36,7 +36,7 @@ namespace OSMDataPrimitives
 		public new object Clone()
 		{
 			var clone = (OSMRelation)base.Clone();
-			clone._members = new List<OSMMember>(this._members);
+			clone.members = new List<OSMMember>(this.members);
 
 			return clone;
 		}

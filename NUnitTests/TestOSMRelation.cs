@@ -5,6 +5,7 @@ using OSMDataPrimitives.Xml;
 using OSMDataPrimitives.PostgreSQL;
 using OSMDataPrimitives.BSON;
 using System.Collections.Specialized;
+using System.Collections.Generic;
 
 namespace NUnit
 {
@@ -271,8 +272,8 @@ namespace NUnit
 			Assert.That(parsedRelation.Tags.Count, Is.EqualTo(relation.Tags.Count));
 			Assert.That(parsedRelation.Members.Count, Is.EqualTo(relation.Members.Count));
 
-			foreach (string key in relation.Tags) {
-				Assert.That(parsedRelation.Tags[key], Is.EqualTo(relation.Tags[key]));
+			foreach (KeyValuePair<string, string> tag in relation.Tags) {
+				Assert.That(parsedRelation.Tags[tag.Key], Is.EqualTo(tag.Value));
 			}
 
 			for (var i = 0; i < relation.Members.Count; i++) {

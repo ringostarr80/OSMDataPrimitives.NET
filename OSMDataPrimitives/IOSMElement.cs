@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 
 namespace OSMDataPrimitives
 {
@@ -42,7 +42,7 @@ namespace OSMDataPrimitives
 		/// Gets or sets the tags.
 		/// </summary>
 		/// <value>The tags.</value>
-		NameValueCollection Tags { get; set; }
+		Dictionary<string, string> Tags { get; set; }
 
 		/// <summary>
 		/// Overrides the identifier.

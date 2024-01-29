@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Xml;
 
@@ -143,10 +144,10 @@ namespace OSMDataPrimitives.Xml
 				}
 			}
 
-			foreach (string tagKey in element.Tags) {
+			foreach (KeyValuePair<string, string> tag in element.Tags) {
 				var tagElement = doc.CreateElement("tag");
-				tagElement.SetAttribute("k", tagKey);
-				tagElement.SetAttribute("v", element.Tags[tagKey]);
+				tagElement.SetAttribute("k", tag.Key);
+				tagElement.SetAttribute("v", tag.Value);
 				osmElement.AppendChild(tagElement);
 			}
 

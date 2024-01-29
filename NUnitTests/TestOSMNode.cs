@@ -5,6 +5,7 @@ using OSMDataPrimitives.Xml;
 using OSMDataPrimitives.PostgreSQL;
 using OSMDataPrimitives.BSON;
 using System.Collections.Specialized;
+using System.Collections.Generic;
 
 namespace NUnit
 {
@@ -252,8 +253,8 @@ namespace NUnit
 			Assert.That(parsedNode.Timestamp, Is.EqualTo(node.Timestamp));
 			Assert.That(parsedNode.Tags.Count, Is.EqualTo(node.Tags.Count));
 
-			foreach (string key in node.Tags) {
-				Assert.That(parsedNode.Tags[key], Is.EqualTo(node.Tags[key]));
+			foreach (KeyValuePair<string, string> tag in node.Tags) {
+				Assert.That(parsedNode.Tags[tag.Key], Is.EqualTo(tag.Value));
 			}
 		}
 

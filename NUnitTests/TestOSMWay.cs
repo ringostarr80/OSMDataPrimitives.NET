@@ -5,6 +5,7 @@ using OSMDataPrimitives.Xml;
 using OSMDataPrimitives.PostgreSQL;
 using OSMDataPrimitives.BSON;
 using System.Collections.Specialized;
+using System.Collections.Generic;
 
 namespace NUnit
 {
@@ -250,8 +251,8 @@ namespace NUnit
 			Assert.That(parsedWay.Tags.Count, Is.EqualTo(way.Tags.Count));
 			Assert.That(parsedWay.NodeRefs.Count, Is.EqualTo(way.NodeRefs.Count));
 
-			foreach (string key in way.Tags) {
-				Assert.That(parsedWay.Tags[key], Is.EqualTo(way.Tags[key]));
+			foreach (KeyValuePair<string, string> tag in way.Tags) {
+				Assert.That(parsedWay.Tags[tag.Key], Is.EqualTo(tag.Value));
 			}
 
 			for (var i = 0; i < way.NodeRefs.Count; i++) {

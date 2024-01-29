@@ -8,16 +8,16 @@ namespace OSMDataPrimitives
 	/// </summary>
 	public class OSMWay : OSMElement
 	{
-		private List<ulong> _nodeRefs = new();
+		private List<ulong> nodeRefs = new();
 
 		/// <summary>
 		/// Gets or sets the node reference-ids.
 		/// </summary>
 		/// <value>The node reference-ids.</value>
 		public List<ulong> NodeRefs {
-			get { return this._nodeRefs; }
+			get { return this.nodeRefs; }
 			set {
-				this._nodeRefs = value ?? throw new NullReferenceException("NodeRefs can't be null.");
+				this.nodeRefs = value ?? throw new NullReferenceException("NodeRefs can't be null.");
 			}
 		}
 
@@ -36,7 +36,7 @@ namespace OSMDataPrimitives
 		public new object Clone()
 		{
 			var clone = (OSMWay)base.Clone();
-			clone._nodeRefs = new List<ulong>(this._nodeRefs);
+			clone.nodeRefs = new List<ulong>(this.nodeRefs);
 
 			return clone;
 		}

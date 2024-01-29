@@ -7,8 +7,8 @@ namespace OSMDataPrimitives
 	/// </summary>
 	public class OSMNode : OSMElement
 	{
-		private double _latitude = 0.0;
-		private double _longitude = 0.0;
+		private double latitude = 0.0;
+		private double longitude = 0.0;
 
 		/// <summary>
 		/// Gets or sets the latitude.
@@ -16,12 +16,12 @@ namespace OSMDataPrimitives
 		/// <value>The latitude.</value>
 		/// <exception cref="T:System.ArgumentOutOfRangeException"></exception>
 		public double Latitude {
-			get { return this._latitude; }
+			get { return this.latitude; }
 			set {
 				if(value < -90.0 || value > 90.0) {
 					throw new ArgumentOutOfRangeException("Latitude", value, "The value for Latitude must be between -90.0 and 90.0.");
 				}
-				this._latitude = value;
+				this.latitude = value;
 			}
 		}
 		/// <summary>
@@ -29,12 +29,12 @@ namespace OSMDataPrimitives
 		/// </summary>
 		/// <value>The longitude.</value>
 		public double Longitude {
-			get { return this._longitude; }
+			get { return this.longitude; }
 			set {
 				if(value < -180.0 || value > 180.0) {
 					throw new ArgumentOutOfRangeException("Longitude", value, "The value for Longitude must be between -180.0 and 180.0.");
 				}
-				this._longitude = value;
+				this.longitude = value;
 			}
 		}
 
