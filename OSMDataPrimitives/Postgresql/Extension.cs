@@ -201,16 +201,16 @@ namespace OSMDataPrimitives.PostgreSQL
 			return insertSB.ToString();
 		}
 
-		private static List<ulong> ParseNodeRefs(string nodeRefsString)
+		private static List<long> ParseNodeRefs(string nodeRefsString)
 		{
 			if (nodeRefsString.StartsWith('{') && nodeRefsString.EndsWith('}')) {
 				nodeRefsString = nodeRefsString[1..^1];
 			}
 
 			var nodeRefsArray = nodeRefsString.Split(',', StringSplitOptions.RemoveEmptyEntries);
-			var nodeRefs = new List<ulong>();
+			var nodeRefs = new List<long>();
 			foreach (var nodeRef in nodeRefsArray) {
-				nodeRefs.Add(Convert.ToUInt64(nodeRef));
+				nodeRefs.Add(Convert.ToInt64(nodeRef));
 			}
 
 			return nodeRefs;

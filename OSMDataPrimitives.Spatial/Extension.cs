@@ -66,7 +66,7 @@ namespace OSMDataPrimitives.Spatial
                 var refAttribute = childNode.Attributes.GetNamedItem("ref");
                 if (refAttribute != null)
                 {
-                    way.NodeRefs.Add(Convert.ToUInt64(refAttribute.Value));
+                    way.NodeRefs.Add(Convert.ToInt64(refAttribute.Value));
                 }
             }
         }

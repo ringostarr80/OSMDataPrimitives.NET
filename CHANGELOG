@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.2.1] - 2024-01-30
+### Changed
+- changed type of NodeRefs from List<ulong> to List<long>
+
 ## [2.2.0] - 2024-01-29
 ### Changed
 - Tags property is now Dictionary<string, string>

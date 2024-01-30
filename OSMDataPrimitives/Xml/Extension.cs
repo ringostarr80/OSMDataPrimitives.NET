@@ -80,7 +80,7 @@ namespace OSMDataPrimitives.Xml
 
 					var refAttribute = childNode.Attributes.GetNamedItem("ref");
 					if (refAttribute is not null) {
-						osmWay.NodeRefs.Add(Convert.ToUInt64(refAttribute.Value));
+						osmWay.NodeRefs.Add(Convert.ToInt64(refAttribute.Value));
 					}
 				}
 			}

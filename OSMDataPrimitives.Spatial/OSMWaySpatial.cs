@@ -91,7 +91,7 @@ namespace OSMDataPrimitives.Spatial
 			this.UserName = way.UserName;
 			this.Version = way.Version;
 			this.Tags = new Dictionary<string, string>(way.Tags);
-			this.NodeRefs = new List<ulong>(way.NodeRefs);
+			this.NodeRefs = new List<long>(way.NodeRefs);
 		}
 
 		/// <summary>

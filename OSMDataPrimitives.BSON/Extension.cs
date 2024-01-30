@@ -156,7 +156,7 @@ namespace OSMDataPrimitives.BSON
 			if (doc.Contains("node_refs")) {
 				var nodeRefsArray = doc["node_refs"].AsBsonArray;
 				foreach (var nodeRef in nodeRefsArray) {
-					way.NodeRefs.Add((ulong)nodeRef.AsInt64);
+					way.NodeRefs.Add(nodeRef.AsInt64);
 				}
 			}
 		}
