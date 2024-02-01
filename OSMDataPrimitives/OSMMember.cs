@@ -1,4 +1,6 @@
-﻿namespace OSMDataPrimitives
+﻿using System.Collections.Generic;
+
+namespace OSMDataPrimitives
 {
 	/// <summary>
 	/// OSMMember.
@@ -30,5 +32,15 @@
 			this.Ref = reference;
 			this.Role = role;
 		}
+
+        public Dictionary<string, string> ToDictionary()
+        {
+            return new Dictionary<string, string>
+            {
+                { "ref", this.Ref.ToString() },
+                { "type", this.Type.ToString().ToLower() },
+                { "role", this.Role }
+            };
+        }
 	}
 }
