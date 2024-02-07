@@ -6,12 +6,12 @@ namespace OSMDataPrimitives.Spatial
 	/// <summary>
 	/// OSMWaySpatialCollection.
 	/// </summary>
-	public class OSMWaySpatialCollection : List<OSMWaySpatial>
+	public class OsmWaySpatialCollection : List<OsmWaySpatial>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.Spatial.OSMWaySpatialCollection"/> class.
 		/// </summary>
-		public OSMWaySpatialCollection()
+		public OsmWaySpatialCollection()
 		{
 
 		}
@@ -20,7 +20,7 @@ namespace OSMDataPrimitives.Spatial
 		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.Spatial.OSMWaySpatialCollection"/> class.
 		/// </summary>
 		/// <param name="ways">Ways.</param>
-		public OSMWaySpatialCollection(IEnumerable<OSMWaySpatial> ways)
+		public OsmWaySpatialCollection(IEnumerable<OsmWaySpatial> ways)
 		{
 			this.AddRange(ways);
 		}
@@ -28,12 +28,12 @@ namespace OSMDataPrimitives.Spatial
 		/// <summary>
 		/// This merges all the containing ways to one way for those, that can be merged.
 		/// </summary>
-		public OSMWaySpatialCollection Merge()
+		public OsmWaySpatialCollection Merge()
 		{
-			var mergedWays = new OSMWaySpatialCollection();
+			var mergedWays = new OsmWaySpatialCollection();
 			foreach(var way in this) {
 				if(way.Nodes.Count > 1) {
-					mergedWays.Add((OSMWaySpatial)way.Clone());
+					mergedWays.Add((OsmWaySpatial)way.Clone());
 				}
 			}
 

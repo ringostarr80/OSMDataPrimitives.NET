@@ -17,7 +17,7 @@ namespace OSMDataPrimitives
 		public List<long> NodeRefs {
 			get { return this.nodeRefs; }
 			set {
-				this.nodeRefs = value ?? throw new NullReferenceException("NodeRefs can't be null.");
+				this.nodeRefs = value ?? throw new ArgumentNullException("NodeRefs");
 			}
 		}
 

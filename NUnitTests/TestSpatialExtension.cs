@@ -135,7 +135,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMNodeSpatialToWKT()
 		{
-			var node = new OSMNodeSpatial(1, 52.1234, 12.4321);
+			var node = new OsmNodeSpatial(1, 52.1234, 12.4321);
 			Assert.That(node.ToWkt(), Is.EqualTo("POINT (12.4321 52.1234)"));
 		}
 
@@ -178,9 +178,9 @@ namespace NUnit
 		[Test]
 		public void TestOSMWayToWKT()
 		{
-			var way = new OSMWaySpatial(1);
-			way.Nodes.Add(new OSMNodeSpatial(2, 52.1234, 10.4321));
-			way.Nodes.Add(new OSMNodeSpatial(3, 52.4321, 10.1234));
+			var way = new OsmWaySpatial(1);
+			way.Nodes.Add(new OsmNodeSpatial(2, 52.1234, 10.4321));
+			way.Nodes.Add(new OsmNodeSpatial(3, 52.4321, 10.1234));
 			Assert.That(way.ToWkt(WktType.LineString), Is.EqualTo("LINESTRING (10.4321 52.1234, 10.1234 52.4321)"));
 		}
 

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 namespace NUnit
 {
 	[TestFixture]
-	public class TestOSMNode
+	public class TestOsmNode
 	{
 		private static OsmNode GetDefaultOSMNode()
 		{

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 namespace NUnit
 {
 	[TestFixture]
-	public class TestOSMWay
+	public class TestOsmWay
 	{
 		private static OsmWay GetDefaultOSMWay()
 		{

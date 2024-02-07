@@ -40,7 +40,7 @@ namespace OSMDataPrimitives.Spatial
             }
         }
 
-        private static void SetOSMNodeProperties(OSMNodeSpatial node, XmlElement element)
+        private static void SetOSMNodeProperties(OsmNodeSpatial node, XmlElement element)
         {
             var latAttribute = element.Attributes.GetNamedItem("lat");
             if (latAttribute != null)
@@ -54,7 +54,7 @@ namespace OSMDataPrimitives.Spatial
             }
         }
 
-        private static void SetOSMWayProperties(OSMWaySpatial way, XmlElement element)
+        private static void SetOSMWayProperties(OsmWaySpatial way, XmlElement element)
         {
             foreach (XmlNode childNode in element.ChildNodes)
             {
@@ -113,19 +113,19 @@ namespace OSMDataPrimitives.Spatial
             var id = Convert.ToUInt64(idAttribute.Value);
             IOsmElement osmElement = element.Name switch
             {
-                "node" => new OSMNodeSpatial(id),
-                "way" => new OSMWaySpatial(id),
+                "node" => new OsmNodeSpatial(id),
+                "way" => new OsmWaySpatial(id),
                 "relation" => new OsmRelation(id),
                 _ => throw new XmlException("Invalid xml-element name '" + element.Name + "'. Expected 'node', 'way' or 'relation'."),
             };
 
             SetOSMGeneralProperties(osmElement, element);
 
-            if (osmElement is OSMNodeSpatial nodeElement)
+            if (osmElement is OsmNodeSpatial nodeElement)
             {
                 SetOSMNodeProperties(nodeElement, element);
             }
-            else if (osmElement is OSMWaySpatial wayElement && element.HasChildNodes)
+            else if (osmElement is OsmWaySpatial wayElement && element.HasChildNodes)
             {
                 SetOSMWayProperties(wayElement, element);
             }
@@ -179,7 +179,7 @@ namespace OSMDataPrimitives.Spatial
         /// </summary>
         /// <returns>The WKT-string.</returns>
         /// <param name="node">Node.</param>
-        public static string ToWkt(this OSMNodeSpatial node)
+        public static string ToWkt(this OsmNodeSpatial node)
         {
             return string.Format("POINT ({0})", node.ToWktPart());
         }
@@ -190,7 +190,7 @@ namespace OSMDataPrimitives.Spatial
         /// <returns>The WKT-string.</returns>
         /// <param name="way">Way.</param>
         /// <param name="wktType">WktType.</param>
-        public static string ToWkt(this OSMWaySpatial way, WktType? wktType = null)
+        public static string ToWkt(this OsmWaySpatial way, WktType? wktType = null)
         {
             var wktTypeString = (way.IsClosed) ? "POLYGON" : "LINESTRING";
             if (wktType.HasValue)
@@ -216,7 +216,7 @@ namespace OSMDataPrimitives.Spatial
         /// <returns>The WKT-string.</returns>
         /// <param name="ways">Ways.</param>
         /// <param name="wktType">WktType.</param>
-        public static string ToWkt(this OSMWaySpatialCollection ways, WktType? wktType = null)
+        public static string ToWkt(this OsmWaySpatialCollection ways, WktType? wktType = null)
         {
             if (wktType.HasValue) {
                 return wktType.Value switch {
@@ -234,7 +234,7 @@ namespace OSMDataPrimitives.Spatial
         /// </summary>
         /// <returns>The WKT-string.</returns>
         /// <param name="ways">Ways.</param>
-        public static string ToWktMultiLineString(this OSMWaySpatialCollection ways)
+        public static string ToWktMultiLineString(this OsmWaySpatialCollection ways)
         {
             var resultSB = new StringBuilder();
             resultSB.Append("MULTILINESTRING");
@@ -261,17 +261,17 @@ namespace OSMDataPrimitives.Spatial
         /// </summary>
         /// <returns>The WKT-string.</returns>
         /// <param name="ways">Ways.</param>
-        public static string ToWktMultiPolygon(this OSMWaySpatialCollection ways)
+        public static string ToWktMultiPolygon(this OsmWaySpatialCollection ways)
         {
             var resultSB = new StringBuilder();
             resultSB.Append("MULTIPOLYGON");
             resultSB.Append(" (");
             var wayCounter = 0;
 
-            var outerWays = new OSMWaySpatialCollection(ways.Where(w => w.Role == "outer")).Merge();
+            var outerWays = new OsmWaySpatialCollection(ways.Where(w => w.Role == "outer")).Merge();
             outerWays.RemoveInvalidPolygons();
             outerWays.EnsurePolygonDirection();
-            var innerWays = new OSMWaySpatialCollection(ways.Where(w => w.Role == "inner")).Merge();
+            var innerWays = new OsmWaySpatialCollection(ways.Where(w => w.Role == "inner")).Merge();
             innerWays.RemoveInvalidPolygons();
             innerWays.EnsurePolygonDirection();
 
@@ -310,12 +310,12 @@ namespace OSMDataPrimitives.Spatial
             return string.Format("{0} {1}", node.Longitude.ToString(CultureInfo.InvariantCulture), node.Latitude.ToString(CultureInfo.InvariantCulture));
         }
 
-        private static string ToWktPart(this OSMNodeSpatial node)
+        private static string ToWktPart(this OsmNodeSpatial node)
         {
             return string.Format("{0} {1}", node.Longitude.ToString(CultureInfo.InvariantCulture), node.Latitude.ToString(CultureInfo.InvariantCulture));
         }
 
-        private static string ToWktPart(this OSMWaySpatial way)
+        private static string ToWktPart(this OsmWaySpatial way)
         {
             var resultSB = new StringBuilder();
 

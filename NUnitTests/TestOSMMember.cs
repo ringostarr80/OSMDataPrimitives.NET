@@ -5,7 +5,7 @@ using OSMDataPrimitives;
 namespace NUnit
 {
     [TestFixture]
-    public class TestOSMMember
+    public class TestOsmMember
     {
         private static OsmMember GetDefaultOSMMemberNode()
         {

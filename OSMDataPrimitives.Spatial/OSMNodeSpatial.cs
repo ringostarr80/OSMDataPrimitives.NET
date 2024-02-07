@@ -6,7 +6,7 @@ namespace OSMDataPrimitives.Spatial
 	/// <summary>
 	/// OSMNodeSpatial.
 	/// </summary>
-	public class OSMNodeSpatial : OsmNode
+	public class OsmNodeSpatial : OsmNode
 	{
 		private const double EQUATORIAL_RADIUS = 6378137.0;
 
@@ -14,7 +14,7 @@ namespace OSMDataPrimitives.Spatial
 		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.Spatial.OSMNodeSpatial"/> class.
 		/// </summary>
 		/// <param name="id">Identifier.</param>
-		public OSMNodeSpatial(ulong id) : base(id)
+		public OsmNodeSpatial(ulong id) : base(id)
 		{
 
 		}
@@ -25,7 +25,7 @@ namespace OSMDataPrimitives.Spatial
 		/// <param name="id">Identifier.</param>
 		/// <param name="latitude">Latitude.</param>
 		/// <param name="longitude">Longitude.</param>
-		public OSMNodeSpatial(ulong id, double latitude, double longitude) : base(id, latitude, longitude)
+		public OsmNodeSpatial(ulong id, double latitude, double longitude) : base(id, latitude, longitude)
 		{
 
 		}
@@ -34,7 +34,7 @@ namespace OSMDataPrimitives.Spatial
 		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.Spatial.OSMNodeSpatial"/> class.
 		/// </summary>
 		/// <param name="node">Node.</param>
-		public OSMNodeSpatial(OsmNode node) : base(node.Id)
+		public OsmNodeSpatial(OsmNode node) : base(node.Id)
 		{
 			this.Latitude = node.Latitude;
 			this.Longitude = node.Longitude;

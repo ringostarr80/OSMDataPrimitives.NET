@@ -6,7 +6,7 @@ using OSMDataPrimitives.Spatial;
 namespace NUnit
 {
 	[TestFixture]
-	public class TestOSMNodeSpatial
+	public class TestOsmNodeSpatial
 	{
 		private static OsmNode GetDefaultOSMNode()
 		{
@@ -25,17 +25,17 @@ namespace NUnit
 			return node;
 		}
 
-		private static OSMNodeSpatial GetOSMNodeSpatial1()
+		private static OsmNodeSpatial GetOSMNodeSpatial1()
 		{
 			// Position of Hamburg.
-			var node = new OSMNodeSpatial(2, 53.553345, 9.992475);
+			var node = new OsmNodeSpatial(2, 53.553345, 9.992475);
 			return node;
 		}
 
-		private static OSMNodeSpatial GetOSMNodeSpatial2()
+		private static OsmNodeSpatial GetOSMNodeSpatial2()
 		{
 			// Position of Munich
-			var node = new OSMNodeSpatial(2, 48.136385, 11.577624);
+			var node = new OsmNodeSpatial(2, 48.136385, 11.577624);
 			return node;
 		}
 
@@ -43,7 +43,7 @@ namespace NUnit
 		public void TestOSMNodeSpatialConstructorWithOSMNode()
 		{
 			var node = GetDefaultOSMNode();
-			var nodeSpatial = new OSMNodeSpatial(node);
+			var nodeSpatial = new OsmNodeSpatial(node);
 
 			nodeSpatial.Changeset += 1;
 			nodeSpatial.Version += 1;

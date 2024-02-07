@@ -10,7 +10,7 @@ using System.Collections.Generic;
 namespace NUnit
 {
 	[TestFixture]
-	public class TestOSMRelation
+	public class TestOsmRelation
 	{
 		private static OsmRelation GetDefaultOSMRelation()
 		{

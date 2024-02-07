@@ -6,18 +6,18 @@ namespace OSMDataPrimitives.Spatial
 	/// <summary>
 	/// OSMWaySpatial.
 	/// </summary>
-	public class OSMWaySpatial : OsmWay
+	public class OsmWaySpatial : OsmWay
 	{
-		private List<OSMNodeSpatial> nodes = new();
+		private List<OsmNodeSpatial> nodes = new();
 
 		/// <summary>
 		/// Gets or sets the nodes.
 		/// </summary>
 		/// <value>The nodes.</value>
-		public List<OSMNodeSpatial> Nodes {
+		public List<OsmNodeSpatial> Nodes {
 			get { return this.nodes; }
 			set {
-				this.nodes = value ?? throw new NullReferenceException("Nodes can't be null.");
+				this.nodes = value ?? throw new ArgumentNullException("Nodes");
 			}
 		}
 
@@ -74,7 +74,7 @@ namespace OSMDataPrimitives.Spatial
 		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.Spatial.OSMWaySpatial"/> class.
 		/// </summary>
 		/// <param name="id">Identifier.</param>
-		public OSMWaySpatial(ulong id) : base(id)
+		public OsmWaySpatial(ulong id) : base(id)
 		{
 
 		}
@@ -83,7 +83,7 @@ namespace OSMDataPrimitives.Spatial
 		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.Spatial.OSMWaySpatial"/> class.
 		/// </summary>
 		/// <param name="way">Way.</param>
-		public OSMWaySpatial(OsmWay way) : base(way.Id)
+		public OsmWaySpatial(OsmWay way) : base(way.Id)
 		{
 			this.Changeset = way.Changeset;
 			this.Timestamp = way.Timestamp;
@@ -99,10 +99,10 @@ namespace OSMDataPrimitives.Spatial
 		/// </summary>
 		public new object Clone()
 		{
-			var clone = (OSMWaySpatial)base.Clone();
-			clone.nodes = new List<OSMNodeSpatial>();
+			var clone = (OsmWaySpatial)base.Clone();
+			clone.nodes = new List<OsmNodeSpatial>();
 			foreach (var node in this.nodes) {
-				clone.nodes.Add((OSMNodeSpatial)node.Clone());
+				clone.nodes.Add((OsmNodeSpatial)node.Clone());
 			}
 
 			return clone;
@@ -111,9 +111,9 @@ namespace OSMDataPrimitives.Spatial
 		/// <summary>
 		/// Reverse the node-order of this instance.
 		/// </summary>
-		public OSMWaySpatial Reverse()
+		public OsmWaySpatial Reverse()
 		{
-			var reversedWay = (OSMWaySpatial)this.Clone();
+			var reversedWay = (OsmWaySpatial)this.Clone();
 			reversedWay.Nodes.Reverse();
 			return reversedWay;
 		}

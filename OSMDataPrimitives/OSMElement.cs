@@ -47,7 +47,7 @@ namespace OSMDataPrimitives
         public Dictionary<string, string> Tags {
 			get { return this.tags; }
 			set {
-				this.tags = value ?? throw new NullReferenceException("Tags can't be null.");
+				this.tags = value ?? throw new ArgumentNullException("Tags");
 			}
 		}
 
