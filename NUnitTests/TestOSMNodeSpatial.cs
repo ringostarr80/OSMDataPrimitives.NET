@@ -8,9 +8,9 @@ namespace NUnit
 	[TestFixture]
 	public class TestOSMNodeSpatial
 	{
-		private static OSMNode GetDefaultOSMNode()
+		private static OsmNode GetDefaultOSMNode()
 		{
-			var node = new OSMNode(2) {
+			var node = new OsmNode(2) {
 				Latitude = 52.123456,
 				Longitude = 12.654321,
 				UserId = 5,

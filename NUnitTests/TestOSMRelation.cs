@@ -12,9 +12,9 @@ namespace NUnit
 	[TestFixture]
 	public class TestOSMRelation
 	{
-		private static OSMRelation GetDefaultOSMRelation()
+		private static OsmRelation GetDefaultOSMRelation()
 		{
-			var relation = new OSMRelation(2) {
+			var relation = new OsmRelation(2) {
 				UserId = 5,
 				UserName = "foo",
 				Version = 3,
@@ -23,10 +23,10 @@ namespace NUnit
 			};
 			relation.Tags.Add("name", "this country");
 			relation.Tags.Add("ref", "DE");
-			relation.Members.Add(new OSMMember(MemberType.Way, 123, "inner"));
-			relation.Members.Add(new OSMMember(MemberType.Way, 234, "outer"));
-			relation.Members.Add(new OSMMember(MemberType.Node, 345, ""));
-			relation.Members.Add(new OSMMember(MemberType.Relation, 456, ""));
+			relation.Members.Add(new OsmMember(MemberType.Way, 123, "inner"));
+			relation.Members.Add(new OsmMember(MemberType.Way, 234, "outer"));
+			relation.Members.Add(new OsmMember(MemberType.Node, 345, ""));
+			relation.Members.Add(new OsmMember(MemberType.Relation, 456, ""));
 
 			return relation;
 		}
@@ -35,7 +35,7 @@ namespace NUnit
 		public void TestOSMRelationClone()
 		{
 			var relation = GetDefaultOSMRelation();
-			var relationClone = (OSMRelation)relation.Clone();
+			var relationClone = (OsmRelation)relation.Clone();
 			relationClone.Changeset += 1;
 			relationClone.Version += 1;
 			relationClone.UserId = 2;
@@ -44,9 +44,9 @@ namespace NUnit
 			relationClone.Tags["name"] = "that country";
 			relationClone.Tags["ref"] = "GB";
 			relationClone.Members.Clear();
-			relationClone.Members.Add(new OSMMember(MemberType.Node, 321, "inner"));
-			relationClone.Members.Add(new OSMMember(MemberType.Way, 432, "inner"));
-			relationClone.Members.Add(new OSMMember(MemberType.Relation, 98765, "outer"));
+			relationClone.Members.Add(new OsmMember(MemberType.Node, 321, "inner"));
+			relationClone.Members.Add(new OsmMember(MemberType.Way, 432, "inner"));
+			relationClone.Members.Add(new OsmMember(MemberType.Relation, 98765, "outer"));
 
 			Assert.That(relation.Changeset, Is.EqualTo(7));
 			Assert.That(relationClone.Changeset, Is.EqualTo(8));
@@ -65,13 +65,13 @@ namespace NUnit
 			Assert.That(relation.Members.Count, Is.EqualTo(4));
 			Assert.That(relationClone.Members.Count, Is.EqualTo(3));
 
-			Assert.That(relation.Members[0], Is.EqualTo(new OSMMember(MemberType.Way, 123, "inner")));
-			Assert.That(relation.Members[1], Is.EqualTo(new OSMMember(MemberType.Way, 234, "outer")));
-			Assert.That(relation.Members[2], Is.EqualTo(new OSMMember(MemberType.Node, 345, "")));
+			Assert.That(relation.Members[0], Is.EqualTo(new OsmMember(MemberType.Way, 123, "inner")));
+			Assert.That(relation.Members[1], Is.EqualTo(new OsmMember(MemberType.Way, 234, "outer")));
+			Assert.That(relation.Members[2], Is.EqualTo(new OsmMember(MemberType.Node, 345, "")));
 
-			Assert.That(relationClone.Members[0], Is.EqualTo(new OSMMember(MemberType.Node, 321, "inner")));
-			Assert.That(relationClone.Members[1], Is.EqualTo(new OSMMember(MemberType.Way, 432, "inner")));
-			Assert.That(relationClone.Members[2], Is.EqualTo(new OSMMember(MemberType.Relation, 98765, "outer")));
+			Assert.That(relationClone.Members[0], Is.EqualTo(new OsmMember(MemberType.Node, 321, "inner")));
+			Assert.That(relationClone.Members[1], Is.EqualTo(new OsmMember(MemberType.Way, 432, "inner")));
+			Assert.That(relationClone.Members[2], Is.EqualTo(new OsmMember(MemberType.Relation, 98765, "outer")));
 		}
 
 		[Test]
@@ -95,7 +95,7 @@ namespace NUnit
 		{
 			var relation = GetDefaultOSMRelation();
 			var xmlRelation = relation.ToXml();
-			var convertedRelation = (OSMRelation)xmlRelation.ToOSMElement();
+			var convertedRelation = (OsmRelation)xmlRelation.ToOSMElement();
 
 			Assert.That(convertedRelation.Id, Is.EqualTo(2));
 			Assert.That(convertedRelation.Changeset, Is.EqualTo(7));
@@ -106,10 +106,10 @@ namespace NUnit
 			Assert.That(convertedRelation.Tags["name"], Is.EqualTo("this country"));
 			Assert.That(convertedRelation.Tags["ref"], Is.EqualTo("DE"));
 			Assert.That(convertedRelation.Members.Count, Is.EqualTo(4));
-			Assert.That(convertedRelation.Members[0], Is.EqualTo(new OSMMember(MemberType.Way, 123, "inner")));
-			Assert.That(convertedRelation.Members[1], Is.EqualTo(new OSMMember(MemberType.Way, 234, "outer")));
-			Assert.That(convertedRelation.Members[2], Is.EqualTo(new OSMMember(MemberType.Node, 345, "")));
-			Assert.That(convertedRelation.Members[3], Is.EqualTo(new OSMMember(MemberType.Relation, 456, "")));
+			Assert.That(convertedRelation.Members[0], Is.EqualTo(new OsmMember(MemberType.Way, 123, "inner")));
+			Assert.That(convertedRelation.Members[1], Is.EqualTo(new OsmMember(MemberType.Way, 234, "outer")));
+			Assert.That(convertedRelation.Members[2], Is.EqualTo(new OsmMember(MemberType.Node, 345, "")));
+			Assert.That(convertedRelation.Members[3], Is.EqualTo(new OsmMember(MemberType.Relation, 456, "")));
 		}
 
 		[Test]
@@ -117,7 +117,7 @@ namespace NUnit
 		{
 			var relation = GetDefaultOSMRelation();
 			var xmlString = relation.ToXmlString();
-			var convertedRelation = (OSMRelation)xmlString.ToOSMElement();
+			var convertedRelation = (OsmRelation)xmlString.ToOSMElement();
 
 			Assert.That(convertedRelation.Id, Is.EqualTo(2));
 			Assert.That(convertedRelation.Changeset, Is.EqualTo(7));
@@ -128,10 +128,10 @@ namespace NUnit
 			Assert.That(convertedRelation.Tags["name"], Is.EqualTo("this country"));
 			Assert.That(convertedRelation.Tags["ref"], Is.EqualTo("DE"));
 			Assert.That(convertedRelation.Members.Count, Is.EqualTo(4));
-			Assert.That(convertedRelation.Members[0], Is.EqualTo(new OSMMember(MemberType.Way, 123, "inner")));
-			Assert.That(convertedRelation.Members[1], Is.EqualTo(new OSMMember(MemberType.Way, 234, "outer")));
-			Assert.That(convertedRelation.Members[2], Is.EqualTo(new OSMMember(MemberType.Node, 345, "")));
-			Assert.That(convertedRelation.Members[3], Is.EqualTo(new OSMMember(MemberType.Relation, 456, "")));
+			Assert.That(convertedRelation.Members[0], Is.EqualTo(new OsmMember(MemberType.Way, 123, "inner")));
+			Assert.That(convertedRelation.Members[1], Is.EqualTo(new OsmMember(MemberType.Way, 234, "outer")));
+			Assert.That(convertedRelation.Members[2], Is.EqualTo(new OsmMember(MemberType.Node, 345, "")));
+			Assert.That(convertedRelation.Members[3], Is.EqualTo(new OsmMember(MemberType.Relation, 456, "")));
 		}
 
 		[Test]
@@ -248,10 +248,10 @@ namespace NUnit
 			var relation = GetDefaultOSMRelation();
 			var bsonDoc = relation.ToBson();
 
-			var parsedRelation = new OSMRelation(0);
+			var parsedRelation = new OsmRelation(0);
 			parsedRelation.ParseBsonDocument(bsonDoc);
 
-			var relation2 = new OSMRelation(2) {
+			var relation2 = new OsmRelation(2) {
 				UserId = 5,
 				UserName = "foo",
 				Version = 3,
@@ -260,8 +260,8 @@ namespace NUnit
 			};
 			relation2.Tags.Add("name", "this country");
 			relation2.Tags.Add("ref", "DE");
-			relation2.Members.Add(new OSMMember(MemberType.Way, 123, "inner"));
-			relation2.Members.Add(new OSMMember(MemberType.Way, 234, "outer"));
+			relation2.Members.Add(new OsmMember(MemberType.Way, 123, "inner"));
+			relation2.Members.Add(new OsmMember(MemberType.Way, 234, "outer"));
 
 			Assert.That(parsedRelation.Id, Is.EqualTo(relation.Id));
 			Assert.That(parsedRelation.UserId, Is.EqualTo(relation.UserId));

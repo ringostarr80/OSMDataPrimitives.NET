@@ -11,20 +11,20 @@ namespace OSMDataPrimitives.PostgreSQL
 	/// </summary>
 	public static class Extension
 	{
-		private static string GetTableNameByElementType(IOSMElement element)
+		private static string GetTableNameByElementType(IOsmElement element)
 		{
-			if (element is OSMNode) {
+			if (element is OsmNode) {
 				return "nodes";
-			} else if (element is OSMWay) {
+			} else if (element is OsmWay) {
 				return "ways";
-			} else if (element is OSMRelation) {
+			} else if (element is OsmRelation) {
 				return "relations";
 			}
 
 			return string.Empty;
 		}
 
-		private static StringBuilder GetRelationSpecificInsert(OSMRelation relationElement, NameValueCollection parameters)
+		private static StringBuilder GetRelationSpecificInsert(OsmRelation relationElement, NameValueCollection parameters)
 		{
 			var insertSB = new StringBuilder();
 			if (relationElement.Members.Count > 0) {
@@ -50,7 +50,7 @@ namespace OSMDataPrimitives.PostgreSQL
 			return insertSB;
 		}
 
-		private static string GetTagsSpecificInsert(IOSMElement element)
+		private static string GetTagsSpecificInsert(IOsmElement element)
 		{
 			var tagsSB = new StringBuilder();
 			if (element.Tags.Count > 0) {
@@ -74,7 +74,7 @@ namespace OSMDataPrimitives.PostgreSQL
 		/// </summary>
 		/// <param name="element">Element.</param>
 		/// <param name="parameters">Parameters.</param>
-		public static void ParsePostgreSQLFields(this IOSMElement element, NameValueCollection parameters)
+		public static void ParsePostgreSQLFields(this IOsmElement element, NameValueCollection parameters)
 		{
 			if (parameters["osm_id"] is not null) {
 				element.OverrideId(Convert.ToUInt64(parameters["osm_id"]));
@@ -84,7 +84,7 @@ namespace OSMDataPrimitives.PostgreSQL
 				element.Tags = ParseHstore(parameters["tags"]);
 			}
 
-			if (element is OSMWay wayElement && parameters["node_refs"] is not null) {
+			if (element is OsmWay wayElement && parameters["node_refs"] is not null) {
 				wayElement.NodeRefs = ParseNodeRefs(parameters["node_refs"]);
 			}
 		}
@@ -95,23 +95,23 @@ namespace OSMDataPrimitives.PostgreSQL
 		/// <returns>The PostgreSQL Select String.</returns>
 		/// <param name="element">Element.</param>
 		/// <param name="inclusiveMetaField">If set to <c>true</c> inclusive meta field.</param>
-		public static string ToPostgreSQLSelect(this IOSMElement element, bool inclusiveMetaField = false)
+		public static string ToPostgreSQLSelect(this IOsmElement element, bool inclusiveMetaField = false)
 		{
 			var table = string.Empty;
 			var selectSB = new StringBuilder("SELECT osm_id");
 			if (inclusiveMetaField) {
 				selectSB.Append(", version, changeset, uid, user, timestamp");
 			}
-			if (element is OSMNode) {
+			if (element is OsmNode) {
 				selectSB.Append(", lat, lon");
 				table = "nodes";
 			}
 			selectSB.Append(", tags::text");
-			if (element is OSMWay) {
+			if (element is OsmWay) {
 				selectSB.Append(", node_refs::text");
 				table = "ways";
 			}
-			if (element is OSMRelation) {
+			if (element is OsmRelation) {
 				selectSB.Append(", members::text");
 				table = "relations";
 			}
@@ -128,7 +128,7 @@ namespace OSMDataPrimitives.PostgreSQL
 		/// <returns>The PostgreSQL Delete String.</returns>
 		/// <param name="element">Element.</param>
 		/// <param name="tableName">TableName.</param>
-		public static string ToPostgreSQLDelete(this IOSMElement element, string tableName = null)
+		public static string ToPostgreSQLDelete(this IOsmElement element, string tableName = null)
 		{
             string table;
             if (tableName != null) {
@@ -147,7 +147,7 @@ namespace OSMDataPrimitives.PostgreSQL
 		/// <param name="element">Element.</param>
 		/// <param name="parameters">Parameters.</param>
 		/// <param name="inclusiveMetaFields">If set to <c>true</c> inclusive meta fields.</param>
-		public static string ToPostgreSQLInsert(this IOSMElement element, out NameValueCollection parameters, bool inclusiveMetaFields = false)
+		public static string ToPostgreSQLInsert(this IOsmElement element, out NameValueCollection parameters, bool inclusiveMetaFields = false)
 		{
 			parameters = new NameValueCollection {
 				{"osm_id", element.Id.ToString()}
@@ -159,17 +159,17 @@ namespace OSMDataPrimitives.PostgreSQL
 			if (inclusiveMetaFields) {
 				insertSB.Append(", version, changeset, uid, user, timestamp");
 			}
-			if (element is OSMNode nodeElement) {
+			if (element is OsmNode nodeElement) {
 				insertSB.Append(", lat");
 				insertSB.Append(", lon");
 				parameters.Add("lat", nodeElement.Latitude.ToString(CultureInfo.InvariantCulture));
 				parameters.Add("lon", nodeElement.Longitude.ToString(CultureInfo.InvariantCulture));
 			}
 			insertSB.Append(", tags");
-			if (element is OSMWay) {
+			if (element is OsmWay) {
 				insertSB.Append(", node_refs");
 			}
-			if (element is OSMRelation) {
+			if (element is OsmRelation) {
 				insertSB.Append(", members");
 			}
 			insertSB.Append(") VALUES(@osm_id::bigint");
@@ -181,19 +181,19 @@ namespace OSMDataPrimitives.PostgreSQL
 				parameters.Add("user", element.UserName);
 				parameters.Add("timestamp", element.Timestamp.ToString("yyyy-MM-dd hh:mm:ss", CultureInfo.InvariantCulture));
 			}
-			if (element is OSMNode) {
+			if (element is OsmNode) {
 				insertSB.Append(", @lat::double precision, @lon::double precision");
 			}
 
 			parameters.Add("tags", GetTagsSpecificInsert(element));
 
 			insertSB.Append(", @tags::hstore");
-			if (element is OSMWay way) {
+			if (element is OsmWay way) {
 				insertSB.Append(", @node_refs::bigint[]");
 				var wayElement = way;
 				parameters.Add("node_refs", "{" + string.Join(", ", wayElement.NodeRefs) + "}");
 			}
-			if (element is OSMRelation relationElement) {
+			if (element is OsmRelation relationElement) {
 				insertSB.Append(GetRelationSpecificInsert(relationElement, parameters));
 			}
 			insertSB.Append(')');

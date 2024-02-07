@@ -5,7 +5,7 @@ namespace OSMDataPrimitives
 	/// <summary>
 	/// OSMNode.
 	/// </summary>
-	public class OSMNode : OSMElement
+	public class OsmNode : OsmElement
 	{
 		private double latitude = 0.0;
 		private double longitude = 0.0;
@@ -42,7 +42,7 @@ namespace OSMDataPrimitives
 		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.OSMNode"/> class.
 		/// </summary>
 		/// <param name="id">Identifier.</param>
-		public OSMNode(ulong id) : base(id)
+		public OsmNode(ulong id) : base(id)
 		{
 
 		}
@@ -53,7 +53,7 @@ namespace OSMDataPrimitives
 		/// <param name="id">Identifier.</param>
 		/// <param name="latitude">Latitude.</param>
 		/// <param name="longitude">Longitude.</param>
-		public OSMNode(ulong id, double latitude, double longitude) : base(id)
+		public OsmNode(ulong id, double latitude, double longitude) : base(id)
 		{
 			this.Latitude = latitude;
 			this.Longitude = longitude;

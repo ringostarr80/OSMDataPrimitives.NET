@@ -6,7 +6,7 @@ namespace OSMDataPrimitives
 	/// <summary>
 	/// OSMElement is the base class for OSMNode, OSMWay and OSMRelation.
 	/// </summary>
-	public abstract class OSMElement : IOSMElement, ICloneable
+	public abstract class OsmElement : IOsmElement, ICloneable
 	{
 		private Dictionary<string, string> tags = new();
 
@@ -55,7 +55,7 @@ namespace OSMDataPrimitives
 		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.OSMElement"/> class.
 		/// </summary>
 		/// <param name="id">Identifier.</param>
-		protected OSMElement(ulong id)
+		protected OsmElement(ulong id)
 		{
 			this.Id = id;
 		}
@@ -65,7 +65,7 @@ namespace OSMDataPrimitives
 		/// </summary>
 		public object Clone()
 		{
-			var clone = (OSMElement)this.MemberwiseClone();
+			var clone = (OsmElement)this.MemberwiseClone();
 			clone.tags = new Dictionary<string, string>(this.tags);
 
 			return clone;

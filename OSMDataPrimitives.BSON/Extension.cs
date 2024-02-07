@@ -13,17 +13,17 @@ namespace OSMDataPrimitives.BSON
 	{
 		static Extension()
 		{
-			BsonClassMap.RegisterClassMap<OSMNode>(cm => {
+			BsonClassMap.RegisterClassMap<OsmNode>(cm => {
 				cm.AutoMap();
-				cm.MapCreator(n => new OSMNode(n.Id));
+				cm.MapCreator(n => new OsmNode(n.Id));
 			});
-			BsonClassMap.RegisterClassMap<OSMWay>(cm => {
+			BsonClassMap.RegisterClassMap<OsmWay>(cm => {
 				cm.AutoMap();
-				cm.MapCreator(w => new OSMWay(w.Id));
+				cm.MapCreator(w => new OsmWay(w.Id));
 			});
-			BsonClassMap.RegisterClassMap<OSMRelation>(cm => {
+			BsonClassMap.RegisterClassMap<OsmRelation>(cm => {
 				cm.AutoMap();
-				cm.MapCreator(r => new OSMRelation(r.Id));
+				cm.MapCreator(r => new OsmRelation(r.Id));
 			});
 		}
 
@@ -32,12 +32,12 @@ namespace OSMDataPrimitives.BSON
 		/// </summary>
 		/// <param name="element">IOSMElement.</param>
 		/// <returns>The BsonDocument.</returns>
-		public static BsonDocument ToBson(this IOSMElement element)
+		public static BsonDocument ToBson(this IOsmElement element)
 		{
 			var bsonDoc = new BsonDocument {
 				{ "id", (long)element.Id }
 			};
-			if (element is OSMNode nodeElement) {
+			if (element is OsmNode nodeElement) {
 				var locationDoc = new BsonDocument {
 					{ "lon", nodeElement.Longitude },
 					{ "lat", nodeElement.Latitude }
@@ -52,11 +52,11 @@ namespace OSMDataPrimitives.BSON
 			bsonDoc.Add("changeset", (long)element.Changeset);
 			bsonDoc.Add("timestamp", element.Timestamp);
 
-			if (element is OSMWay wayElement) {
+			if (element is OsmWay wayElement) {
 				bsonDoc.Add("node_refs", new BsonArray(wayElement.NodeRefs));
 			}
 
-			if (element is OSMRelation relationElement) {
+			if (element is OsmRelation relationElement) {
 				var bsonMembersArray = new BsonArray();
 				foreach (var osmMember in relationElement.Members) {
 					var memberDocument = new BsonDocument {
@@ -85,7 +85,7 @@ namespace OSMDataPrimitives.BSON
 		/// </summary>
 		/// <param name="element">IOSMElement.</param>
 		/// <param name="doc">BsonDocument.</param>
-		public static void ParseBsonDocument(this IOSMElement element, BsonDocument doc)
+		public static void ParseBsonDocument(this IOsmElement element, BsonDocument doc)
 		{
 			element.OverrideId(0);
 
@@ -93,7 +93,7 @@ namespace OSMDataPrimitives.BSON
 				element.OverrideId((ulong)doc["id"].AsInt64);
 			}
 
-			if (element is OSMNode nodeElement) {
+			if (element is OsmNode nodeElement) {
 				ParseBsonDocumentForOSMNode(nodeElement, doc);
 			}
 
@@ -109,11 +109,11 @@ namespace OSMDataPrimitives.BSON
 			element.Changeset = doc.Contains("changeset") ? (ulong)doc["changeset"].AsInt64 : 0;
 			element.Timestamp = doc.Contains("timestamp") ? doc["timestamp"].AsBsonDateTime.ToUniversalTime() : DateTime.UnixEpoch;
 
-			if (element is OSMWay wayElement) {
+			if (element is OsmWay wayElement) {
 				ParseBsonDocumentForOSMWay(wayElement, doc);
 			}
 
-			if (element is OSMRelation relationElement) {
+			if (element is OsmRelation relationElement) {
 				ParseBsonDocumentForOSMRelation(relationElement, doc);
 			}
 
@@ -131,7 +131,7 @@ namespace OSMDataPrimitives.BSON
 		/// </summary>
 		/// <param name="node">OSMNode.</param>
 		/// <param name="doc">BsonDocument.</param>
-		public static void ParseBsonDocumentForOSMNode(OSMNode node, BsonDocument doc)
+		public static void ParseBsonDocumentForOSMNode(OsmNode node, BsonDocument doc)
 		{
 			if (doc.Contains("location")) {
 				var locationDoc = doc["location"].AsBsonDocument;
@@ -150,7 +150,7 @@ namespace OSMDataPrimitives.BSON
 		/// </summary>
 		/// <param name="way">OSMWay.</param>
 		/// <param name="doc">BsonDocument.</param>
-		public static void ParseBsonDocumentForOSMWay(OSMWay way, BsonDocument doc)
+		public static void ParseBsonDocumentForOSMWay(OsmWay way, BsonDocument doc)
 		{
 			way.NodeRefs.Clear();
 			if (doc.Contains("node_refs")) {
@@ -166,7 +166,7 @@ namespace OSMDataPrimitives.BSON
 		/// </summary>
 		/// <param name="relation">OSMRelation.</param>
 		/// <param name="doc">BsonDocument.</param>
-		public static void ParseBsonDocumentForOSMRelation(OSMRelation relation, BsonDocument doc)
+		public static void ParseBsonDocumentForOSMRelation(OsmRelation relation, BsonDocument doc)
 		{
 			relation.Members.Clear();
 			if (doc.Contains("members")) {
@@ -182,7 +182,7 @@ namespace OSMDataPrimitives.BSON
 						_ => null
 					};
 					if (memberType.HasValue) {
-						relation.Members.Add(new OSMMember(memberType.Value, (ulong)memberDoc["ref"].AsInt64, memberDoc["role"].AsString));
+						relation.Members.Add(new OsmMember(memberType.Value, (ulong)memberDoc["ref"].AsInt64, memberDoc["role"].AsString));
 					}
 				}
 			}

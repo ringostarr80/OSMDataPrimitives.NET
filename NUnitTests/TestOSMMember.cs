@@ -7,19 +7,19 @@ namespace NUnit
     [TestFixture]
     public class TestOSMMember
     {
-        private static OSMMember GetDefaultOSMMemberNode()
+        private static OsmMember GetDefaultOSMMemberNode()
         {
-            return new OSMMember(MemberType.Node, 1, "");
+            return new OsmMember(MemberType.Node, 1, "");
         }
 
-        private static OSMMember GetDefaultOSMMemberWay()
+        private static OsmMember GetDefaultOSMMemberWay()
         {
-            return new OSMMember(MemberType.Way, 2, "outer");
+            return new OsmMember(MemberType.Way, 2, "outer");
         }
 
-        private static OSMMember GetDefaultOSMMemberRelation()
+        private static OsmMember GetDefaultOSMMemberRelation()
         {
-            return new OSMMember(MemberType.Relation, 3, "");
+            return new OsmMember(MemberType.Relation, 3, "");
         }
 
         [Test]

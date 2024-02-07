@@ -12,9 +12,9 @@ namespace NUnit
 	[TestFixture]
 	public class TestOSMNode
 	{
-		private static OSMNode GetDefaultOSMNode()
+		private static OsmNode GetDefaultOSMNode()
 		{
-			var node = new OSMNode(2) {
+			var node = new OsmNode(2) {
 				Latitude = 52.123456,
 				Longitude = 12.654321,
 				UserId = 5,
@@ -33,7 +33,7 @@ namespace NUnit
 		public void TestOSMNodeClone()
 		{
 			var node = GetDefaultOSMNode();
-			var nodeClone = (OSMNode)node.Clone();
+			var nodeClone = (OsmNode)node.Clone();
 			nodeClone.Changeset += 1;
 			nodeClone.Version += 1;
 			nodeClone.Latitude += 2.341;
@@ -86,8 +86,8 @@ namespace NUnit
 			Assert.That(convertedNode.Id, Is.EqualTo(2));
 			Assert.That(convertedNode.Changeset, Is.EqualTo(7));
 			Assert.That(convertedNode.Version, Is.EqualTo(3));
-			Assert.That(((OSMNode)convertedNode).Latitude, Is.EqualTo(52.123456));
-			Assert.That(((OSMNode)convertedNode).Longitude, Is.EqualTo(12.654321));
+			Assert.That(((OsmNode)convertedNode).Latitude, Is.EqualTo(52.123456));
+			Assert.That(((OsmNode)convertedNode).Longitude, Is.EqualTo(12.654321));
 			Assert.That(convertedNode.UserId, Is.EqualTo(5));
 			Assert.That(convertedNode.UserName, Is.EqualTo("foo"));
 			Assert.That(convertedNode.Timestamp, Is.EqualTo(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc)));
@@ -105,8 +105,8 @@ namespace NUnit
 			Assert.That(convertedNode.Id, Is.EqualTo(2));
 			Assert.That(convertedNode.Changeset, Is.EqualTo(7));
 			Assert.That(convertedNode.Version, Is.EqualTo(3));
-			Assert.That(((OSMNode)convertedNode).Latitude, Is.EqualTo(52.123456));
-			Assert.That(((OSMNode)convertedNode).Longitude, Is.EqualTo(12.654321));
+			Assert.That(((OsmNode)convertedNode).Latitude, Is.EqualTo(52.123456));
+			Assert.That(((OsmNode)convertedNode).Longitude, Is.EqualTo(12.654321));
 			Assert.That(convertedNode.UserId, Is.EqualTo(5));
 			Assert.That(convertedNode.UserName, Is.EqualTo("foo"));
 			Assert.That(convertedNode.Timestamp, Is.EqualTo(new DateTime(2017, 1, 20, 12, 03, 43, DateTimeKind.Utc)));
@@ -240,7 +240,7 @@ namespace NUnit
 			var node = GetDefaultOSMNode();
 			var bsonDoc = node.ToBson();
 
-			var parsedNode = new OSMNode(0);
+			var parsedNode = new OsmNode(0);
 			parsedNode.ParseBsonDocument(bsonDoc);
 
 			Assert.That(parsedNode.Id, Is.EqualTo(node.Id));

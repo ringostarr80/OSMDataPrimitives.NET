@@ -10,7 +10,7 @@ namespace OSMDataPrimitives.Xml
 	/// </summary>
 	public static class Extension
 	{
-		private static void SetGeneralProperties(IOSMElement osmElement, XmlElement xmlElement)
+		private static void SetGeneralProperties(IOsmElement osmElement, XmlElement xmlElement)
 		{
 			var changesetAttribute = xmlElement.Attributes.GetNamedItem("changeset");
 			if (changesetAttribute is not null) {
@@ -34,7 +34,7 @@ namespace OSMDataPrimitives.Xml
 			}
 		}
 
-		private static void SetOSMNodeProperties(OSMNode osmNode, XmlElement xmlElement)
+		private static void SetOSMNodeProperties(OsmNode osmNode, XmlElement xmlElement)
 		{
 			var latAttribute = xmlElement.Attributes.GetNamedItem("lat");
 			if (latAttribute is not null) {
@@ -46,7 +46,7 @@ namespace OSMDataPrimitives.Xml
 			}
 		}
 
-		private static void SetOSMRelationProperties(OSMRelation osmRelation, XmlElement xmlElement)
+		private static void SetOSMRelationProperties(OsmRelation osmRelation, XmlElement xmlElement)
 		{
 			foreach (XmlNode childNode in xmlElement.ChildNodes) {
 				if (childNode.Name != "member") {
@@ -65,12 +65,12 @@ namespace OSMDataPrimitives.Xml
 					};
 
 					var refValue = Convert.ToUInt64(refAttribute.Value);
-					osmRelation.Members.Add(new OSMMember(memberType.Value, refValue, roleAttribute.Value));
+					osmRelation.Members.Add(new OsmMember(memberType.Value, refValue, roleAttribute.Value));
 				}
 			}
 		}
 
-		private static void SetOSMWayProperties(OSMWay osmWay, XmlElement xmlElement)
+		private static void SetOSMWayProperties(OsmWay osmWay, XmlElement xmlElement)
 		{
 			if (xmlElement.HasChildNodes) {
 				foreach (XmlNode childNode in xmlElement.ChildNodes) {
@@ -91,7 +91,7 @@ namespace OSMDataPrimitives.Xml
 		/// </summary>
 		/// <param name="element">IOSMElement.</param>
 		/// <returns>The XmlElement.</returns>
-		public static XmlElement ToXml(this IOSMElement element)
+		public static XmlElement ToXml(this IOsmElement element)
 		{
 			return ToXml(element, new XmlDocument());
 		}
@@ -102,19 +102,19 @@ namespace OSMDataPrimitives.Xml
 		/// <returns>The XmlElement.</returns>
 		/// <param name="element">IOSMElement.</param>
 		/// <param name="doc">XmlDocument.</param>
-		public static XmlElement ToXml(this IOSMElement element, XmlDocument doc)
+		public static XmlElement ToXml(this IOsmElement element, XmlDocument doc)
 		{
 			var elementName = "element";
-			if (element is OSMNode) {
+			if (element is OsmNode) {
 				elementName = "node";
-			} else if (element is OSMWay) {
+			} else if (element is OsmWay) {
 				elementName = "way";
-			} else if (element is OSMRelation) {
+			} else if (element is OsmRelation) {
 				elementName = "relation";
 			}
 			var osmElement = doc.CreateElement(elementName);
 			osmElement.SetAttribute("id", element.Id.ToString());
-			if (element is OSMNode nodeElement) {
+			if (element is OsmNode nodeElement) {
 				osmElement.SetAttribute("lat", nodeElement.Latitude.ToString(CultureInfo.InvariantCulture));
 				osmElement.SetAttribute("lon", nodeElement.Longitude.ToString(CultureInfo.InvariantCulture));
 			}
@@ -126,7 +126,7 @@ namespace OSMDataPrimitives.Xml
 			osmElement.SetAttribute("changeset", element.Changeset.ToString());
 			osmElement.SetAttribute("timestamp", element.Timestamp.ToString("yyyy-MM-ddThh:mm:ssZ", CultureInfo.InvariantCulture));
 
-			if (element is OSMWay wayElement) {
+			if (element is OsmWay wayElement) {
 				foreach (var nodeRef in wayElement.NodeRefs) {
 					var ndElement = doc.CreateElement("nd");
 					ndElement.SetAttribute("ref", nodeRef.ToString());
@@ -134,7 +134,7 @@ namespace OSMDataPrimitives.Xml
 				}
 			}
 
-			if (element is OSMRelation relationElement) {
+			if (element is OsmRelation relationElement) {
 				foreach (var osmMember in relationElement.Members) {
 					var memberElement = doc.CreateElement("member");
 					memberElement.SetAttribute("type", osmMember.Type.ToString().ToLower());
@@ -159,7 +159,7 @@ namespace OSMDataPrimitives.Xml
 		/// </summary>
 		/// <returns>The Xml-String.</returns>
 		/// <param name="element">IOSMElement.</param>
-		public static string ToXmlString(this IOSMElement element)
+		public static string ToXmlString(this IOsmElement element)
 		{
 			var xmlElement = ToXml(element);
 			return xmlElement.OuterXml;
@@ -170,25 +170,25 @@ namespace OSMDataPrimitives.Xml
 		/// </summary>
 		/// <returns>The OSMElement.</returns>
 		/// <param name="element">XmlElement.</param>
-		public static IOSMElement ToOSMElement(this XmlElement element)
+		public static IOsmElement ToOSMElement(this XmlElement element)
 		{
 			var idAttribute = element.Attributes.GetNamedItem("id") ?? throw new XmlException("Missing required xml-attribute 'id'.");
             var id = Convert.ToUInt64(idAttribute.Value);
-            IOSMElement osmElement = element.Name switch
+            IOsmElement osmElement = element.Name switch
             {
-                "node" => new OSMNode(id),
-                "way" => new OSMWay(id),
-                "relation" => new OSMRelation(id),
+                "node" => new OsmNode(id),
+                "way" => new OsmWay(id),
+                "relation" => new OsmRelation(id),
                 _ => throw new XmlException("Invalid xml-element name '" + element.Name + "'. Expected 'node', 'way' or 'relation'."),
             };
 
 			SetGeneralProperties(osmElement, element);
 
-			if (osmElement is OSMNode nodeElement) {
+			if (osmElement is OsmNode nodeElement) {
 				SetOSMNodeProperties(nodeElement, element);
-			} else if (osmElement is OSMWay wayElement) {
+			} else if (osmElement is OsmWay wayElement) {
 				SetOSMWayProperties(wayElement, element);
-			} else if (osmElement is OSMRelation relationElement) {
+			} else if (osmElement is OsmRelation relationElement) {
 				SetOSMRelationProperties(relationElement, element);
 			}
 
@@ -212,7 +212,7 @@ namespace OSMDataPrimitives.Xml
 		/// </summary>
 		/// <returns>The OSMElement.</returns>
 		/// <param name="element">Xml-String.</param>
-		public static IOSMElement ToOSMElement(this string element)
+		public static IOsmElement ToOSMElement(this string element)
 		{
 			var xmlDoc = new XmlDocument();
 			xmlDoc.LoadXml(element);

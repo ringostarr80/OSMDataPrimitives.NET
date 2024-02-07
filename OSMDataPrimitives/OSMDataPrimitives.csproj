@@ -6,7 +6,6 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
-    <!-- <NuspecFile>OSMDataPrimitives.nuspec</NuspecFile> -->
     <!-- nuget package metadata -->
     <PackageId>OSMDataPrimitives</PackageId>
     <PackageLicenseExpression>CC0-1.0</PackageLicenseExpression>

@@ -11,7 +11,7 @@ namespace OSMDataPrimitives.Spatial
     /// </summary>
     public static class Extension
     {
-        private static void SetOSMGeneralProperties(IOSMElement osmElement, XmlElement element)
+        private static void SetOSMGeneralProperties(IOsmElement osmElement, XmlElement element)
         {
             var changesetAttribute = element.Attributes.GetNamedItem("changeset");
             if (changesetAttribute != null)
@@ -71,7 +71,7 @@ namespace OSMDataPrimitives.Spatial
             }
         }
 
-        private static void SetOSMRelationProperties(OSMRelation relation, XmlElement element)
+        private static void SetOSMRelationProperties(OsmRelation relation, XmlElement element)
         {
             foreach (XmlNode childNode in element.ChildNodes)
             {
@@ -97,7 +97,7 @@ namespace OSMDataPrimitives.Spatial
                     }
 
                     var refValue = Convert.ToUInt64(refAttribute.Value);
-                    relation.Members.Add(new OSMMember(memberType.Value, refValue, roleAttribute.Value));
+                    relation.Members.Add(new OsmMember(memberType.Value, refValue, roleAttribute.Value));
                 }
             }
         }
@@ -107,15 +107,15 @@ namespace OSMDataPrimitives.Spatial
         /// </summary>
         /// <returns>The OSMElement.</returns>
         /// <param name="element">XmlElement.</param>
-        public static IOSMElement ToOSMSpatialElement(this XmlElement element)
+        public static IOsmElement ToOSMSpatialElement(this XmlElement element)
         {
             var idAttribute = element.Attributes.GetNamedItem("id") ?? throw new XmlException("Missing required xml-attribute 'id'.");
             var id = Convert.ToUInt64(idAttribute.Value);
-            IOSMElement osmElement = element.Name switch
+            IOsmElement osmElement = element.Name switch
             {
                 "node" => new OSMNodeSpatial(id),
                 "way" => new OSMWaySpatial(id),
-                "relation" => new OSMRelation(id),
+                "relation" => new OsmRelation(id),
                 _ => throw new XmlException("Invalid xml-element name '" + element.Name + "'. Expected 'node', 'way' or 'relation'."),
             };
 
@@ -129,7 +129,7 @@ namespace OSMDataPrimitives.Spatial
             {
                 SetOSMWayProperties(wayElement, element);
             }
-            else if (osmElement is OSMRelation relationElement && element.HasChildNodes)
+            else if (osmElement is OsmRelation relationElement && element.HasChildNodes)
             {
                 SetOSMRelationProperties(relationElement, element);
             }
@@ -157,7 +157,7 @@ namespace OSMDataPrimitives.Spatial
         /// </summary>
         /// <returns>The OSMElement.</returns>
         /// <param name="element">Xml-String.</param>
-        public static IOSMElement ToOSMSpatialElement(this string element)
+        public static IOsmElement ToOSMSpatialElement(this string element)
         {
             var xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(element);
@@ -169,7 +169,7 @@ namespace OSMDataPrimitives.Spatial
         /// </summary>
         /// <returns>The WKT-string.</returns>
         /// <param name="node">Node.</param>
-        public static string ToWkt(this OSMNode node)
+        public static string ToWkt(this OsmNode node)
         {
             return string.Format("POINT ({0})", node.ToWktPart());
         }
@@ -305,7 +305,7 @@ namespace OSMDataPrimitives.Spatial
             return resultSB.ToString();
         }
 
-        private static string ToWktPart(this OSMNode node)
+        private static string ToWktPart(this OsmNode node)
         {
             return string.Format("{0} {1}", node.Longitude.ToString(CultureInfo.InvariantCulture), node.Latitude.ToString(CultureInfo.InvariantCulture));
         }

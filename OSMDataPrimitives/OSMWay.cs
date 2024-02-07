@@ -6,7 +6,7 @@ namespace OSMDataPrimitives
 	/// <summary>
 	/// OSMWay.
 	/// </summary>
-	public class OSMWay : OSMElement
+	public class OsmWay : OsmElement
 	{
 		private List<long> nodeRefs = new();
 
@@ -25,7 +25,7 @@ namespace OSMDataPrimitives
 		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.OSMWay"/> class.
 		/// </summary>
 		/// <param name="id">Identifier.</param>
-		public OSMWay(ulong id) : base(id)
+		public OsmWay(ulong id) : base(id)
 		{
 
 		}
@@ -35,7 +35,7 @@ namespace OSMDataPrimitives
 		/// </summary>
 		public new object Clone()
 		{
-			var clone = (OSMWay)base.Clone();
+			var clone = (OsmWay)base.Clone();
 			clone.nodeRefs = new List<long>(this.nodeRefs);
 
 			return clone;

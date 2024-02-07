@@ -92,7 +92,7 @@ namespace NUnit
 		{
 			var xmlNode = BuildOsmXmlNode();
 			var spatialElement = xmlNode.ToOSMSpatialElement();
-			if (spatialElement is OSMNode osmNode) {
+			if (spatialElement is OsmNode osmNode) {
 				Assert.That(osmNode.Id, Is.EqualTo(1));
 				Assert.That(osmNode.Changeset, Is.EqualTo(2));
 				Assert.That(osmNode.Version, Is.EqualTo(3));
@@ -111,7 +111,7 @@ namespace NUnit
 		{
 			var xmlNode = BuildOsmXmlNode();
 			var spatialElement = xmlNode.OuterXml.ToOSMSpatialElement();
-			if (spatialElement is OSMNode osmNode) {
+			if (spatialElement is OsmNode osmNode) {
 				Assert.That(osmNode.Id, Is.EqualTo(1));
 				Assert.That(osmNode.Changeset, Is.EqualTo(2));
 				Assert.That(osmNode.Version, Is.EqualTo(3));
@@ -128,7 +128,7 @@ namespace NUnit
 		[Test]
 		public void TestOSMNodeToWKT()
 		{
-			var node = new OSMNode(1, 52.1234, 12.4321);
+			var node = new OsmNode(1, 52.1234, 12.4321);
 			Assert.That(node.ToWkt(), Is.EqualTo("POINT (12.4321 52.1234)"));
 		}
 
@@ -144,7 +144,7 @@ namespace NUnit
 		{
 			var xmlWay = BuildOsmXmlWay();
 			var spatialElement = xmlWay.ToOSMSpatialElement();
-			if (spatialElement is OSMWay osmWay) {
+			if (spatialElement is OsmWay osmWay) {
 				Assert.That(osmWay.Id, Is.EqualTo(1));
 				Assert.That(osmWay.Changeset, Is.EqualTo(2));
 				Assert.That(osmWay.Version, Is.EqualTo(3));
@@ -162,7 +162,7 @@ namespace NUnit
 		{
 			var xmlWay = BuildOsmXmlWay();
 			var spatialElement = xmlWay.OuterXml.ToOSMSpatialElement();
-			if (spatialElement is OSMWay osmWay) {
+			if (spatialElement is OsmWay osmWay) {
 				Assert.That(osmWay.Id, Is.EqualTo(1));
 				Assert.That(osmWay.Changeset, Is.EqualTo(2));
 				Assert.That(osmWay.Version, Is.EqualTo(3));
@@ -189,7 +189,7 @@ namespace NUnit
 		{
 			var xmlRelation = BuildOsmXmlRelation();
 			var spatialElement = xmlRelation.ToOSMSpatialElement();
-			if (spatialElement is OSMRelation osmRelation) {
+			if (spatialElement is OsmRelation osmRelation) {
 				Assert.That(osmRelation.Id, Is.EqualTo(1));
 				Assert.That(osmRelation.Changeset, Is.EqualTo(2));
 				Assert.That(osmRelation.Version, Is.EqualTo(3));
@@ -207,7 +207,7 @@ namespace NUnit
 		{
 			var xmlRelation = BuildOsmXmlRelation();
 			var spatialElement = xmlRelation.OuterXml.ToOSMSpatialElement();
-			if (spatialElement is OSMRelation osmRelation) {
+			if (spatialElement is OsmRelation osmRelation) {
 				Assert.That(osmRelation.Id, Is.EqualTo(1));
 				Assert.That(osmRelation.Changeset, Is.EqualTo(2));
 				Assert.That(osmRelation.Version, Is.EqualTo(3));

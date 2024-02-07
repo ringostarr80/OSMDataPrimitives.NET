@@ -12,9 +12,9 @@ namespace NUnit
 	[TestFixture]
 	public class TestOSMWay
 	{
-		private static OSMWay GetDefaultOSMWay()
+		private static OsmWay GetDefaultOSMWay()
 		{
-			var way = new OSMWay(2) {
+			var way = new OsmWay(2) {
 				UserId = 5,
 				UserName = "foo",
 				Version = 3,
@@ -37,7 +37,7 @@ namespace NUnit
 		public void TestOSMWayClone()
 		{
 			var way = GetDefaultOSMWay();
-			var wayClone = (OSMWay)way.Clone();
+			var wayClone = (OsmWay)way.Clone();
 			wayClone.Changeset += 1;
 			wayClone.Version += 1;
 			wayClone.UserId = 2;
@@ -106,7 +106,7 @@ namespace NUnit
 		{
 			var way = GetDefaultOSMWay();
 			var xmlWay = way.ToXml();
-			var convertedWay = (OSMWay)xmlWay.ToOSMElement();
+			var convertedWay = (OsmWay)xmlWay.ToOSMElement();
 
 			Assert.That(convertedWay.Id, Is.EqualTo(2));
 			Assert.That(convertedWay.Changeset, Is.EqualTo(7));
@@ -130,7 +130,7 @@ namespace NUnit
 		{
 			var way = GetDefaultOSMWay();
 			var xmlString = way.ToXmlString();
-			var convertedWay = (OSMWay)xmlString.ToOSMElement();
+			var convertedWay = (OsmWay)xmlString.ToOSMElement();
 
 			Assert.That(convertedWay.Id, Is.EqualTo(2));
 			Assert.That(convertedWay.Changeset, Is.EqualTo(7));
@@ -239,7 +239,7 @@ namespace NUnit
 			var way = GetDefaultOSMWay();
 			var bsonDoc = way.ToBson();
 
-			var parsedWay = new OSMWay(0);
+			var parsedWay = new OsmWay(0);
 			parsedWay.ParseBsonDocument(bsonDoc);
 
 			Assert.That(parsedWay.Id, Is.EqualTo(way.Id));

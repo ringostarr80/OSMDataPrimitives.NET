@@ -17,7 +17,7 @@ namespace NUnit
                 { "osm_id", "2" },
                 { "tags", "\"foo\"=>\"bar\"" }
             };
-            var osmNode = new OSMNode(1, 52.1234, 10.1234);
+            var osmNode = new OsmNode(1, 52.1234, 10.1234);
             osmNode.ParsePostgreSQLFields(parameters);
 
             var expectedTags = new Dictionary<string, string> {
@@ -35,7 +35,7 @@ namespace NUnit
                 { "tags", "\"foo\"=>\"bar\"" },
                 { "node_refs", "{10,12,15,213,18}" }
             };
-            var osmWay = new OSMWay(1);
+            var osmWay = new OsmWay(1);
             osmWay.ParsePostgreSQLFields(parameters);
 
             var expectedTags = new Dictionary<string, string> {
@@ -54,7 +54,7 @@ namespace NUnit
                 { "osm_id", "2" },
                 { "tags", "\"foo" }
             };
-            var osmNode = new OSMNode(1, 52.1234, 10.1234);
+            var osmNode = new OsmNode(1, 52.1234, 10.1234);
             osmNode.ParsePostgreSQLFields(parameters);
 
             Assert.That(osmNode.Tags, Is.EqualTo(new NameValueCollection()));
@@ -67,7 +67,7 @@ namespace NUnit
                 { "osm_id", "2" },
                 { "tags", "\"foo\"" }
             };
-            var osmNode = new OSMNode(1, 52.1234, 10.1234);
+            var osmNode = new OsmNode(1, 52.1234, 10.1234);
             osmNode.ParsePostgreSQLFields(parameters);
 
             Assert.That(osmNode.Tags, Is.EqualTo(new NameValueCollection()));
@@ -80,7 +80,7 @@ namespace NUnit
                 { "osm_id", "2" },
                 { "tags", "\"foo\"=>" }
             };
-            var osmNode = new OSMNode(1, 52.1234, 10.1234);
+            var osmNode = new OsmNode(1, 52.1234, 10.1234);
             osmNode.ParsePostgreSQLFields(parameters);
 
             Assert.That(osmNode.Tags, Is.EqualTo(new NameValueCollection()));
@@ -93,7 +93,7 @@ namespace NUnit
                 { "osm_id", "2" },
                 { "tags", "\"foo\"=>\"bar" }
             };
-            var osmNode = new OSMNode(1, 52.1234, 10.1234);
+            var osmNode = new OsmNode(1, 52.1234, 10.1234);
             osmNode.ParsePostgreSQLFields(parameters);
 
             Assert.That(osmNode.Tags, Is.EqualTo(new NameValueCollection()));
@@ -106,7 +106,7 @@ namespace NUnit
                 { "osm_id", "2" },
                 { "tags", "\"foo\"=>\"bar\\baz\"" }
             };
-            var osmNode = new OSMNode(1, 52.1234, 10.1234);
+            var osmNode = new OsmNode(1, 52.1234, 10.1234);
             osmNode.ParsePostgreSQLFields(parameters);
 
             Assert.That(osmNode.Tags["foo"], Is.EqualTo("bar\\baz"));

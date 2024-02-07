@@ -5,7 +5,7 @@ namespace OSMDataPrimitives
 	/// <summary>
 	/// OSMMember.
 	/// </summary>
-	public struct OSMMember
+	public struct OsmMember
 	{
         /// <summary>
         /// The member-type.
@@ -26,7 +26,7 @@ namespace OSMDataPrimitives
         /// <param name="type">Type.</param>
         /// <param name="reference">Reference.</param>
         /// <param name="role">Role.</param>
-        public OSMMember(MemberType type, ulong reference, string role)
+        public OsmMember(MemberType type, ulong reference, string role)
 		{
 			this.Type = type;
 			this.Ref = reference;

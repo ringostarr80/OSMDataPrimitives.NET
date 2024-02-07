@@ -8,9 +8,9 @@ namespace NUnit
 	[TestFixture]
 	public class TestOSMWaySpatial
 	{
-		private static OSMWay GetDefaultOSMWay()
+		private static OsmWay GetDefaultOSMWay()
 		{
-			var way = new OSMWay(2) {
+			var way = new OsmWay(2) {
 				UserId = 5,
 				UserName = "foo",
 				Version = 3,

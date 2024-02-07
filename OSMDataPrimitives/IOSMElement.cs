@@ -6,7 +6,7 @@ namespace OSMDataPrimitives
 	/// <summary>
 	/// IOSMElement is the interface for OSMNode, OSMWay and OSMRelation
 	/// </summary>
-	public interface IOSMElement
+	public interface IOsmElement
 	{
 		/// <summary>
 		/// Gets the identifier.

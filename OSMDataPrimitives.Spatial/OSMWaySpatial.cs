@@ -6,7 +6,7 @@ namespace OSMDataPrimitives.Spatial
 	/// <summary>
 	/// OSMWaySpatial.
 	/// </summary>
-	public class OSMWaySpatial : OSMWay
+	public class OSMWaySpatial : OsmWay
 	{
 		private List<OSMNodeSpatial> nodes = new();
 
@@ -83,7 +83,7 @@ namespace OSMDataPrimitives.Spatial
 		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.Spatial.OSMWaySpatial"/> class.
 		/// </summary>
 		/// <param name="way">Way.</param>
-		public OSMWaySpatial(OSMWay way) : base(way.Id)
+		public OSMWaySpatial(OsmWay way) : base(way.Id)
 		{
 			this.Changeset = way.Changeset;
 			this.Timestamp = way.Timestamp;
