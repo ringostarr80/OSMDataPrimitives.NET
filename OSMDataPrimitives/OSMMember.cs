@@ -33,7 +33,11 @@ namespace OSMDataPrimitives
 			this.Role = role;
 		}
 
-        public Dictionary<string, string> ToDictionary()
+        /// <summary>
+        /// Converts the OSMMember object to a dictionary.
+        /// </summary>
+        /// <returns>A dictionary containing the member's properties.</returns>
+        public readonly Dictionary<string, string> ToDictionary()
         {
             return new Dictionary<string, string>
             {
