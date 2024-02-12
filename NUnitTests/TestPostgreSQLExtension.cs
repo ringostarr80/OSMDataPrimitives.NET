@@ -128,7 +128,6 @@ namespace NUnit
             Assert.That(result["key2"], Is.EqualTo("value2"));
         }
 
-        //*
         [Test]
         public void ParseHstore_InvalidHstoreString_ReturnsDictionaryWith1Entry()
         {
@@ -142,6 +141,5 @@ namespace NUnit
             Assert.That(result, Is.InstanceOf<Dictionary<string, string>>());
             Assert.That(result, Is.EqualTo(new Dictionary<string, string> {{"key1", "value1"}}));
         }
-        //*/
     }
 }

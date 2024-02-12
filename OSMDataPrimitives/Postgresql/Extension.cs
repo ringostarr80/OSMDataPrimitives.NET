@@ -225,7 +225,12 @@ namespace OSMDataPrimitives.PostgreSQL
 		public static Dictionary<string, string> ParseHstore(string hstoreString)
 		{
 			var result = new Dictionary<string, string>();
-			var matches = Regex.Matches(hstoreString, "(\"(?:[^\"]|\"\")*\")\\s*=>\\s*(\"(?:[^\"]|\"\")*\")(,\\s*|$)");
+			var matches = Regex.Matches(
+				hstoreString,
+				"(\"(?:[^\"]|\"\")*\")\\s*=>\\s*(\"(?:[^\"]|\"\")*\")(,\\s*|$)",
+				RegexOptions.Compiled,
+				new TimeSpan(0, 0, 5)
+			);
 
 			foreach (Match match in matches)
 			{
