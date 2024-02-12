@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -232,10 +233,10 @@ namespace OSMDataPrimitives.PostgreSQL
 				new TimeSpan(0, 0, 5)
 			);
 
-			foreach (Match match in matches)
+			foreach (var groups in matches.Select(match => match.Groups))
 			{
-				var key = match.Groups[1].Value.Replace("\"\"", "\"").Trim('"');
-				var value = match.Groups[2].Value.Replace("\"\"", "\"").Trim('"');
+				var key = groups[1].Value.Replace("\"\"", "\"").Trim('"');
+				var value = groups[2].Value.Replace("\"\"", "\"").Trim('"');
 				result[key] = value;
 			}
 
