@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace OSMDataPrimitives.PostgreSQL
 {
@@ -221,73 +222,19 @@ namespace OSMDataPrimitives.PostgreSQL
 			return val.Replace("'", "''").Replace("\\", "\\\\").Replace("\"", "\\\"");
 		}
 
-		private static Dictionary<string, string> ParseHstore(string hstoreString)
+		public static Dictionary<string, string> ParseHstore(string hstoreString)
 		{
-			var hstore = new Dictionary<string, string>();
-            var startIndex = 0;
+			var result = new Dictionary<string, string>();
+			var matches = Regex.Matches(hstoreString, "(\"(?:[^\"]|\"\")*\")\\s*=>\\s*(\"(?:[^\"]|\"\")*\")(,\\s*|$)");
 
-            do
-            {
-                var beginKeyQuoteIndex = hstoreString.IndexOf('"', startIndex);
-                if (beginKeyQuoteIndex == -1)
-                {
-                    break;
-                }
-                var endKeyQuoteIndex = hstoreString.IndexOf('"', beginKeyQuoteIndex + 1);
-                if (endKeyQuoteIndex == -1)
-                {
-                    break;
-                }
-                var tagKey = hstoreString.Substring(beginKeyQuoteIndex + 1, endKeyQuoteIndex - beginKeyQuoteIndex - 1);
-                if (hstoreString.Length >= endKeyQuoteIndex + 1 + 2 && hstoreString.Substring(endKeyQuoteIndex + 1, 2) != "=>")
-                {
-                    break;
-                }
+			foreach (Match match in matches)
+			{
+				var key = match.Groups[1].Value.Replace("\"\"", "\"").Trim('"');
+				var value = match.Groups[2].Value.Replace("\"\"", "\"").Trim('"');
+				result[key] = value;
+			}
 
-				if (hstoreString.Length < endKeyQuoteIndex + 2)
-				{
-					break;
-				}
-                var beginValueQuoteIndex = hstoreString.IndexOf('"', endKeyQuoteIndex + 2);
-                if (beginValueQuoteIndex == -1)
-                {
-                    break;
-                }
-                var endValueQuoteIndex = hstoreString.IndexOf('"', beginValueQuoteIndex + 1);
-                if (endValueQuoteIndex == -1)
-                {
-                    break;
-                }
-                if (hstoreString[endValueQuoteIndex - 1] == '\\')
-                {
-                    var valueStartIndex = endValueQuoteIndex + 1;
-                    bool realValueFinishQuoteFound;
-                    do
-                    {
-                        realValueFinishQuoteFound = false;
-                        endValueQuoteIndex = hstoreString.IndexOf('"', valueStartIndex);
-                        if (endValueQuoteIndex == -1)
-                        {
-                            break;
-                        }
-                        if (hstoreString[endValueQuoteIndex - 1] != '\\')
-                        {
-                            realValueFinishQuoteFound = true;
-                        }
-                        else
-                        {
-                            valueStartIndex = endValueQuoteIndex + 1;
-                        }
-                    } while (!realValueFinishQuoteFound);
-                }
-
-                var tagValue = hstoreString.Substring(beginValueQuoteIndex + 1, endValueQuoteIndex - beginValueQuoteIndex - 1);
-                hstore.Add(tagKey, tagValue);
-
-                startIndex = endValueQuoteIndex + 1;
-            } while (true);
-
-            return hstore;
+			return result;
 		}
 	}
 }

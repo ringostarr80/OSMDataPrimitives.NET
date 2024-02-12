@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
-
 using NUnit.Framework;
 using OSMDataPrimitives;
 using OSMDataPrimitives.PostgreSQL;
@@ -83,7 +82,8 @@ namespace NUnit
             var osmNode = new OsmNode(1, 52.1234, 10.1234);
             osmNode.ParsePostgreSQLFields(parameters);
 
-            Assert.That(osmNode.Tags, Is.EqualTo(new NameValueCollection()));
+            var expectedTags = new Dictionary<string, string>();
+            Assert.That(osmNode.Tags, Is.EqualTo(expectedTags));
         }
 
         [Test]
@@ -111,5 +111,37 @@ namespace NUnit
 
             Assert.That(osmNode.Tags["foo"], Is.EqualTo("bar\\baz"));
         }
+
+        [Test]
+        public void ParseHstore_ValidHstoreString_ReturnsDictionary()
+        {
+            // Arrange
+            string hstoreString = "\"key1\"=>\"value1\", \"key2\"=>\"value2\"";
+
+            // Act
+            var result = Extension.ParseHstore(hstoreString);
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<Dictionary<string, string>>());
+            Assert.That(result.Count, Is.EqualTo(2));
+            Assert.That(result["key1"], Is.EqualTo("value1"));
+            Assert.That(result["key2"], Is.EqualTo("value2"));
+        }
+
+        //*
+        [Test]
+        public void ParseHstore_InvalidHstoreString_ReturnsDictionaryWith1Entry()
+        {
+            // Arrange
+            string hstoreString = "\"key1\"=>\"value1\",\"key2\"=>";
+
+            // Act
+            var result = Extension.ParseHstore(hstoreString);
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<Dictionary<string, string>>());
+            Assert.That(result, Is.EqualTo(new Dictionary<string, string> {{"key1", "value1"}}));
+        }
+        //*/
     }
 }
