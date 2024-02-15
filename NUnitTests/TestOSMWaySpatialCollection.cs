@@ -207,6 +207,74 @@ namespace NUnit
 		}
 
 		[Test]
+		public void TestOsmWaySpatialCollectionMerge2SimpleWaysWhereSecondIsPrependedToTheFirst()
+		{
+			var way1 = new OsmWaySpatial(1) {
+				Nodes = {
+					new OsmNodeSpatial(1, 0, 0),
+					new OsmNodeSpatial(2, 0, 1)
+				}
+			};
+			var way2 = new OsmWaySpatial(2) {
+				Nodes = {
+					new OsmNodeSpatial(3, 0, 0),
+					new OsmNodeSpatial(4, 0, -1)
+				}
+			};
+			var mergedWay = new OsmWaySpatialCollection {
+				way1,
+				way2
+			}.Merge();
+
+			var expectedMergedWay = new OsmWaySpatialCollection {
+				new OsmWaySpatial(1) {
+					Nodes = {
+						new OsmNodeSpatial(4, 0, -1),
+						new OsmNodeSpatial(1, 0, 0),
+						new OsmNodeSpatial(2, 0, 1)
+					}
+				}
+			};
+
+			Assert.That(mergedWay.Count, Is.EqualTo(1));
+			Assert.That(mergedWay, Is.EqualTo(expectedMergedWay));
+		}
+
+		[Test]
+		public void TestOsmWaySpatialCollectionMerge2SimpleWaysWhereSecondIsPrependedToTheFirstReversed()
+		{
+			var way1 = new OsmWaySpatial(1) {
+				Nodes = {
+					new OsmNodeSpatial(1, 0, 0),
+					new OsmNodeSpatial(2, 0, 1)
+				}
+			};
+			var way2 = new OsmWaySpatial(2) {
+				Nodes = {
+					new OsmNodeSpatial(3, 0, -1),
+					new OsmNodeSpatial(4, 0, 0)
+				}
+			};
+			var mergedWay = new OsmWaySpatialCollection {
+				way1,
+				way2
+			}.Merge();
+
+			var expectedMergedWay = new OsmWaySpatialCollection {
+				new OsmWaySpatial(1) {
+					Nodes = {
+						new OsmNodeSpatial(3, 0, -1),
+						new OsmNodeSpatial(1, 0, 0),
+						new OsmNodeSpatial(2, 0, 1)
+					}
+				}
+			};
+
+			Assert.That(mergedWay.Count, Is.EqualTo(1));
+			Assert.That(mergedWay, Is.EqualTo(expectedMergedWay));
+		}
+
+		[Test]
 		public void TestOsmWaySpatialCollectionMerge3SimpleWays()
 		{
 			var way1 = new OsmWaySpatial(1) {
