@@ -46,6 +46,13 @@ namespace OSMDataPrimitives.Spatial
 			this.Tags = new Dictionary<string, string>(node.Tags);
 		}
 
+		public override int GetHashCode()
+		{
+			unchecked {
+				return 1 + base.GetHashCode();
+			}
+		}
+
 		/// <summary>
 		/// Converts the angle from degree to radian
 		/// </summary>
