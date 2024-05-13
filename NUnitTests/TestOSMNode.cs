@@ -63,8 +63,36 @@ namespace NUnit
 		[Test]
 		public void TestOSMNodeEquality()
 		{
-			var node1 = new OsmNode(2);
-			var node2 = new OsmNode(2);
+			var node1 = new OsmNode(2) {
+				Tags = new Dictionary<string, string> {
+					{"name", "bar"},
+					{"ref", "baz"}
+				}
+			};
+			var node2 = new OsmNode(2) {
+				Tags = new Dictionary<string, string> {
+					{"name", "bar"},
+					{"ref", "baz"}
+				}
+			};
+			var node2WithoutTags = new OsmNode(2);
+			var node2WithLessTags = new OsmNode(2) {
+				Tags = new Dictionary<string, string> {
+					{"name", "bar"}
+				}
+			};
+			var node2WithOtherTagKeys = new OsmNode(2) {
+				Tags = new Dictionary<string, string> {
+					{"name", "bar"},
+					{"foo", "baz"}
+				}
+			};
+			var node2WithOtherTagValues = new OsmNode(2) {
+				Tags = new Dictionary<string, string> {
+					{"name", "foo"},
+					{"ref", "bar"}
+				}
+			};
 			var node3 = new OsmNode(3);
 			var node1Ref = node1;
 
@@ -75,6 +103,14 @@ namespace NUnit
 			Assert.That(node1.Equals(node1Ref), Is.True);
 			Assert.That(node1.Equals(node2), Is.True);
 			Assert.That(node1.Equals(node3), Is.False);
+			Assert.That(node1.Equals(null), Is.False);
+			Assert.That(node1.Equals("foo"), Is.False);
+			Assert.That(node1.Equals(node2WithoutTags), Is.False);
+			Assert.That(node1.Equals(node2WithLessTags), Is.False);
+			Assert.That(node1.Equals(node2WithOtherTagKeys), Is.False);
+			Assert.That(node1.Equals(node2WithOtherTagValues), Is.False);
+
+			Assert.That(node1.GetHashCode(), Is.EqualTo(node1Ref.GetHashCode()));
 		}
 
 		[Test]
