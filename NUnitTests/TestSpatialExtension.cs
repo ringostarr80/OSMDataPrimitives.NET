@@ -98,7 +98,7 @@ namespace NUnit
 				Assert.That(osmNode.Version, Is.EqualTo(3));
 				Assert.That(osmNode.UserId, Is.EqualTo(4));
 				Assert.That(osmNode.UserName, Is.EqualTo("unknown"));
-				Assert.That(osmNode.Timestamp, Is.EqualTo(new DateTime(2023, 6, 1, 12, 0, 0)));
+				Assert.That(osmNode.Timestamp, Is.EqualTo(new DateTime(2023, 6, 1, 12, 0, 0, DateTimeKind.Utc)));
 				Assert.That(osmNode.Latitude, Is.EqualTo(52.1234));
 				Assert.That(osmNode.Longitude, Is.EqualTo(12.4321));
 				Assert.That(osmNode.Tags.Count, Is.EqualTo(1));
@@ -117,7 +117,7 @@ namespace NUnit
 				Assert.That(osmNode.Version, Is.EqualTo(3));
 				Assert.That(osmNode.UserId, Is.EqualTo(4));
 				Assert.That(osmNode.UserName, Is.EqualTo("unknown"));
-				Assert.That(osmNode.Timestamp, Is.EqualTo(new DateTime(2023, 6, 1, 12, 0, 0)));
+				Assert.That(osmNode.Timestamp, Is.EqualTo(new DateTime(2023, 6, 1, 12, 0, 0, DateTimeKind.Utc)));
 				Assert.That(osmNode.Latitude, Is.EqualTo(52.1234));
 				Assert.That(osmNode.Longitude, Is.EqualTo(12.4321));
 				Assert.That(osmNode.Tags.Count, Is.EqualTo(1));
@@ -150,7 +150,7 @@ namespace NUnit
 				Assert.That(osmWay.Version, Is.EqualTo(3));
 				Assert.That(osmWay.UserId, Is.EqualTo(4));
 				Assert.That(osmWay.UserName, Is.EqualTo("unknown"));
-				Assert.That(osmWay.Timestamp, Is.EqualTo(new DateTime(2023, 6, 1, 12, 0, 0)));
+				Assert.That(osmWay.Timestamp, Is.EqualTo(new DateTime(2023, 6, 1, 12, 0, 0, DateTimeKind.Utc)));
 				Assert.That(osmWay.Tags.Count, Is.EqualTo(1));
 				Assert.That(osmWay.Tags["building"], Is.EqualTo("house"));
 				Assert.That(osmWay.NodeRefs.Count, Is.EqualTo(2));
@@ -168,7 +168,7 @@ namespace NUnit
 				Assert.That(osmWay.Version, Is.EqualTo(3));
 				Assert.That(osmWay.UserId, Is.EqualTo(4));
 				Assert.That(osmWay.UserName, Is.EqualTo("unknown"));
-				Assert.That(osmWay.Timestamp, Is.EqualTo(new DateTime(2023, 6, 1, 12, 0, 0)));
+				Assert.That(osmWay.Timestamp, Is.EqualTo(new DateTime(2023, 6, 1, 12, 0, 0, DateTimeKind.Utc)));
 				Assert.That(osmWay.Tags.Count, Is.EqualTo(1));
 				Assert.That(osmWay.Tags["building"], Is.EqualTo("house"));
 				Assert.That(osmWay.NodeRefs.Count, Is.EqualTo(2));
@@ -195,7 +195,7 @@ namespace NUnit
 				Assert.That(osmRelation.Version, Is.EqualTo(3));
 				Assert.That(osmRelation.UserId, Is.EqualTo(4));
 				Assert.That(osmRelation.UserName, Is.EqualTo("unknown"));
-				Assert.That(osmRelation.Timestamp, Is.EqualTo(new DateTime(2023, 6, 1, 12, 0, 0)));
+				Assert.That(osmRelation.Timestamp, Is.EqualTo(new DateTime(2023, 6, 1, 12, 0, 0, DateTimeKind.Utc)));
 				Assert.That(osmRelation.Tags.Count, Is.EqualTo(1));
 				Assert.That(osmRelation.Tags["building"], Is.EqualTo("house"));
 				Assert.That(osmRelation.Members.Count, Is.EqualTo(3));
@@ -213,7 +213,7 @@ namespace NUnit
 				Assert.That(osmRelation.Version, Is.EqualTo(3));
 				Assert.That(osmRelation.UserId, Is.EqualTo(4));
 				Assert.That(osmRelation.UserName, Is.EqualTo("unknown"));
-				Assert.That(osmRelation.Timestamp, Is.EqualTo(new DateTime(2023, 6, 1, 12, 0, 0)));
+				Assert.That(osmRelation.Timestamp, Is.EqualTo(new DateTime(2023, 6, 1, 12, 0, 0, DateTimeKind.Utc)));
 				Assert.That(osmRelation.Tags.Count, Is.EqualTo(1));
 				Assert.That(osmRelation.Tags["building"], Is.EqualTo("house"));
 				Assert.That(osmRelation.Members.Count, Is.EqualTo(3));

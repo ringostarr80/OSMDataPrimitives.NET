@@ -30,6 +30,29 @@ namespace NUnit
 		}
 
 		[Test]
+		public void TestOSMNodeConstructor()
+		{
+			var node = new OsmNode(2);
+			Assert.That(node.Id, Is.EqualTo(2));
+			Assert.That(node.Latitude, Is.Zero);
+			Assert.That(node.Longitude, Is.Zero);
+			Assert.That(node.UserId, Is.Zero);
+			Assert.That(node.UserName, Is.Empty);
+			Assert.That(node.Version, Is.Zero);
+			Assert.That(node.Changeset, Is.Zero);
+			Assert.That(node.Timestamp, Is.EqualTo(DateTime.UnixEpoch));
+			Assert.That(node.Tags.Count, Is.Zero);
+		}
+
+		[Test]
+		public void TestOSMNodeSettingLatitudeOutOfRangeException()
+		{
+			var node = new OsmNode(2);
+			Assert.That(() => node.Latitude = 91.0, Throws.TypeOf<ArgumentOutOfRangeException>());
+			Assert.That(() => node.Latitude = -91.0, Throws.TypeOf<ArgumentOutOfRangeException>());
+		}
+
+		[Test]
 		public void TestOSMNodeClone()
 		{
 			var node = GetDefaultOSMNode();
@@ -273,7 +296,7 @@ namespace NUnit
 			Assert.That(node.UserName, Is.Empty);
 			Assert.That(node.Version, Is.Zero);
 			Assert.That(node.Changeset, Is.Zero);
-			Assert.That(node.Timestamp, Is.EqualTo(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)));
+			Assert.That(node.Timestamp, Is.EqualTo(DateTime.UnixEpoch));
 			Assert.That(node.Tags.Count, Is.Zero);
 		}
 	}

@@ -7,7 +7,7 @@ using OSMDataPrimitives.PostgreSQL;
 namespace NUnit
 {
 	[TestFixture]
-	public class TestPostgreSQLExtension
+	public class TestPostgreSqlExtension
 	{
         [Test]
 		public void TestOSMNodeParsePostgreSQLFields()

@@ -273,7 +273,7 @@ namespace NUnit
 			Assert.That(way.UserName, Is.Empty);
 			Assert.That(way.Version, Is.Zero);
 			Assert.That(way.Changeset, Is.Zero);
-			Assert.That(way.Timestamp, Is.EqualTo(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)));
+			Assert.That(way.Timestamp, Is.EqualTo(DateTime.UnixEpoch));
 			Assert.That(way.Tags.Count, Is.Zero);
 			Assert.That(way.NodeRefs.Count, Is.Zero);
 		}
