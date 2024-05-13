@@ -71,6 +71,10 @@ namespace NUnit
 			Assert.That(node1 == node1Ref, Is.True);
 			Assert.That(node1 == node2, Is.False);
 			Assert.That(node1 == node3, Is.False);
+
+			Assert.That(node1.Equals(node1Ref), Is.True);
+			Assert.That(node1.Equals(node2), Is.True);
+			Assert.That(node1.Equals(node3), Is.False);
 		}
 
 		[Test]
