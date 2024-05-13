@@ -53,6 +53,27 @@ namespace NUnit
 		}
 
 		[Test]
+		public void TestOSMNodeSettingLongitudeOutOfRangeException()
+		{
+			var node = new OsmNode(2);
+			Assert.That(() => node.Longitude = 181.0, Throws.TypeOf<ArgumentOutOfRangeException>());
+			Assert.That(() => node.Longitude = -181.0, Throws.TypeOf<ArgumentOutOfRangeException>());
+		}
+
+		[Test]
+		public void TestOSMNodeEquality()
+		{
+			var node1 = new OsmNode(2);
+			var node2 = new OsmNode(2);
+			var node3 = new OsmNode(3);
+			var node1Ref = node1;
+
+			Assert.That(node1 == node1Ref, Is.True);
+			Assert.That(node1 == node2, Is.False);
+			Assert.That(node1 == node3, Is.False);
+		}
+
+		[Test]
 		public void TestOSMNodeClone()
 		{
 			var node = GetDefaultOSMNode();
