@@ -96,8 +96,8 @@ namespace OSMDataPrimitives
 				this.Version == other.Version &&
 				this.Timestamp == other.Timestamp &&
 				this.Changeset == other.Changeset &&
-				this.Latitude == other.Latitude &&
-				this.Longitude == other.Longitude
+				Math.Abs(this.Latitude - other.Latitude) < double.Epsilon &&
+				Math.Abs(this.Longitude - other.Longitude) < double.Epsilon
 			);
 		}
 

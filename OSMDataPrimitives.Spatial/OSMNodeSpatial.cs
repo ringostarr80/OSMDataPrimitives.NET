@@ -46,6 +46,48 @@ namespace OSMDataPrimitives.Spatial
 			this.Tags = new Dictionary<string, string>(node.Tags);
 		}
 
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(this, obj)) {
+				return true;
+			}
+			if(obj == null || GetType() != obj.GetType()) {
+				return false;
+			}
+			var other = (OsmNode)obj;
+
+			if (this.Tags == null && other.Tags != null) {
+				return false;
+			}
+			if (this.Tags != null && other.Tags == null) {
+				return false;
+			}
+			if (this.Tags.Count != other.Tags.Count) {
+				return false;
+			}
+
+			foreach (var kvp in this.Tags)
+			{
+				if (!other.Tags.TryGetValue(kvp.Key, out string valueInDict2)) {
+					return false;
+				}
+				if (kvp.Value != valueInDict2) {
+					return false;
+				}
+			}
+
+			return (
+				this.Id == other.Id &&
+				this.UserId == other.UserId &&
+				this.UserName == other.UserName &&
+				this.Version == other.Version &&
+				this.Timestamp == other.Timestamp &&
+				this.Changeset == other.Changeset &&
+				this.Latitude == other.Latitude &&
+				this.Longitude == other.Longitude
+			);
+		}
+
 		public override int GetHashCode()
 		{
 			unchecked {
