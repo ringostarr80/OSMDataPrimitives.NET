@@ -48,44 +48,7 @@ namespace OSMDataPrimitives.Spatial
 
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals(this, obj)) {
-				return true;
-			}
-			if(obj == null || GetType() != obj.GetType()) {
-				return false;
-			}
-			var other = (OsmNode)obj;
-
-			if (this.Tags == null && other.Tags != null) {
-				return false;
-			}
-			if (this.Tags != null && other.Tags == null) {
-				return false;
-			}
-			if (this.Tags.Count != other.Tags.Count) {
-				return false;
-			}
-
-			foreach (var kvp in this.Tags)
-			{
-				if (!other.Tags.TryGetValue(kvp.Key, out string valueInDict2)) {
-					return false;
-				}
-				if (kvp.Value != valueInDict2) {
-					return false;
-				}
-			}
-
-			return (
-				this.Id == other.Id &&
-				this.UserId == other.UserId &&
-				this.UserName == other.UserName &&
-				this.Version == other.Version &&
-				this.Timestamp == other.Timestamp &&
-				this.Changeset == other.Changeset &&
-				Math.Abs(this.Latitude - other.Latitude) < double.Epsilon &&
-				Math.Abs(this.Longitude - other.Longitude) < double.Epsilon
-			);
+			return base.Equals(obj);
 		}
 
 		public override int GetHashCode()
