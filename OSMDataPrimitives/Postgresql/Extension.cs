@@ -260,6 +260,11 @@ namespace OSMDataPrimitives.PostgreSql
 			return val.Replace("'", "''").Replace("\\", "\\\\").Replace("\"", "\\\"");
 		}
 
+		/// <summary>
+		/// Parses a PostgreSql hstore string.
+		/// </summary>
+		/// <param name="hstoreString"></param>
+		/// <returns>A Dictionary with the key-value pairs of the hstore string.</returns>
 		public static Dictionary<string, string> ParseHstore(string hstoreString)
 		{
 			var result = new Dictionary<string, string>();

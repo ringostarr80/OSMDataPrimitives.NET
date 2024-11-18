@@ -65,6 +65,11 @@ namespace OSMDataPrimitives
 			this.Id = id;
 		}
 
+		/// <summary>
+		/// This checks for value equality.
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns>true, if the OsmElements are equal, else false.</returns>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(this, obj))
@@ -120,6 +125,10 @@ namespace OSMDataPrimitives
 			);
 		}
 
+		/// <summary>
+		/// Returns the hash code for this instance.
+		/// </summary>
+		/// <returns>A 32-bit signed integer hash code.</returns>
 		public override int GetHashCode()
 		{
 			unchecked
