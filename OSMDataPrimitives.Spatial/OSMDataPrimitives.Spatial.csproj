@@ -6,7 +6,7 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
-    <!-- <NuspecFile>OSMDataPrimitives.Spatial.nuspec</NuspecFile> -->
+    <!-- <NuspecFile>OsmDataPrimitives.Spatial.nuspec</NuspecFile> -->
     <!-- nuget package metadata -->
     <PackageId>OSMDataPrimitives.Spatial</PackageId>
     <PackageLicenseExpression>CC0-1.0</PackageLicenseExpression>

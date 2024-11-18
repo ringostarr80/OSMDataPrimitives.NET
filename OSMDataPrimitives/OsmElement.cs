@@ -57,7 +57,7 @@ namespace OSMDataPrimitives
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.OSMElement"/> class.
+		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.OsmElement"/> class.
 		/// </summary>
 		/// <param name="id">Identifier.</param>
 		protected OsmElement(ulong id)

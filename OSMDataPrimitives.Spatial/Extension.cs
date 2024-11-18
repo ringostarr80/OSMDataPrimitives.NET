@@ -225,7 +225,7 @@ namespace OSMDataPrimitives.Spatial
                 {
                     WktType.LineString or WktType.Polygon => wktType.Value.ToString().ToUpper(),
                     _ => throw new XmlException("invalid wktType-value (" + wktType.Value +
-                                                ") for 'OSMWaySpatial.ToWkt(WktType? wktType = null)'."),
+                                                ") for 'OsmWaySpatial.ToWkt(WktType? wktType = null)'."),
                 };
             }
 
@@ -252,7 +252,7 @@ namespace OSMDataPrimitives.Spatial
                     WktType.MultiLineString => ToWktMultiLineString(ways),
                     WktType.MultiPolygon => ToWktMultiPolygon(ways),
                     _ => throw new XmlException("invalid wktType-value (" + wktType.Value +
-                                                ") for 'OSMWaySpatialCollection.ToWkt(WktType? wktType = null)'.")
+                                                ") for 'OsmWaySpatialCollection.ToWkt(WktType? wktType = null)'.")
                 };
             }
 
@@ -264,7 +264,7 @@ namespace OSMDataPrimitives.Spatial
         /// </summary>
         /// <returns>The WKT-string.</returns>
         /// <param name="ways">Ways.</param>
-        public static string ToWktMultiLineString(this OsmWaySpatialCollection ways)
+        private static string ToWktMultiLineString(this OsmWaySpatialCollection ways)
         {
             var resultStringBuilder = new StringBuilder();
             resultStringBuilder.Append("MULTILINESTRING");
@@ -292,7 +292,7 @@ namespace OSMDataPrimitives.Spatial
         /// </summary>
         /// <returns>The WKT-string.</returns>
         /// <param name="ways">Ways.</param>
-        public static string ToWktMultiPolygon(this OsmWaySpatialCollection ways)
+        private static string ToWktMultiPolygon(this OsmWaySpatialCollection ways)
         {
             var resultStringBuilder = new StringBuilder();
             resultStringBuilder.Append("MULTIPOLYGON");

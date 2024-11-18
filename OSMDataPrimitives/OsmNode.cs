@@ -50,7 +50,7 @@ namespace OSMDataPrimitives
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.OSMNode"/> class.
+		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.OsmNode"/> class.
 		/// </summary>
 		/// <param name="id">Identifier.</param>
 		public OsmNode(ulong id) : base(id)

@@ -4,12 +4,12 @@ using System.Collections.Generic;
 namespace OSMDataPrimitives.Spatial
 {
 	/// <summary>
-	/// OSMWaySpatialCollection.
+	/// OsmWaySpatialCollection.
 	/// </summary>
 	public class OsmWaySpatialCollection : List<OsmWaySpatial>
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.Spatial.OSMWaySpatialCollection"/> class.
+		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.Spatial.OsmWaySpatialCollection"/> class.
 		/// </summary>
 		public OsmWaySpatialCollection()
 		{
@@ -17,7 +17,7 @@ namespace OSMDataPrimitives.Spatial
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.Spatial.OSMWaySpatialCollection"/> class.
+		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.Spatial.OsmWaySpatialCollection"/> class.
 		/// </summary>
 		/// <param name="ways">Ways.</param>
 		public OsmWaySpatialCollection(IEnumerable<OsmWaySpatial> ways)

@@ -12,12 +12,12 @@ This pretty little project is intended to provide the 3 basic data types (nodes,
 I'm about to use it in some other projects.
 
 ## Usage
-To create new instances of an OSMNode:
+To create new instances of an OsmNode:
 
 ```C#
 using OSMDataPrimitives;
 
-var node = new OSMNode(1, 52.123456, 12.654321) {
+var node = new OsmNode(1, 52.123456, 12.654321) {
 	UserId = 1,
 	UserName = "username",
 	Version = 1,
@@ -28,10 +28,10 @@ node.Tags.Add("name", "foo");
 node.Tags.Add("ref", "bar");
 ```
 
-It's also easy to create new instances of an OSMWay:
+It's also easy to create new instances of an OsmWay:
 
 ```C#
-var way = new OSMWay(1) {
+var way = new OsmWay(1) {
 	UserId = 1,
 	UserName = "username",
 	Version = 1,
@@ -46,10 +46,10 @@ way.NodeRefs.Add(3);
 way.NodeRefs.Add(4);
 ```
 
-And last but not least an OSMRelation:
+And last but not least an OsmRelation:
 
 ```C#
-var relation = new OSMRelation(1) {
+var relation = new OsmRelation(1) {
 	UserId = 1,
 	UserName = "username",
 	Version = 1,
@@ -58,17 +58,17 @@ var relation = new OSMRelation(1) {
 };
 relation.Tags.Add("name", "my little country");
 relation.Tags.Add("note", "just a test.");
-relation.Members.Add(new OSMMember(MemberType.Way, 1, "outer"));
-relation.Members.Add(new OSMMember(MemberType.Way, 2, "outer"));
+relation.Members.Add(new OsmMember(MemberType.Way, 1, "outer"));
+relation.Members.Add(new OsmMember(MemberType.Way, 2, "outer"));
 ```
 
-To simply convert these OSMElement's to a XML-String or a XmlElement:
+To simply convert these OsmElement's to a XML-String or a XmlElement:
 
 ```C#
 using OSMDataPrimitives;
 using OSMDataPrimitives.Xml;
 
-var node = new OSMNode(1, 52.123456, 12.654321) {
+var node = new OsmNode(1, 52.123456, 12.654321) {
 	UserId = 1,
 	UserName = "username",
 	Version = 1,
@@ -93,10 +93,10 @@ Console.WriteLine(xmlElement.OuterXml);
  */
 ```
 
-It is also possible to build PostgreSQL queries for the OSMElement's:
+It is also possible to build PostgreSQL queries for the OsmElement's:
 
 ```C#
-var node = new OSMNode(1, 52.123456, 12.654321) {
+var node = new OsmNode(1, 52.123456, 12.654321) {
 	UserId = 1,
 	UserName = "username",
 	Version = 1,
