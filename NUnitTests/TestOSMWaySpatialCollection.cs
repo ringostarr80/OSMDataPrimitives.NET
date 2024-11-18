@@ -2,7 +2,7 @@
 using OSMDataPrimitives;
 using OSMDataPrimitives.Spatial;
 
-namespace NUnit
+namespace NUnitTests
 {
 	[TestFixture]
 	public class TestOsmWaySpatialCollection
@@ -89,7 +89,7 @@ namespace NUnit
 		}
 
 		[Test]
-		public void TestOSMWaySpatialCollectionMultiLineString()
+		public void TestOsmWaySpatialCollectionMultiLineString()
 		{
 			var line1 = GetDefaultLine1();
 			var line2 = GetDefaultLine2();
@@ -102,7 +102,7 @@ namespace NUnit
 		}
 
 		[Test]
-		public void TestOSMWaySpatialCollectionMultiPolygon1()
+		public void TestOsmWaySpatialCollectionMultiPolygon1()
 		{
 			var polygon1 = GetOuterPolygon1();
 			var polygon2 = GetOuterPolygon2();
@@ -115,7 +115,7 @@ namespace NUnit
 		}
 
 		[Test]
-		public void TestOSMWaySpatialCollectionMultiPolygonWithInner()
+		public void TestOsmWaySpatialCollectionMultiPolygonWithInner()
 		{
 			var outerPolygon1 = GetOuterPolygon3();
 			var outerPolygon2 = GetOuterPolygon4();
@@ -130,7 +130,7 @@ namespace NUnit
 		}
 
 		[Test]
-		public void TestOSMWaySpatialCollectionMultiPolygonWithNoData()
+		public void TestOsmWaySpatialCollectionMultiPolygonWithNoData()
 		{
 			Assert.Throws<DataException>(() => {
 				var multiPolygon = new OsmWaySpatialCollection();

@@ -2,22 +2,22 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using NUnit.Framework;
 using OSMDataPrimitives;
-using OSMDataPrimitives.PostgreSQL;
+using OSMDataPrimitives.PostgreSql;
 
-namespace NUnit
+namespace NUnitTests
 {
 	[TestFixture]
 	public class TestPostgreSqlExtension
 	{
         [Test]
-		public void TestOSMNodeParsePostgreSQLFields()
+		public void TestOsmNodeParsePostgreSqlFields()
 		{
             var parameters = new NameValueCollection() {
                 { "osm_id", "2" },
                 { "tags", "\"foo\"=>\"bar\"" }
             };
             var osmNode = new OsmNode(1, 52.1234, 10.1234);
-            osmNode.ParsePostgreSQLFields(parameters);
+            osmNode.ParsePostgreSqlFields(parameters);
 
             var expectedTags = new Dictionary<string, string> {
                 { "foo", "bar" }
@@ -27,7 +27,7 @@ namespace NUnit
         }
 
         [Test]
-		public void TestOSMWayParsePostgreSQLFields()
+		public void TestOsmWayParsePostgreSqlFields()
 		{
             var parameters = new NameValueCollection() {
                 { "osm_id", "2" },
@@ -35,7 +35,7 @@ namespace NUnit
                 { "node_refs", "{10,12,15,213,18}" }
             };
             var osmWay = new OsmWay(1);
-            osmWay.ParsePostgreSQLFields(parameters);
+            osmWay.ParsePostgreSqlFields(parameters);
 
             var expectedTags = new Dictionary<string, string> {
                 { "foo", "bar" }
@@ -47,67 +47,67 @@ namespace NUnit
         }
 
         [Test]
-		public void TestOSMNodeParsePostgreSQLFieldsFailed1()
+		public void TestOsmNodeParsePostgreSqlFieldsFailed1()
 		{
             var parameters = new NameValueCollection() {
                 { "osm_id", "2" },
                 { "tags", "\"foo" }
             };
             var osmNode = new OsmNode(1, 52.1234, 10.1234);
-            osmNode.ParsePostgreSQLFields(parameters);
+            osmNode.ParsePostgreSqlFields(parameters);
 
             Assert.That(osmNode.Tags, Is.EqualTo(new NameValueCollection()));
         }
 
         [Test]
-		public void TestOSMNodeParsePostgreSQLFieldsFailed2()
+		public void TestOsmNodeParsePostgreSqlFieldsFailed2()
 		{
             var parameters = new NameValueCollection() {
                 { "osm_id", "2" },
                 { "tags", "\"foo\"" }
             };
             var osmNode = new OsmNode(1, 52.1234, 10.1234);
-            osmNode.ParsePostgreSQLFields(parameters);
+            osmNode.ParsePostgreSqlFields(parameters);
 
             Assert.That(osmNode.Tags, Is.EqualTo(new NameValueCollection()));
         }
 
         [Test]
-		public void TestOSMNodeParsePostgreSQLFieldsFailed3()
+		public void TestOsmNodeParsePostgreSqlFieldsFailed3()
 		{
             var parameters = new NameValueCollection() {
                 { "osm_id", "2" },
                 { "tags", "\"foo\"=>" }
             };
             var osmNode = new OsmNode(1, 52.1234, 10.1234);
-            osmNode.ParsePostgreSQLFields(parameters);
+            osmNode.ParsePostgreSqlFields(parameters);
 
             var expectedTags = new Dictionary<string, string>();
             Assert.That(osmNode.Tags, Is.EqualTo(expectedTags));
         }
 
         [Test]
-		public void TestOSMNodeParsePostgreSQLFieldsFailed4()
+		public void TestOsmNodeParsePostgreSqlFieldsFailed4()
 		{
             var parameters = new NameValueCollection() {
                 { "osm_id", "2" },
                 { "tags", "\"foo\"=>\"bar" }
             };
             var osmNode = new OsmNode(1, 52.1234, 10.1234);
-            osmNode.ParsePostgreSQLFields(parameters);
+            osmNode.ParsePostgreSqlFields(parameters);
 
             Assert.That(osmNode.Tags, Is.EqualTo(new NameValueCollection()));
         }
 
         [Test]
-		public void TestOSMNodeParsePostgreSQLFieldsWithEscapedBackslash()
+		public void TestOsmNodeParsePostgreSqlFieldsWithEscapedBackslash()
 		{
             var parameters = new NameValueCollection() {
                 { "osm_id", "2" },
                 { "tags", "\"foo\"=>\"bar\\baz\"" }
             };
             var osmNode = new OsmNode(1, 52.1234, 10.1234);
-            osmNode.ParsePostgreSQLFields(parameters);
+            osmNode.ParsePostgreSqlFields(parameters);
 
             Assert.That(osmNode.Tags["foo"], Is.EqualTo("bar\\baz"));
         }

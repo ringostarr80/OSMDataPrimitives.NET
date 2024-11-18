@@ -1,7 +1,7 @@
 ﻿namespace OSMDataPrimitives
 {
 	/// <summary>
-	/// MemberTypes for OSMMember.
+	/// MemberTypes for OsmMember.
 	/// </summary>
 	public enum MemberType
 	{
@@ -9,10 +9,12 @@
 		/// The node-type.
 		/// </summary>
 		Node,
+
 		/// <summary>
 		/// The way-type.
 		/// </summary>
 		Way,
+
 		/// <summary>
 		/// The relation-type.
 		/// </summary>

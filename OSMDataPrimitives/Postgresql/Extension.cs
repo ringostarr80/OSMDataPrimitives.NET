@@ -6,212 +6,249 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace OSMDataPrimitives.PostgreSQL
+namespace OSMDataPrimitives.PostgreSql
 {
 	/// <summary>
-	/// Extension to provide PostgreSQL-capabilities.
+	/// Extension to provide PostgreSql-capabilities.
 	/// </summary>
 	public static class Extension
 	{
 		private static string GetTableNameByElementType(IOsmElement element)
 		{
-			if (element is OsmNode) {
-				return "nodes";
-			} else if (element is OsmWay) {
-				return "ways";
-			} else if (element is OsmRelation) {
-				return "relations";
-			}
-
-			return string.Empty;
+			return element switch
+			{
+				OsmNode => "nodes",
+				OsmWay => "ways",
+				OsmRelation => "relations",
+				_ => string.Empty,
+			};
 		}
 
-		private static StringBuilder GetRelationSpecificInsert(OsmRelation relationElement, NameValueCollection parameters)
+		private static StringBuilder GetRelationSpecificInsert(OsmRelation relationElement,
+			NameValueCollection parameters)
 		{
-			var insertSB = new StringBuilder();
-			if (relationElement.Members.Count > 0) {
-				insertSB.Append(", ARRAY[");
+			var insertStringBuilder = new StringBuilder();
+			if (relationElement.Members.Count > 0)
+			{
+				insertStringBuilder.Append(", ARRAY[");
 				var membersCounter = 0;
-				foreach (var member in relationElement.Members) {
+				foreach (var member in relationElement.Members)
+				{
 					membersCounter++;
-					if (membersCounter > 1) {
-						insertSB.Append(", ");
+					if (membersCounter > 1)
+					{
+						insertStringBuilder.Append(", ");
 					}
-					insertSB.Append("@member_" + membersCounter + "::hstore");
-					var memberSB = new StringBuilder();
-					memberSB.Append("\"type\"=>\"" + member.Type.ToString().ToLower() + "\",");
-					memberSB.Append("\"ref\"=>\"" + member.Ref + "\",");
-					memberSB.Append("\"role\"=>\"" + ReplaceHstoreValue(member.Role) + "\"");
-					parameters.Add("member_" + membersCounter, memberSB.ToString());
+
+					insertStringBuilder.Append("@member_" + membersCounter + "::hstore");
+					var memberStringBuilder = new StringBuilder();
+					memberStringBuilder.Append("\"type\"=>\"" + member.Type.ToString().ToLower() + "\",");
+					memberStringBuilder.Append("\"ref\"=>\"" + member.Ref + "\",");
+					memberStringBuilder.Append("\"role\"=>\"" + ReplaceHstoreValue(member.Role) + "\"");
+					parameters.Add("member_" + membersCounter, memberStringBuilder.ToString());
 				}
-				insertSB.Append(']');
-			} else {
-				insertSB.Append(", '{}'");
+
+				insertStringBuilder.Append(']');
+			}
+			else
+			{
+				insertStringBuilder.Append(", '{}'");
 			}
 
-			return insertSB;
+			return insertStringBuilder;
 		}
 
 		private static string GetTagsSpecificInsert(IOsmElement element)
 		{
-			var tagsSB = new StringBuilder();
-			if (element.Tags.Count > 0) {
+			var tagsStringBuilder = new StringBuilder();
+			if (element.Tags.Count > 0)
+			{
 				var tagCounter = 0;
-				foreach (var tag in element.Tags) {
+				foreach (var tag in element.Tags)
+				{
 					tagCounter++;
-					if (tagCounter > 1) {
-						tagsSB.Append(", ");
+					if (tagCounter > 1)
+					{
+						tagsStringBuilder.Append(", ");
 					}
-					tagsSB.Append($"\"{ReplaceHstoreValue(tag.Key)}\"=>\"{ReplaceHstoreValue(tag.Value)}\"");
+
+					tagsStringBuilder.Append($"\"{ReplaceHstoreValue(tag.Key)}\"=>\"{ReplaceHstoreValue(tag.Value)}\"");
 				}
-			} else {
-				tagsSB.Append("");
+			}
+			else
+			{
+				tagsStringBuilder.Append("");
 			}
 
-			return tagsSB.ToString();
+			return tagsStringBuilder.ToString();
 		}
 
 		/// <summary>
-		/// Parses the PostgreSQL Fields.
+		/// Parses the PostgreSql Fields.
 		/// </summary>
 		/// <param name="element">Element.</param>
 		/// <param name="parameters">Parameters.</param>
-		public static void ParsePostgreSQLFields(this IOsmElement element, NameValueCollection parameters)
+		public static void ParsePostgreSqlFields(this IOsmElement element, NameValueCollection parameters)
 		{
-			if (parameters["osm_id"] is not null) {
+			if (parameters["osm_id"] is not null)
+			{
 				element.OverrideId(Convert.ToUInt64(parameters["osm_id"]));
 			}
 
-			if (parameters["tags"] is not null) {
+			if (parameters["tags"] is not null)
+			{
 				element.Tags = ParseHstore(parameters["tags"]);
 			}
 
-			if (element is OsmWay wayElement && parameters["node_refs"] is not null) {
+			if (element is OsmWay wayElement && parameters["node_refs"] is not null)
+			{
 				wayElement.NodeRefs = ParseNodeRefs(parameters["node_refs"]);
 			}
 		}
 
 		/// <summary>
-		/// Converts the OSMElement to a PostgreSQL Select String.
+		/// Converts the OsmElement to a PostgreSql Select String.
 		/// </summary>
-		/// <returns>The PostgreSQL Select String.</returns>
+		/// <returns>The PostgreSql Select String.</returns>
 		/// <param name="element">Element.</param>
 		/// <param name="inclusiveMetaField">If set to <c>true</c> inclusive meta field.</param>
-		public static string ToPostgreSQLSelect(this IOsmElement element, bool inclusiveMetaField = false)
+		public static string ToPostgreSqlSelect(this IOsmElement element, bool inclusiveMetaField = false)
 		{
 			var table = string.Empty;
-			var selectSB = new StringBuilder("SELECT osm_id");
-			if (inclusiveMetaField) {
-				selectSB.Append(", version, changeset, uid, user, timestamp");
+			var selectStringBuilder = new StringBuilder("SELECT osm_id");
+			if (inclusiveMetaField)
+			{
+				selectStringBuilder.Append(", version, changeset, uid, user, timestamp");
 			}
-			if (element is OsmNode) {
-				selectSB.Append(", lat, lon");
+
+			if (element is OsmNode)
+			{
+				selectStringBuilder.Append(", lat, lon");
 				table = "nodes";
 			}
-			selectSB.Append(", tags::text");
-			if (element is OsmWay) {
-				selectSB.Append(", node_refs::text");
-				table = "ways";
-			}
-			if (element is OsmRelation) {
-				selectSB.Append(", members::text");
-				table = "relations";
+
+			selectStringBuilder.Append(", tags::text");
+			switch (element)
+			{
+				case OsmWay:
+					selectStringBuilder.Append(", node_refs::text");
+					table = "ways";
+					break;
+				case OsmRelation:
+					selectStringBuilder.Append(", members::text");
+					table = "relations";
+					break;
 			}
 
-			selectSB.Append(" FROM " + table);
-			selectSB.Append(" WHERE osm_id = " + element.Id);
+			selectStringBuilder.Append(" FROM " + table);
+			selectStringBuilder.Append(" WHERE osm_id = " + element.Id);
 
-			return selectSB.ToString();
+			return selectStringBuilder.ToString();
 		}
 
 		/// <summary>
-		/// Converts the OSMElement to a PostgreSQL Delete String.
+		/// Converts the OsmElement to a PostgreSql Delete String.
 		/// </summary>
-		/// <returns>The PostgreSQL Delete String.</returns>
+		/// <returns>The PostgreSql Delete String.</returns>
 		/// <param name="element">Element.</param>
 		/// <param name="tableName">TableName.</param>
-		public static string ToPostgreSQLDelete(this IOsmElement element, string tableName = null)
+		public static string ToPostgreSqlDelete(this IOsmElement element, string tableName = null)
 		{
-            string table;
-            if (tableName != null) {
-				table = tableName;
-			} else {
-				table = GetTableNameByElementType(element);
-			}
-
-			return string.Format("DELETE FROM {0} WHERE osm_id = {1}", table, element.Id);
+			var table = tableName ?? GetTableNameByElementType(element);
+			return $"DELETE FROM {table} WHERE osm_id = {element.Id}";
 		}
 
 		/// <summary>
-		/// Converts the OSMElement to a PostgreSQL Insert String and fills the Parameters.
+		/// Converts the OsmElement to a PostgreSql Insert String and fills the Parameters.
 		/// </summary>
-		/// <returns>The PostgreSQL Insert String.</returns>
+		/// <returns>The PostgreSql Insert String.</returns>
 		/// <param name="element">Element.</param>
 		/// <param name="parameters">Parameters.</param>
 		/// <param name="inclusiveMetaFields">If set to <c>true</c> inclusive meta fields.</param>
-		public static string ToPostgreSQLInsert(this IOsmElement element, out NameValueCollection parameters, bool inclusiveMetaFields = false)
+		public static string ToPostgreSqlInsert(this IOsmElement element, out NameValueCollection parameters,
+			bool inclusiveMetaFields = false)
 		{
-			parameters = new NameValueCollection {
-				{"osm_id", element.Id.ToString()}
+			parameters = new NameValueCollection
+			{
+				{ "osm_id", element.Id.ToString() }
 			};
 
 			var tableName = GetTableNameByElementType(element);
 
-			var insertSB = new StringBuilder($"INSERT INTO {tableName} (osm_id");
-			if (inclusiveMetaFields) {
-				insertSB.Append(", version, changeset, uid, user, timestamp");
+			var insertStringBuilder = new StringBuilder($"INSERT INTO {tableName} (osm_id");
+			if (inclusiveMetaFields)
+			{
+				insertStringBuilder.Append(", version, changeset, uid, user, timestamp");
 			}
-			if (element is OsmNode nodeElement) {
-				insertSB.Append(", lat");
-				insertSB.Append(", lon");
+
+			if (element is OsmNode nodeElement)
+			{
+				insertStringBuilder.Append(", lat");
+				insertStringBuilder.Append(", lon");
 				parameters.Add("lat", nodeElement.Latitude.ToString(CultureInfo.InvariantCulture));
 				parameters.Add("lon", nodeElement.Longitude.ToString(CultureInfo.InvariantCulture));
 			}
-			insertSB.Append(", tags");
-			if (element is OsmWay) {
-				insertSB.Append(", node_refs");
+
+			insertStringBuilder.Append(", tags");
+			switch (element)
+			{
+				case OsmWay:
+					insertStringBuilder.Append(", node_refs");
+					break;
+				case OsmRelation:
+					insertStringBuilder.Append(", members");
+					break;
 			}
-			if (element is OsmRelation) {
-				insertSB.Append(", members");
-			}
-			insertSB.Append(") VALUES(@osm_id::bigint");
-			if (inclusiveMetaFields) {
-				insertSB.Append(", @version::bigint, @changeset::bigint, @uid::bigint, @user, TIMESTAMP @timestamp");
+
+			insertStringBuilder.Append(") VALUES(@osm_id::bigint");
+			if (inclusiveMetaFields)
+			{
+				insertStringBuilder.Append(
+					", @version::bigint, @changeset::bigint, @uid::bigint, @user, TIMESTAMP @timestamp");
 				parameters.Add("version", element.Version.ToString());
 				parameters.Add("changeset", element.Changeset.ToString());
 				parameters.Add("uid", element.UserId.ToString());
 				parameters.Add("user", element.UserName);
-				parameters.Add("timestamp", element.Timestamp.ToString("yyyy-MM-dd hh:mm:ss", CultureInfo.InvariantCulture));
+				parameters.Add("timestamp",
+					element.Timestamp.ToString("yyyy-MM-dd hh:mm:ss", CultureInfo.InvariantCulture));
 			}
-			if (element is OsmNode) {
-				insertSB.Append(", @lat::double precision, @lon::double precision");
+
+			if (element is OsmNode)
+			{
+				insertStringBuilder.Append(", @lat::double precision, @lon::double precision");
 			}
 
 			parameters.Add("tags", GetTagsSpecificInsert(element));
 
-			insertSB.Append(", @tags::hstore");
-			if (element is OsmWay way) {
-				insertSB.Append(", @node_refs::bigint[]");
-				var wayElement = way;
-				parameters.Add("node_refs", "{" + string.Join(", ", wayElement.NodeRefs) + "}");
+			insertStringBuilder.Append(", @tags::hstore");
+			switch (element)
+			{
+				case OsmWay way:
+					insertStringBuilder.Append(", @node_refs::bigint[]");
+					var wayElement = way;
+					parameters.Add("node_refs", "{" + string.Join(", ", wayElement.NodeRefs) + "}");
+					break;
+				case OsmRelation relationElement:
+					insertStringBuilder.Append(GetRelationSpecificInsert(relationElement, parameters));
+					break;
 			}
-			if (element is OsmRelation relationElement) {
-				insertSB.Append(GetRelationSpecificInsert(relationElement, parameters));
-			}
-			insertSB.Append(')');
 
-			return insertSB.ToString();
+			insertStringBuilder.Append(')');
+
+			return insertStringBuilder.ToString();
 		}
 
 		private static List<long> ParseNodeRefs(string nodeRefsString)
 		{
-			if (nodeRefsString.StartsWith('{') && nodeRefsString.EndsWith('}')) {
+			if (nodeRefsString.StartsWith('{') && nodeRefsString.EndsWith('}'))
+			{
 				nodeRefsString = nodeRefsString[1..^1];
 			}
 
 			var nodeRefsArray = nodeRefsString.Split(',', StringSplitOptions.RemoveEmptyEntries);
 			var nodeRefs = new List<long>();
-			foreach (var nodeRef in nodeRefsArray) {
+			foreach (var nodeRef in nodeRefsArray)
+			{
 				nodeRefs.Add(Convert.ToInt64(nodeRef));
 			}
 

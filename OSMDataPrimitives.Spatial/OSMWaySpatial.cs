@@ -4,43 +4,49 @@ using System.Collections.Generic;
 namespace OSMDataPrimitives.Spatial
 {
 	/// <summary>
-	/// OSMWaySpatial.
+	/// OsmWaySpatial.
 	/// </summary>
 	public class OsmWaySpatial : OsmWay
 	{
-		private List<OsmNodeSpatial> nodes = new();
+		private List<OsmNodeSpatial> _nodes = [];
 
 		/// <summary>
 		/// Gets or sets the nodes.
 		/// </summary>
 		/// <value>The nodes.</value>
-		public List<OsmNodeSpatial> Nodes {
-			get { return this.nodes; }
-			set {
-				this.nodes = value ?? throw new ArgumentNullException("Nodes");
-			}
+		public List<OsmNodeSpatial> Nodes
+		{
+			get => this._nodes;
+			set => this._nodes = value ?? throw new ArgumentNullException(nameof(Nodes));
 		}
 
-        /// <summary>
-        /// Gets or sets the role.
-        /// </summary>
-        /// <value>The role.</value>
-        public string Role { get; set; } = "outer";
+		/// <summary>
+		/// Gets or sets the role.
+		/// </summary>
+		/// <value>The role.</value>
+		public string Role { get; init; } = "outer";
 
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="T:OSMDataPrimitives.Spatial.OSMWaySpatial"/> is closed.
-        /// </summary>
-        /// <value><c>true</c> if this way is a closed line (polygon); otherwise, <c>false</c>.</value>
-        public bool IsClosed {
-			get {
-				if (this.nodes.Count < 3) {
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="T:OSMDataPrimitives.Spatial.OSMWaySpatial"/> is closed.
+		/// </summary>
+		/// <value><c>true</c> if this way is a closed line (polygon); otherwise, <c>false</c>.</value>
+		public bool IsClosed
+		{
+			get
+			{
+				if (this._nodes.Count < 3)
+				{
 					return false;
 				}
-				var lastNodeIndex = this.nodes.Count - 1;
-				if (Math.Abs(this.nodes[0].Latitude - this.nodes[lastNodeIndex].Latitude) > double.Epsilon) {
+
+				var lastNodeIndex = this._nodes.Count - 1;
+				if (Math.Abs(this._nodes[0].Latitude - this._nodes[lastNodeIndex].Latitude) > double.Epsilon)
+				{
 					return false;
 				}
-				if (Math.Abs(this.nodes[0].Longitude - this.nodes[lastNodeIndex].Longitude) > double.Epsilon) {
+
+				if (Math.Abs(this._nodes[0].Longitude - this._nodes[lastNodeIndex].Longitude) > double.Epsilon)
+				{
 					return false;
 				}
 
@@ -52,17 +58,22 @@ namespace OSMDataPrimitives.Spatial
 		/// Gets the direction (Clockwise or CounterClockwise).
 		/// </summary>
 		/// <value>The direction.</value>
-		public PolygonDirection Direction {
-			get {
-				var nodesCount = this.nodes.Count;
+		public PolygonDirection Direction
+		{
+			get
+			{
+				var nodesCount = this._nodes.Count;
 				var sum = 0.0;
-				for (var i = 0; i < nodesCount; i++) {
+				for (var i = 0; i < nodesCount; i++)
+				{
 					var nextNodeIndex = i + 1;
-					if (i == nodesCount - 1) {
+					if (i == nodesCount - 1)
+					{
 						nextNodeIndex = 0;
 					}
-					var longitudeDiff = this.nodes[nextNodeIndex].Longitude - this.nodes[i].Longitude;
-					var latitudeDiff = this.nodes[nextNodeIndex].Latitude + this.nodes[i].Latitude;
+
+					var longitudeDiff = this._nodes[nextNodeIndex].Longitude - this._nodes[i].Longitude;
+					var latitudeDiff = this._nodes[nextNodeIndex].Latitude + this._nodes[i].Latitude;
 					sum += longitudeDiff * latitudeDiff;
 				}
 
@@ -71,7 +82,7 @@ namespace OSMDataPrimitives.Spatial
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.Spatial.OSMWaySpatial"/> class.
+		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.Spatial.OsmWaySpatial"/> class.
 		/// </summary>
 		/// <param name="id">Identifier.</param>
 		public OsmWaySpatial(ulong id) : base(id)
@@ -80,7 +91,7 @@ namespace OSMDataPrimitives.Spatial
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.Spatial.OSMWaySpatial"/> class.
+		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.Spatial.OsmWaySpatial"/> class.
 		/// </summary>
 		/// <param name="way">Way.</param>
 		public OsmWaySpatial(OsmWay way) : base(way.Id)
@@ -91,7 +102,7 @@ namespace OSMDataPrimitives.Spatial
 			this.UserName = way.UserName;
 			this.Version = way.Version;
 			this.Tags = new Dictionary<string, string>(way.Tags);
-			this.NodeRefs = new List<long>(way.NodeRefs);
+			this.NodeRefs = [..way.NodeRefs];
 		}
 
 		/// <summary>
@@ -100,9 +111,10 @@ namespace OSMDataPrimitives.Spatial
 		public new object Clone()
 		{
 			var clone = (OsmWaySpatial)base.Clone();
-			clone.nodes = new List<OsmNodeSpatial>();
-			foreach (var node in this.nodes) {
-				clone.nodes.Add((OsmNodeSpatial)node.Clone());
+			clone._nodes = new List<OsmNodeSpatial>();
+			foreach (var node in this._nodes)
+			{
+				clone._nodes.Add((OsmNodeSpatial)node.Clone());
 			}
 
 			return clone;
@@ -126,18 +138,23 @@ namespace OSMDataPrimitives.Spatial
 		/// <param name="longitude">Longitude.</param>
 		public bool PointInPolygon(double latitude, double longitude)
 		{
-			if (!this.IsClosed) {
+			if (!this.IsClosed)
+			{
 				return false;
 			}
 
 			var result = false;
 			var nodesCount = this.Nodes.Count;
 			var j = nodesCount - 1;
-			for (var i = 0; i < nodesCount; j = i++) {
-				var iNode = this.nodes[i];
-				var jNode = this.nodes[j];
+			for (var i = 0; i < nodesCount; j = i++)
+			{
+				var iNode = this._nodes[i];
+				var jNode = this._nodes[j];
 				if (((iNode.Latitude > latitude) != (jNode.Latitude > latitude)) &&
-				   (longitude < (jNode.Longitude - iNode.Longitude) * (latitude - iNode.Latitude) / (jNode.Latitude - iNode.Latitude) + iNode.Longitude)) {
+				    (longitude <
+				     (jNode.Longitude - iNode.Longitude) * (latitude - iNode.Latitude) /
+				     (jNode.Latitude - iNode.Latitude) + iNode.Longitude))
+				{
 					result = !result;
 				}
 			}

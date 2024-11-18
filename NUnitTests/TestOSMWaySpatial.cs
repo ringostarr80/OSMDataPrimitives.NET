@@ -3,12 +3,12 @@ using NUnit.Framework;
 using OSMDataPrimitives;
 using OSMDataPrimitives.Spatial;
 
-namespace NUnit
+namespace NUnitTests
 {
 	[TestFixture]
 	public class TestOsmWaySpatial
 	{
-		private static OsmWay GetDefaultOSMWay()
+		private static OsmWay GetDefaultOsmWay()
 		{
 			var way = new OsmWay(2) {
 				UserId = 5,
@@ -29,7 +29,7 @@ namespace NUnit
 			return way;
 		}
 
-		private static OsmWaySpatial GetDefaultOSMWaySpatial()
+		private static OsmWaySpatial GetDefaultOsmWaySpatial()
 		{
 			var way = new OsmWaySpatial(19410366) {
 				Version = 11,
@@ -54,7 +54,7 @@ namespace NUnit
 			return way;
 		}
 
-		private static OsmWaySpatial GetClosedOSMWaySpatial()
+		private static OsmWaySpatial GetClosedOsmWaySpatial()
 		{
 			var way = new OsmWaySpatial(39857589) {
 				Version = 6,
@@ -86,7 +86,7 @@ namespace NUnit
 			return way;
 		}
 
-		private static OsmWaySpatial GetClockwiseOSMWaySpatial()
+		private static OsmWaySpatial GetClockwiseOsmWaySpatial()
 		{
 			var way = new OsmWaySpatial(90105666) {
 				Version = 3,
@@ -111,7 +111,7 @@ namespace NUnit
 			return way;
 		}
 
-		private static OsmWaySpatial GetCounterClockwiseOSMWaySpatial()
+		private static OsmWaySpatial GetCounterClockwiseOsmWaySpatial()
 		{
 			var way = new OsmWaySpatial(273579651) {
 				Version = 2,
@@ -136,9 +136,9 @@ namespace NUnit
 		}
 
 		[Test]
-		public void TestOSMWaySpatialClone()
+		public void TestOsmWaySpatialClone()
 		{
-			var defaultWay = GetDefaultOSMWaySpatial();
+			var defaultWay = GetDefaultOsmWaySpatial();
 			var clonedWay = (OsmWaySpatial)defaultWay.Clone();
 			clonedWay.Nodes[0].Latitude += 0.02;
 			clonedWay.Nodes[0].Longitude += 0.01;
@@ -151,9 +151,9 @@ namespace NUnit
 		}
 
 		[Test]
-		public void TestOSMWaySpatialConstructorWithOSMWay()
+		public void TestOsmWaySpatialConstructorWithOsmWay()
 		{
-			var way = GetDefaultOSMWay();
+			var way = GetDefaultOsmWay();
 			var waySpatial = new OsmWaySpatial(way);
 
 			waySpatial.Changeset += 1;
@@ -202,54 +202,54 @@ namespace NUnit
 		}
 
 		[Test]
-		public void TestOSMWaySpatialIsNotClosed()
+		public void TestOsmWaySpatialIsNotClosed()
 		{
-			var defaultWay = GetDefaultOSMWaySpatial();
+			var defaultWay = GetDefaultOsmWaySpatial();
 			Assert.That(defaultWay.IsClosed, Is.False);
 		}
 
 		[Test]
-		public void TestOSMWaySpatialIsClosed()
+		public void TestOsmWaySpatialIsClosed()
 		{
-			var closedWay = GetClosedOSMWaySpatial();
+			var closedWay = GetClosedOsmWaySpatial();
 			Assert.That(closedWay.IsClosed, Is.True);
 		}
 
 		[Test]
-		public void TestOSMWaySpatialDirectionClockwise()
+		public void TestOsmWaySpatialDirectionClockwise()
 		{
-			var counterClockwiseWay = GetCounterClockwiseOSMWaySpatial();
+			var counterClockwiseWay = GetCounterClockwiseOsmWaySpatial();
 			Assert.That(counterClockwiseWay.Direction, Is.EqualTo(PolygonDirection.CounterClockwise));
 		}
 
 		[Test]
-		public void TestOSMWaySpatialDirectionCounterClockwise()
+		public void TestOsmWaySpatialDirectionCounterClockwise()
 		{
-			var clockwiseWay = GetClockwiseOSMWaySpatial();
+			var clockwiseWay = GetClockwiseOsmWaySpatial();
 			Assert.That(clockwiseWay.Direction, Is.EqualTo(PolygonDirection.Clockwise));
 		}
 
 		[Test]
-		public void TestOSMWaySpatialReverse()
+		public void TestOsmWaySpatialReverse()
 		{
-			var clockwiseWay = GetClockwiseOSMWaySpatial();
+			var clockwiseWay = GetClockwiseOsmWaySpatial();
 			var counterClockwiseWay = clockwiseWay.Reverse();
 			Assert.That(counterClockwiseWay.Direction, Is.EqualTo(PolygonDirection.CounterClockwise));
 		}
 
 		[Test]
-		public void TestOSMWaySpatialToWkt()
+		public void TestOsmWaySpatialToWkt()
 		{
-			var way = GetDefaultOSMWaySpatial();
+			var way = GetDefaultOsmWaySpatial();
 			var wkt = way.ToWkt();
 			var expectedWkt = "LINESTRING (9.9936292 53.5510746, 9.9937873 53.5511904, 9.9943703 53.5515143, 9.994567 53.5516129)";
 			Assert.That(wkt, Is.EqualTo(expectedWkt));
 		}
 
 		[Test]
-		public void TestOSMWaySpatialPointIsInPolygon()
+		public void TestOsmWaySpatialPointIsInPolygon()
 		{
-			var polygon = GetClosedOSMWaySpatial();
+			var polygon = GetClosedOsmWaySpatial();
 
 			Assert.That(polygon.PointInPolygon(53.5514198, 9.9944637), Is.True);
 			Assert.That(polygon.PointInPolygon(53.5511411, 9.9948384), Is.True);

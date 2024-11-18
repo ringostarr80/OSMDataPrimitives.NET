@@ -3,12 +3,12 @@ using NUnit.Framework;
 using OSMDataPrimitives;
 using OSMDataPrimitives.Spatial;
 
-namespace NUnit
+namespace NUnitTests
 {
 	[TestFixture]
 	public class TestOsmNodeSpatial
 	{
-		private static OsmNode GetDefaultOSMNode()
+		private static OsmNode GetDefaultOsmNode()
 		{
 			var node = new OsmNode(2) {
 				Latitude = 52.123456,
@@ -25,14 +25,14 @@ namespace NUnit
 			return node;
 		}
 
-		private static OsmNodeSpatial GetOSMNodeSpatial1()
+		private static OsmNodeSpatial GetOsmNodeSpatial1()
 		{
 			// Position of Hamburg.
 			var node = new OsmNodeSpatial(2, 53.553345, 9.992475);
 			return node;
 		}
 
-		private static OsmNodeSpatial GetOSMNodeSpatial2()
+		private static OsmNodeSpatial GetOsmNodeSpatial2()
 		{
 			// Position of Munich
 			var node = new OsmNodeSpatial(2, 48.136385, 11.577624);
@@ -40,9 +40,9 @@ namespace NUnit
 		}
 
 		[Test]
-		public void TestOSMNodeSpatialConstructorWithOSMNode()
+		public void TestOsmNodeSpatialConstructorWithOsmNode()
 		{
-			var node = GetDefaultOSMNode();
+			var node = GetDefaultOsmNode();
 			var nodeSpatial = new OsmNodeSpatial(node);
 
 			nodeSpatial.Changeset += 1;
@@ -78,8 +78,8 @@ namespace NUnit
 		[Test]
 		public void TestNodeDistanceCalculation()
 		{
-			var node1 = GetOSMNodeSpatial1();
-			var node2 = GetOSMNodeSpatial2();
+			var node1 = GetOsmNodeSpatial1();
+			var node2 = GetOsmNodeSpatial2();
 
 			var distance = node1.GetDistance(node2);
 			Assert.That((int)distance, Is.EqualTo(613178));
@@ -88,8 +88,8 @@ namespace NUnit
 		[Test]
 		public void TestNodeDirectionCalculation()
 		{
-			var node1 = GetOSMNodeSpatial1();
-			var node2 = GetOSMNodeSpatial2();
+			var node1 = GetOsmNodeSpatial1();
+			var node2 = GetOsmNodeSpatial2();
 
 			var direction = node1.GetDirection(node2);
 			Assert.That((int)direction, Is.EqualTo(168));
@@ -98,7 +98,7 @@ namespace NUnit
 		[Test]
 		public void TestNodeToWkt()
 		{
-			var node = GetOSMNodeSpatial1();
+			var node = GetOsmNodeSpatial1();
 			var wkt = node.ToWkt();
 			var expectedWkt = "POINT (9.992475 53.553345)";
 			Assert.That(wkt, Is.EqualTo(expectedWkt));

@@ -3,38 +3,49 @@
 namespace OSMDataPrimitives
 {
 	/// <summary>
-	/// OSMNode.
+	/// OsmNode.
 	/// </summary>
 	public class OsmNode : OsmElement
 	{
-		private double latitude = 0.0;
-		private double longitude = 0.0;
+		private double _latitude;
+		private double _longitude;
 
 		/// <summary>
 		/// Gets or sets the latitude.
 		/// </summary>
 		/// <value>The latitude.</value>
 		/// <exception cref="T:System.ArgumentOutOfRangeException"></exception>
-		public double Latitude {
-			get { return this.latitude; }
-			set {
-				if(value < -90.0 || value > 90.0) {
-					throw new ArgumentOutOfRangeException("Latitude", value, "The value for Latitude must be between -90.0 and 90.0.");
+		public double Latitude
+		{
+			get => this._latitude;
+			set
+			{
+				if (value is < -90.0 or > 90.0)
+				{
+					throw new ArgumentOutOfRangeException(nameof(Latitude), value,
+						"The value for Latitude must be between -90.0 and 90.0.");
 				}
-				this.latitude = value;
+
+				this._latitude = value;
 			}
 		}
+
 		/// <summary>
 		/// Gets or sets the longitude.
 		/// </summary>
 		/// <value>The longitude.</value>
-		public double Longitude {
-			get { return this.longitude; }
-			set {
-				if(value < -180.0 || value > 180.0) {
-					throw new ArgumentOutOfRangeException("Longitude", value, "The value for Longitude must be between -180.0 and 180.0.");
+		public double Longitude
+		{
+			get => this._longitude;
+			set
+			{
+				if (value is < -180.0 or > 180.0)
+				{
+					throw new ArgumentOutOfRangeException(nameof(Longitude), value,
+						"The value for Longitude must be between -180.0 and 180.0.");
 				}
-				this.longitude = value;
+
+				this._longitude = value;
 			}
 		}
 
@@ -48,7 +59,7 @@ namespace OSMDataPrimitives
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.OSMNode"/> class.
+		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.OsmNode"/> class.
 		/// </summary>
 		/// <param name="id">Identifier.</param>
 		/// <param name="latitude">Latitude.</param>
@@ -61,31 +72,46 @@ namespace OSMDataPrimitives
 
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals(this, obj)) {
+			if (ReferenceEquals(this, obj))
+			{
 				return true;
 			}
-			if(obj == null || GetType() != obj.GetType()) {
+
+			if (obj == null || GetType() != obj.GetType())
+			{
 				return false;
 			}
+
 			var other = (OsmNode)obj;
 
-			if (this.Tags == null && other.Tags != null) {
-				return false;
-			}
-			if (this.Tags != null && other.Tags == null) {
-				return false;
-			}
-			if (this.Tags.Count != other.Tags.Count) {
+			if (this.Tags == null && other.Tags != null)
+			{
 				return false;
 			}
 
-			foreach (var kvp in this.Tags)
+			if (this.Tags != null && other.Tags == null)
 			{
-				if (!other.Tags.TryGetValue(kvp.Key, out string valueInDict2)) {
+				return false;
+			}
+
+			if (this.Tags is not null && other.Tags is not null)
+			{
+				if (this.Tags.Count != other.Tags.Count)
+				{
 					return false;
 				}
-				if (kvp.Value != valueInDict2) {
-					return false;
+
+				foreach (var kvp in this.Tags)
+				{
+					if (!other.Tags.TryGetValue(kvp.Key, out string valueInDict2))
+					{
+						return false;
+					}
+
+					if (kvp.Value != valueInDict2)
+					{
+						return false;
+					}
 				}
 			}
 
@@ -103,9 +129,7 @@ namespace OSMDataPrimitives
 
 		public override int GetHashCode()
 		{
-			unchecked {
-				return base.GetHashCode() ^ this.Latitude.GetHashCode() ^ this.Longitude.GetHashCode();
-			}
+			return base.GetHashCode() ^ this.Latitude.GetHashCode() ^ this.Longitude.GetHashCode();
 		}
 	}
 }

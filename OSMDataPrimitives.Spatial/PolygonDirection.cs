@@ -9,6 +9,7 @@
 		/// clockwise direction.
 		/// </summary>
 		Clockwise,
+
 		/// <summary>
 		/// counter-clockwise direction.
 		/// </summary>

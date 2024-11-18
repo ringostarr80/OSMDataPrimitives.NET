@@ -2,30 +2,30 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using OSMDataPrimitives;
 
-namespace NUnit
+namespace NUnitTests
 {
     [TestFixture]
     public class TestOsmMember
     {
-        private static OsmMember GetDefaultOSMMemberNode()
+        private static OsmMember GetDefaultOsmMemberNode()
         {
             return new OsmMember(MemberType.Node, 1, "");
         }
 
-        private static OsmMember GetDefaultOSMMemberWay()
+        private static OsmMember GetDefaultOsmMemberWay()
         {
             return new OsmMember(MemberType.Way, 2, "outer");
         }
 
-        private static OsmMember GetDefaultOSMMemberRelation()
+        private static OsmMember GetDefaultOsmMemberRelation()
         {
             return new OsmMember(MemberType.Relation, 3, "");
         }
 
         [Test]
-        public void TestOSMMemberNode()
+        public void TestOsmMemberNode()
         {
-            var memberNode = GetDefaultOSMMemberNode();
+            var memberNode = GetDefaultOsmMemberNode();
 
             Assert.That(memberNode.Type, Is.EqualTo(MemberType.Node));
             Assert.That(memberNode.Ref, Is.EqualTo(1));
@@ -33,9 +33,9 @@ namespace NUnit
         }
 
         [Test]
-        public void TestOSMMemberWay()
+        public void TestOsmMemberWay()
         {
-            var memberWay = GetDefaultOSMMemberWay();
+            var memberWay = GetDefaultOsmMemberWay();
 
             Assert.That(memberWay.Type, Is.EqualTo(MemberType.Way));
             Assert.That(memberWay.Ref, Is.EqualTo(2));
@@ -43,9 +43,9 @@ namespace NUnit
         }
 
         [Test]
-        public void TestOSMMemberRelation()
+        public void TestOsmMemberRelation()
         {
-            var memberRelation = GetDefaultOSMMemberRelation();
+            var memberRelation = GetDefaultOsmMemberRelation();
 
             Assert.That(memberRelation.Type, Is.EqualTo(MemberType.Relation));
             Assert.That(memberRelation.Ref, Is.EqualTo(3));
@@ -53,9 +53,9 @@ namespace NUnit
         }
 
         [Test]
-        public void TestOSMMemberNodeToDictionary()
+        public void TestOsmMemberNodeToDictionary()
         {
-            var memberNode = GetDefaultOSMMemberNode();
+            var memberNode = GetDefaultOsmMemberNode();
             var expectedDictionary = new Dictionary<string, string>
             {
                 { "type", "node" },
@@ -67,9 +67,9 @@ namespace NUnit
         }
 
         [Test]
-        public void TestOSMMemberWayToDictionary()
+        public void TestOsmMemberWayToDictionary()
         {
-            var memberWay = GetDefaultOSMMemberWay();
+            var memberWay = GetDefaultOsmMemberWay();
             var expectedDictionary = new Dictionary<string, string>
             {
                 { "type", "way" },
@@ -81,9 +81,9 @@ namespace NUnit
         }
 
         [Test]
-        public void TestOSMMemberRelationToDictionary()
+        public void TestOsmMemberRelationToDictionary()
         {
-            var memberRelation = GetDefaultOSMMemberRelation();
+            var memberRelation = GetDefaultOsmMemberRelation();
             var expectedDictionary = new Dictionary<string, string>
             {
                 { "type", "relation" },

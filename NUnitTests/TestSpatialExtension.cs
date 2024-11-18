@@ -5,7 +5,7 @@ using NUnit.Framework;
 using OSMDataPrimitives;
 using OSMDataPrimitives.Spatial;
 
-namespace NUnit
+namespace NUnitTests
 {
 	[TestFixture]
 	public class TestSpatialExtension
@@ -88,10 +88,10 @@ namespace NUnit
 		}
 
 		[Test]
-		public void TestXmlNodeToOSMSpatialElement()
+		public void TestXmlNodeToOsmSpatialElement()
 		{
 			var xmlNode = BuildOsmXmlNode();
-			var spatialElement = xmlNode.ToOSMSpatialElement();
+			var spatialElement = xmlNode.ToOsmSpatialElement();
 			if (spatialElement is OsmNode osmNode) {
 				Assert.That(osmNode.Id, Is.EqualTo(1));
 				Assert.That(osmNode.Changeset, Is.EqualTo(2));
@@ -107,10 +107,10 @@ namespace NUnit
         }
 
 		[Test]
-		public void TestXmlNodeStringToOSMSpatialElement()
+		public void TestXmlNodeStringToOsmSpatialElement()
 		{
 			var xmlNode = BuildOsmXmlNode();
-			var spatialElement = xmlNode.OuterXml.ToOSMSpatialElement();
+			var spatialElement = xmlNode.OuterXml.ToOsmSpatialElement();
 			if (spatialElement is OsmNode osmNode) {
 				Assert.That(osmNode.Id, Is.EqualTo(1));
 				Assert.That(osmNode.Changeset, Is.EqualTo(2));
@@ -126,24 +126,24 @@ namespace NUnit
         }
 
 		[Test]
-		public void TestOSMNodeToWKT()
+		public void TestOsmNodeToWkt()
 		{
 			var node = new OsmNode(1, 52.1234, 12.4321);
 			Assert.That(node.ToWkt(), Is.EqualTo("POINT (12.4321 52.1234)"));
 		}
 
 		[Test]
-		public void TestOSMNodeSpatialToWKT()
+		public void TestOsmNodeSpatialToWkt()
 		{
 			var node = new OsmNodeSpatial(1, 52.1234, 12.4321);
 			Assert.That(node.ToWkt(), Is.EqualTo("POINT (12.4321 52.1234)"));
 		}
 
 		[Test]
-		public void TestXmlWayToOSMSpatialElement()
+		public void TestXmlWayToOsmSpatialElement()
 		{
 			var xmlWay = BuildOsmXmlWay();
-			var spatialElement = xmlWay.ToOSMSpatialElement();
+			var spatialElement = xmlWay.ToOsmSpatialElement();
 			if (spatialElement is OsmWay osmWay) {
 				Assert.That(osmWay.Id, Is.EqualTo(1));
 				Assert.That(osmWay.Changeset, Is.EqualTo(2));
@@ -158,10 +158,10 @@ namespace NUnit
         }
 
 		[Test]
-		public void TestXmlWayStringToOSMSpatialElement()
+		public void TestXmlWayStringToOsmSpatialElement()
 		{
 			var xmlWay = BuildOsmXmlWay();
-			var spatialElement = xmlWay.OuterXml.ToOSMSpatialElement();
+			var spatialElement = xmlWay.OuterXml.ToOsmSpatialElement();
 			if (spatialElement is OsmWay osmWay) {
 				Assert.That(osmWay.Id, Is.EqualTo(1));
 				Assert.That(osmWay.Changeset, Is.EqualTo(2));
@@ -176,7 +176,7 @@ namespace NUnit
         }
 
 		[Test]
-		public void TestOSMWayToWKT()
+		public void TestOsmWayToWkt()
 		{
 			var way = new OsmWaySpatial(1);
 			way.Nodes.Add(new OsmNodeSpatial(2, 52.1234, 10.4321));
@@ -185,10 +185,10 @@ namespace NUnit
 		}
 
 		[Test]
-		public void TestXmlRelationToOSMSpatialElement()
+		public void TestXmlRelationToOsmSpatialElement()
 		{
 			var xmlRelation = BuildOsmXmlRelation();
-			var spatialElement = xmlRelation.ToOSMSpatialElement();
+			var spatialElement = xmlRelation.ToOsmSpatialElement();
 			if (spatialElement is OsmRelation osmRelation) {
 				Assert.That(osmRelation.Id, Is.EqualTo(1));
 				Assert.That(osmRelation.Changeset, Is.EqualTo(2));
@@ -203,10 +203,10 @@ namespace NUnit
         }
 
 		[Test]
-		public void TestXmlRelationStringToOSMSpatialElement()
+		public void TestXmlRelationStringToOsmSpatialElement()
 		{
 			var xmlRelation = BuildOsmXmlRelation();
-			var spatialElement = xmlRelation.OuterXml.ToOSMSpatialElement();
+			var spatialElement = xmlRelation.OuterXml.ToOsmSpatialElement();
 			if (spatialElement is OsmRelation osmRelation) {
 				Assert.That(osmRelation.Id, Is.EqualTo(1));
 				Assert.That(osmRelation.Changeset, Is.EqualTo(2));

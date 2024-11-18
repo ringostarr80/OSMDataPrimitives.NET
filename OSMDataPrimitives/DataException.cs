@@ -10,13 +10,21 @@ public class DataException : Exception
     /// <summary>
     /// DataException constructor.
     /// </summary>
-    public DataException() { }
+    public DataException()
+    {
+    }
+
     /// <summary>
     /// DataException constructor.
     /// </summary>
-    public DataException(string message) : base(message) { }
+    public DataException(string message) : base(message)
+    {
+    }
+
     /// <summary>
     /// DataException constructor.
     /// </summary>
-    public DataException(string message, Exception inner) : base(message, inner) { }
+    public DataException(string message, Exception inner) : base(message, inner)
+    {
+    }
 }

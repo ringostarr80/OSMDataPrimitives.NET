@@ -2,17 +2,17 @@
 using NUnit.Framework;
 using OSMDataPrimitives;
 using OSMDataPrimitives.Xml;
-using OSMDataPrimitives.PostgreSQL;
+using OSMDataPrimitives.PostgreSql;
 using OSMDataPrimitives.BSON;
 using System.Collections.Specialized;
 using System.Collections.Generic;
 
-namespace NUnit
+namespace NUnitTests
 {
 	[TestFixture]
 	public class TestOsmRelation
 	{
-		private static OsmRelation GetDefaultOSMRelation()
+		private static OsmRelation GetDefaultOsmRelation()
 		{
 			var relation = new OsmRelation(2) {
 				UserId = 5,
@@ -32,9 +32,9 @@ namespace NUnit
 		}
 
 		[Test]
-		public void TestOSMRelationClone()
+		public void TestOsmRelationClone()
 		{
-			var relation = GetDefaultOSMRelation();
+			var relation = GetDefaultOsmRelation();
 			var relationClone = (OsmRelation)relation.Clone();
 			relationClone.Changeset += 1;
 			relationClone.Version += 1;
@@ -75,9 +75,9 @@ namespace NUnit
 		}
 
 		[Test]
-		public void TestOSMRelationToXmlString()
+		public void TestOsmRelationToXmlString()
 		{
-			var relation = GetDefaultOSMRelation();
+			var relation = GetDefaultOsmRelation();
 
 			var expectedXmlString = "<relation id=\"2\" version=\"3\" uid=\"5\" user=\"foo\" changeset=\"7\" timestamp=\"2017-01-20T12:03:43Z\">";
 			expectedXmlString += "<member type=\"way\" ref=\"123\" role=\"inner\" />";
@@ -91,11 +91,11 @@ namespace NUnit
 		}
 
 		[Test]
-		public void TestXmlElementToOSMRelation()
+		public void TestXmlElementToOsmRelation()
 		{
-			var relation = GetDefaultOSMRelation();
+			var relation = GetDefaultOsmRelation();
 			var xmlRelation = relation.ToXml();
-			var convertedRelation = (OsmRelation)xmlRelation.ToOSMElement();
+			var convertedRelation = (OsmRelation)xmlRelation.ToOsmElement();
 
 			Assert.That(convertedRelation.Id, Is.EqualTo(2));
 			Assert.That(convertedRelation.Changeset, Is.EqualTo(7));
@@ -113,11 +113,11 @@ namespace NUnit
 		}
 
 		[Test]
-		public void TestXmlStringToOSMRelation()
+		public void TestXmlStringToOsmRelation()
 		{
-			var relation = GetDefaultOSMRelation();
+			var relation = GetDefaultOsmRelation();
 			var xmlString = relation.ToXmlString();
-			var convertedRelation = (OsmRelation)xmlString.ToOSMElement();
+			var convertedRelation = (OsmRelation)xmlString.ToOsmElement();
 
 			Assert.That(convertedRelation.Id, Is.EqualTo(2));
 			Assert.That(convertedRelation.Changeset, Is.EqualTo(7));
@@ -135,10 +135,10 @@ namespace NUnit
 		}
 
 		[Test]
-		public void TestOSMRelationToPostgreSQLInsertString()
+		public void TestOsmRelationToPostgreSqlInsertString()
 		{
-			var relation = GetDefaultOSMRelation();
-			var sqlInsert = relation.ToPostgreSQLInsert(out NameValueCollection sqlParameters);
+			var relation = GetDefaultOsmRelation();
+			var sqlInsert = relation.ToPostgreSqlInsert(out NameValueCollection sqlParameters);
 			var expectedSql = "INSERT INTO relations (osm_id, tags, members) ";
 			expectedSql += "VALUES(@osm_id::bigint, @tags::hstore, ARRAY[@member_1::hstore, @member_2::hstore, @member_3::hstore, @member_4::hstore])";
 			Assert.That(sqlInsert, Is.EqualTo(expectedSql));
@@ -158,46 +158,46 @@ namespace NUnit
 		}
 
 		[Test]
-		public void TestOSMRelationWithoutMembersToPostgreSQLInsertString()
+		public void TestOsmRelationWithoutMembersToPostgreSqlInsertString()
 		{
-			var relation = GetDefaultOSMRelation();
+			var relation = GetDefaultOsmRelation();
 			relation.Members.Clear();
-            var sqlInsert = relation.ToPostgreSQLInsert(out _);
+            var sqlInsert = relation.ToPostgreSqlInsert(out _);
 			var expectedSql = "INSERT INTO relations (osm_id, tags, members) ";
 			expectedSql += "VALUES(@osm_id::bigint, @tags::hstore, '{}')";
 			Assert.That(sqlInsert, Is.EqualTo(expectedSql));
 		}
 
 		[Test]
-		public void TestOSMRelationToPostgreSQLSelectString()
+		public void TestOsmRelationToPostgreSqlSelectString()
 		{
-			var relation = GetDefaultOSMRelation();
-			var sqlSelect = relation.ToPostgreSQLSelect();
+			var relation = GetDefaultOsmRelation();
+			var sqlSelect = relation.ToPostgreSqlSelect();
 			var expectedSql = "SELECT osm_id, tags::text, members::text FROM relations WHERE osm_id = 2";
 			Assert.That(sqlSelect, Is.EqualTo(expectedSql));
 
-			sqlSelect = relation.ToPostgreSQLSelect(inclusiveMetaField: true);
+			sqlSelect = relation.ToPostgreSqlSelect(inclusiveMetaField: true);
 			expectedSql = "SELECT osm_id, version, changeset, uid, user, timestamp, tags::text, members::text FROM relations WHERE osm_id = 2";
 			Assert.That(sqlSelect, Is.EqualTo(expectedSql));
 
 			relation.OverrideId(7);
-			sqlSelect = relation.ToPostgreSQLSelect();
+			sqlSelect = relation.ToPostgreSqlSelect();
 			expectedSql = "SELECT osm_id, tags::text, members::text FROM relations WHERE osm_id = 7";
 			Assert.That(sqlSelect, Is.EqualTo(expectedSql));
 		}
 
 		[Test]
-		public void TestOSMRelationToPostgreSQLDeleteString()
+		public void TestOsmRelationToPostgreSqlDeleteString()
 		{
-			var relation = GetDefaultOSMRelation();
+			var relation = GetDefaultOsmRelation();
 			var expectedSql = "DELETE FROM relations WHERE osm_id = 2";
-			Assert.That(relation.ToPostgreSQLDelete(), Is.EqualTo(expectedSql));
+			Assert.That(relation.ToPostgreSqlDelete(), Is.EqualTo(expectedSql));
 		}
 
 		[Test]
-		public void TestOSMRelationToBson()
+		public void TestOsmRelationToBson()
 		{
-			var relation = GetDefaultOSMRelation();
+			var relation = GetDefaultOsmRelation();
 
 			var bsonDoc = relation.ToBson();
 			var idElement = bsonDoc.GetElement("id");
@@ -243,9 +243,9 @@ namespace NUnit
 		}
 
 		[Test]
-		public void TestOSMRelationParseBsonDocument()
+		public void TestOsmRelationParseBsonDocument()
 		{
-			var relation = GetDefaultOSMRelation();
+			var relation = GetDefaultOsmRelation();
 			var bsonDoc = relation.ToBson();
 
 			var parsedRelation = new OsmRelation(0);
@@ -284,9 +284,9 @@ namespace NUnit
 		}
 
 		[Test]
-		public void TestOSMRelationParseEmptyBsonDocument()
+		public void TestOsmRelationParseEmptyBsonDocument()
 		{
-			var relation = GetDefaultOSMRelation();
+			var relation = GetDefaultOsmRelation();
 			var bsonDoc = new MongoDB.Bson.BsonDocument();
 
 			relation.ParseBsonDocument(bsonDoc);

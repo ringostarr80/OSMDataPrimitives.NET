@@ -4,25 +4,24 @@ using System.Collections.Generic;
 namespace OSMDataPrimitives
 {
 	/// <summary>
-	/// OSMWay.
+	/// OsmWay.
 	/// </summary>
 	public class OsmWay : OsmElement
 	{
-		private List<long> nodeRefs = new();
+		private List<long> _nodeRefs = [];
 
 		/// <summary>
 		/// Gets or sets the node reference-ids.
 		/// </summary>
 		/// <value>The node reference-ids.</value>
-		public List<long> NodeRefs {
-			get { return this.nodeRefs; }
-			set {
-				this.nodeRefs = value ?? throw new ArgumentNullException("NodeRefs");
-			}
+		public List<long> NodeRefs
+		{
+			get => this._nodeRefs;
+			set => this._nodeRefs = value ?? throw new ArgumentNullException(nameof(NodeRefs));
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.OSMWay"/> class.
+		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.OsmWay"/> class.
 		/// </summary>
 		/// <param name="id">Identifier.</param>
 		public OsmWay(ulong id) : base(id)
@@ -36,7 +35,7 @@ namespace OSMDataPrimitives
 		public new object Clone()
 		{
 			var clone = (OsmWay)base.Clone();
-			clone.nodeRefs = new List<long>(this.nodeRefs);
+			clone._nodeRefs = [..this._nodeRefs];
 
 			return clone;
 		}

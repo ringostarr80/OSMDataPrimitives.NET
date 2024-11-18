@@ -4,14 +4,14 @@ using System.Collections.Generic;
 namespace OSMDataPrimitives.Spatial
 {
 	/// <summary>
-	/// OSMNodeSpatial.
+	/// OsmNodeSpatial.
 	/// </summary>
 	public class OsmNodeSpatial : OsmNode
 	{
-		private const double EQUATORIAL_RADIUS = 6378137.0;
+		private const double EquatorialRadius = 6378137.0;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.Spatial.OSMNodeSpatial"/> class.
+		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.Spatial.OsmNodeSpatial"/> class.
 		/// </summary>
 		/// <param name="id">Identifier.</param>
 		public OsmNodeSpatial(ulong id) : base(id)
@@ -20,7 +20,7 @@ namespace OSMDataPrimitives.Spatial
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.Spatial.OSMNodeSpatial"/> class.
+		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.Spatial.OsmNodeSpatial"/> class.
 		/// </summary>
 		/// <param name="id">Identifier.</param>
 		/// <param name="latitude">Latitude.</param>
@@ -53,7 +53,8 @@ namespace OSMDataPrimitives.Spatial
 
 		public override int GetHashCode()
 		{
-			unchecked {
+			unchecked
+			{
 				return 1 + base.GetHashCode();
 			}
 		}
@@ -63,24 +64,14 @@ namespace OSMDataPrimitives.Spatial
 		/// </summary>
 		/// <param name="angle"></param>
 		/// <returns></returns>
-		public static double DegreeToRadian(double angle)
+		private static double DegreeToRadian(double angle)
 		{
 			return Math.PI * angle / 180.0;
 		}
 
-		/// <summary>
-        /// Converts the angle from radian to degree
-        /// </summary>
-        /// <param name="angle"></param>
-        /// <returns></returns>
-		public static double RadianToDegree(double angle)
-		{
-			return angle * (180.0 / Math.PI);
-		}
-
 		private static double SqlMod(double n, double m)
 		{
-			return n - ((int)(n / m) * m);
+			return n - (int)(n / m) * m;
 		}
 
 		/// <summary>
@@ -95,8 +86,10 @@ namespace OSMDataPrimitives.Spatial
 			var latitudeDestination = node.Latitude / 180.0 * Math.PI;
 			var longitudeDestination = node.Longitude / 180.0 * Math.PI;
 
-			var distance = Math.Acos(Math.Sin(latitudeOrigin) * Math.Sin(latitudeDestination) + Math.Cos(latitudeOrigin) * Math.Cos(latitudeDestination) * Math.Cos(longitudeDestination - longitudeOrigin));
-			distance *= EQUATORIAL_RADIUS;
+			var distance = Math.Acos(Math.Sin(latitudeOrigin) * Math.Sin(latitudeDestination) +
+			                         Math.Cos(latitudeOrigin) * Math.Cos(latitudeDestination) *
+			                         Math.Cos(longitudeDestination - longitudeOrigin));
+			distance *= EquatorialRadius;
 
 			return distance;
 		}
@@ -114,8 +107,12 @@ namespace OSMDataPrimitives.Spatial
 			var radLongitudeDestination = DegreeToRadian(node.Longitude);
 			var cosLatitudeDestination = Math.Cos(radLatitudeDestination);
 
-			var sqlMod = SqlMod(Math.Atan2(Math.Cos(radLatitudeOrigin) * Math.Sin(radLatitudeDestination) - Math.Sin(radLatitudeOrigin) * cosLatitudeDestination * Math.Cos(radLongitudeDestination - radLongitudeOrigin),
-										   Math.Sin(radLongitudeDestination - radLongitudeOrigin) * cosLatitudeDestination) - (5 * Math.PI / 2), 2 * Math.PI);
+			var sqlMod = SqlMod(Math.Atan2(
+					Math.Cos(radLatitudeOrigin) * Math.Sin(radLatitudeDestination) - Math.Sin(radLatitudeOrigin) *
+					cosLatitudeDestination * Math.Cos(radLongitudeDestination - radLongitudeOrigin),
+					Math.Sin(radLongitudeDestination - radLongitudeOrigin) * cosLatitudeDestination) -
+				(5 * Math.PI / 2),
+				2 * Math.PI);
 			var direction = (-180.0 / Math.PI) * sqlMod;
 
 			return direction;
