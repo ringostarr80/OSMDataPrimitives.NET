@@ -3,7 +3,7 @@
 namespace OSMDataPrimitives
 {
 	/// <summary>
-	/// OSMMember.
+	/// OsmMember.
 	/// </summary>
 	public struct OsmMember
 	{
@@ -36,7 +36,7 @@ namespace OSMDataPrimitives
 		}
 
 		/// <summary>
-		/// Converts the OSMMember object to a dictionary.
+		/// Converts the OsmMember object to a dictionary.
 		/// </summary>
 		/// <returns>A dictionary containing the member's properties.</returns>
 		public readonly Dictionary<string, string> ToDictionary()

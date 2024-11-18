@@ -27,7 +27,7 @@ namespace OSMDataPrimitives.Spatial
 		public string Role { get; init; } = "outer";
 
 		/// <summary>
-		/// Gets a value indicating whether this <see cref="T:OSMDataPrimitives.Spatial.OSMWaySpatial"/> is closed.
+		/// Gets a value indicating whether this <see cref="T:OSMDataPrimitives.Spatial.OsmWaySpatial"/> is closed.
 		/// </summary>
 		/// <value><c>true</c> if this way is a closed line (polygon); otherwise, <c>false</c>.</value>
 		public bool IsClosed
