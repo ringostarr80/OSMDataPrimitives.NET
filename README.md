@@ -1,7 +1,7 @@
-![license](https://img.shields.io/github/license/ringostarr80/OSMDataPrimitives.NET)
-![codeql_analysis](https://img.shields.io/github/actions/workflow/status/ringostarr80/OSMDataPrimitives.NET/codeql-analysis.yml)
-![nuget_version](https://img.shields.io/nuget/v/OSMDataPrimitives)
-![github_tag](https://img.shields.io/github/v/tag/ringostarr80/OSMDataPrimitives.NET?sort=semver)
+[![license](https://img.shields.io/github/license/ringostarr80/OSMDataPrimitives.NET)](LICENSE)
+[![codeql_analysis](https://img.shields.io/github/actions/workflow/status/ringostarr80/OSMDataPrimitives.NET/codeql-analysis.yml)](https://github.com/ringostarr80/OSMDataPrimitives.NET/actions/workflows/codeql-analysis.yml)
+[![nuget_version](https://img.shields.io/nuget/v/OSMDataPrimitives)](https://www.nuget.org/packages/OSMDataPrimitives)
+[![github_tag](https://img.shields.io/github/v/tag/ringostarr80/OSMDataPrimitives.NET?sort=semver)](https://github.com/ringostarr80/OSMDataPrimitives.NET/tags)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ringostarr80_OSMDataPrimitives.NET&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ringostarr80_OSMDataPrimitives.NET)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ringostarr80_OSMDataPrimitives.NET&metric=coverage)](https://sonarcloud.io/summary/new_code?id=ringostarr80_OSMDataPrimitives.NET)
 
