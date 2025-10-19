@@ -92,18 +92,20 @@ namespace OSMDataPrimitives.Spatial
 							break;
 						}
 
-						if (!(Math.Abs(currentFirstNode.Latitude - nextLastNode.Latitude) < double.Epsilon) ||
-						    !(Math.Abs(currentFirstNode.Longitude - nextLastNode.Longitude) < double.Epsilon)) continue;
+						if (Math.Abs(currentFirstNode.Latitude - nextLastNode.Latitude) >= double.Epsilon ||
+							Math.Abs(currentFirstNode.Longitude - nextLastNode.Longitude) >= double.Epsilon)
 						{
-							for (var j = nextWay.Nodes.Count - 2; j >= 0; j--)
-							{
-								mergedWays[i].Nodes.Insert(0, nextWay.Nodes[j]);
-							}
-
-							merged = true;
-							mergedWays.RemoveAt(innerI);
-							break;
+							continue;
 						}
+
+						for (var j = nextWay.Nodes.Count - 2; j >= 0; j--)
+						{
+							mergedWays[i].Nodes.Insert(0, nextWay.Nodes[j]);
+						}
+
+						merged = true;
+						mergedWays.RemoveAt(innerI);
+						break;
 					}
 
 					if (merged)
