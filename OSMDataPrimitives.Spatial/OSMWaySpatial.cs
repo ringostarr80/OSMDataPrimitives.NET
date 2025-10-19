@@ -45,12 +45,7 @@ namespace OSMDataPrimitives.Spatial
 					return false;
 				}
 
-				if (Math.Abs(this._nodes[0].Longitude - this._nodes[lastNodeIndex].Longitude) > double.Epsilon)
-				{
-					return false;
-				}
-
-				return true;
+				return !(Math.Abs(this._nodes[0].Longitude - this._nodes[lastNodeIndex].Longitude) > double.Epsilon);
 			}
 		}
 
@@ -87,7 +82,6 @@ namespace OSMDataPrimitives.Spatial
 		/// <param name="id">Identifier.</param>
 		public OsmWaySpatial(ulong id) : base(id)
 		{
-
 		}
 
 		/// <summary>

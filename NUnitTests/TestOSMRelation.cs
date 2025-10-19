@@ -190,7 +190,7 @@ namespace NUnitTests
 		public void TestOsmRelationToPostgreSqlDeleteString()
 		{
 			var relation = GetDefaultOsmRelation();
-			var expectedSql = "DELETE FROM relations WHERE osm_id = 2";
+			const string expectedSql = "DELETE FROM relations WHERE osm_id = 2";
 			Assert.That(relation.ToPostgreSqlDelete(), Is.EqualTo(expectedSql));
 		}
 

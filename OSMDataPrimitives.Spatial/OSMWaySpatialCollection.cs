@@ -13,7 +13,6 @@ namespace OSMDataPrimitives.Spatial
 		/// </summary>
 		public OsmWaySpatialCollection()
 		{
-
 		}
 
 		/// <summary>
@@ -43,7 +42,7 @@ namespace OSMDataPrimitives.Spatial
 			do
 			{
 				merged = false;
-				int mergedWaysCount = mergedWays.Count;
+				var mergedWaysCount = mergedWays.Count;
 				for (var i = 0; i < mergedWaysCount - 1; i++)
 				{
 					var currentWay = mergedWays[i];
@@ -93,8 +92,8 @@ namespace OSMDataPrimitives.Spatial
 							break;
 						}
 
-						if (Math.Abs(currentFirstNode.Latitude - nextLastNode.Latitude) < double.Epsilon &&
-						    Math.Abs(currentFirstNode.Longitude - nextLastNode.Longitude) < double.Epsilon)
+						if (!(Math.Abs(currentFirstNode.Latitude - nextLastNode.Latitude) < double.Epsilon) ||
+						    !(Math.Abs(currentFirstNode.Longitude - nextLastNode.Longitude) < double.Epsilon)) continue;
 						{
 							for (var j = nextWay.Nodes.Count - 2; j >= 0; j--)
 							{
@@ -137,16 +136,20 @@ namespace OSMDataPrimitives.Spatial
 				}
 
 				var polygonDirection = this[i].Direction;
-				if (role == "inner")
+				switch (role)
 				{
-					if (polygonDirection != PolygonDirection.CounterClockwise)
+					case "inner":
 					{
-						this[i] = this[i].Reverse();
+						if (polygonDirection != PolygonDirection.CounterClockwise)
+						{
+							this[i] = this[i].Reverse();
+						}
+
+						break;
 					}
-				}
-				else if (role == "outer" && polygonDirection != PolygonDirection.Clockwise)
-				{
-					this[i] = this[i].Reverse();
+					case "outer" when polygonDirection != PolygonDirection.Clockwise:
+						this[i] = this[i].Reverse();
+						break;
 				}
 			}
 		}
