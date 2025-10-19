@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using System.Xml;
 
 namespace OSMDataPrimitives.Xml
@@ -77,20 +75,22 @@ namespace OSMDataPrimitives.Xml
 				var typeAttribute = childNode.Attributes.GetNamedItem("type");
 				var refAttribute = childNode.Attributes.GetNamedItem("ref");
 				var roleAttribute = childNode.Attributes.GetNamedItem("role");
-				if (typeAttribute is not null && refAttribute is not null && roleAttribute is not null)
+				if (typeAttribute is null || refAttribute is null || roleAttribute is null)
 				{
-					MemberType? memberType = typeAttribute.Value switch
-					{
-						"node" => MemberType.Node,
-						"way" => MemberType.Way,
-						"relation" => MemberType.Relation,
-						_ => throw new XmlException(
-							$"invalid xml-attribute value ({typeAttribute.Value}) for 'member[@type]'.")
-					};
-
-					var refValue = Convert.ToUInt64(refAttribute.Value);
-					osmRelation.Members.Add(new OsmMember(memberType.Value, refValue, roleAttribute.Value));
+					continue;
 				}
+
+				var memberType = typeAttribute.Value switch
+				{
+					"node" => MemberType.Node,
+					"way" => MemberType.Way,
+					"relation" => MemberType.Relation,
+					_ => throw new XmlException(
+						$"invalid xml-attribute value ({typeAttribute.Value}) for 'member[@type]'.")
+				};
+
+				var refValue = Convert.ToUInt64(refAttribute.Value);
+				osmRelation.Members.Add(new OsmMember(memberType, refValue, roleAttribute.Value));
 			}
 		}
 
@@ -161,27 +161,35 @@ namespace OSMDataPrimitives.Xml
 			osmElement.SetAttribute("timestamp",
 				element.Timestamp.ToString("yyyy-MM-ddThh:mm:ssZ", CultureInfo.InvariantCulture));
 
-			if (element is OsmWay wayElement)
+			switch (element)
 			{
-				foreach (var nodeRef in wayElement.NodeRefs)
+				case OsmWay wayElement:
 				{
-					var ndElement = doc.CreateElement("nd");
-					ndElement.SetAttribute("ref", nodeRef.ToString());
-					osmElement.AppendChild(ndElement);
+					foreach (var nodeRef in wayElement.NodeRefs)
+					{
+						var ndElement = doc.CreateElement("nd");
+						ndElement.SetAttribute("ref", nodeRef.ToString());
+						osmElement.AppendChild(ndElement);
+					}
+
+					break;
 				}
-			} else if (element is OsmRelation relationElement)
-			{
-				foreach (var osmMember in relationElement.Members)
+				case OsmRelation relationElement:
 				{
-					var memberElement = doc.CreateElement("member");
-					memberElement.SetAttribute("type", osmMember.Type.ToString().ToLower());
-					memberElement.SetAttribute("ref", osmMember.Ref.ToString());
-					memberElement.SetAttribute("role", osmMember.Role);
-					osmElement.AppendChild(memberElement);
+					foreach (var osmMember in relationElement.Members)
+					{
+						var memberElement = doc.CreateElement("member");
+						memberElement.SetAttribute("type", osmMember.Type.ToString().ToLower());
+						memberElement.SetAttribute("ref", osmMember.Ref.ToString());
+						memberElement.SetAttribute("role", osmMember.Role);
+						osmElement.AppendChild(memberElement);
+					}
+
+					break;
 				}
 			}
 
-			foreach (KeyValuePair<string, string> tag in element.Tags)
+			foreach (var tag in element.Tags)
 			{
 				var tagElement = doc.CreateElement("tag");
 				tagElement.SetAttribute("k", tag.Key);

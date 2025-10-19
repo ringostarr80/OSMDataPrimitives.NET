@@ -273,7 +273,7 @@ namespace NUnitTests
 		public void TestOsmNodeToPostgreSqlDeleteString()
 		{
 			var node = GetDefaultOsmNode();
-			var expectedSql = "DELETE FROM nodes WHERE osm_id = 2";
+			const string expectedSql = "DELETE FROM nodes WHERE osm_id = 2";
 			Assert.That(node.ToPostgreSqlDelete(), Is.EqualTo(expectedSql));
 		}
 
@@ -281,7 +281,7 @@ namespace NUnitTests
 		public void TestOsmNodeToPostgreSqlDeleteWithCustomTableString()
 		{
 			var node = GetDefaultOsmNode();
-			var expectedSql = "DELETE FROM foo_nodes WHERE osm_id = 2";
+			const string expectedSql = "DELETE FROM foo_nodes WHERE osm_id = 2";
 			Assert.That(node.ToPostgreSqlDelete("foo_nodes"), Is.EqualTo(expectedSql));
 		}
 

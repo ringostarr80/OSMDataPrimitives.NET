@@ -6,20 +6,22 @@ using OSMDataPrimitives.PostgreSql;
 
 namespace NUnitTests
 {
-	[TestFixture]
-	public class TestPostgreSqlExtension
-	{
+    [TestFixture]
+    public class TestPostgreSqlExtension
+    {
         [Test]
-		public void TestOsmNodeParsePostgreSqlFields()
-		{
-            var parameters = new NameValueCollection() {
+        public void TestOsmNodeParsePostgreSqlFields()
+        {
+            var parameters = new NameValueCollection()
+            {
                 { "osm_id", "2" },
                 { "tags", "\"foo\"=>\"bar\"" }
             };
             var osmNode = new OsmNode(1, 52.1234, 10.1234);
             osmNode.ParsePostgreSqlFields(parameters);
 
-            var expectedTags = new Dictionary<string, string> {
+            var expectedTags = new Dictionary<string, string>
+            {
                 { "foo", "bar" }
             };
             Assert.That(osmNode.Id, Is.EqualTo(2));
@@ -27,9 +29,10 @@ namespace NUnitTests
         }
 
         [Test]
-		public void TestOsmWayParsePostgreSqlFields()
-		{
-            var parameters = new NameValueCollection() {
+        public void TestOsmWayParsePostgreSqlFields()
+        {
+            var parameters = new NameValueCollection()
+            {
                 { "osm_id", "2" },
                 { "tags", "\"foo\"=>\"bar\"" },
                 { "node_refs", "{10,12,15,213,18}" }
@@ -37,7 +40,8 @@ namespace NUnitTests
             var osmWay = new OsmWay(1);
             osmWay.ParsePostgreSqlFields(parameters);
 
-            var expectedTags = new Dictionary<string, string> {
+            var expectedTags = new Dictionary<string, string>
+            {
                 { "foo", "bar" }
             };
             var expectedList = new List<ulong> { 10, 12, 15, 213, 18 };
@@ -47,9 +51,10 @@ namespace NUnitTests
         }
 
         [Test]
-		public void TestOsmNodeParsePostgreSqlFieldsFailed1()
-		{
-            var parameters = new NameValueCollection() {
+        public void TestOsmNodeParsePostgreSqlFieldsFailed1()
+        {
+            var parameters = new NameValueCollection()
+            {
                 { "osm_id", "2" },
                 { "tags", "\"foo" }
             };
@@ -60,9 +65,10 @@ namespace NUnitTests
         }
 
         [Test]
-		public void TestOsmNodeParsePostgreSqlFieldsFailed2()
-		{
-            var parameters = new NameValueCollection() {
+        public void TestOsmNodeParsePostgreSqlFieldsFailed2()
+        {
+            var parameters = new NameValueCollection()
+            {
                 { "osm_id", "2" },
                 { "tags", "\"foo\"" }
             };
@@ -73,9 +79,10 @@ namespace NUnitTests
         }
 
         [Test]
-		public void TestOsmNodeParsePostgreSqlFieldsFailed3()
-		{
-            var parameters = new NameValueCollection() {
+        public void TestOsmNodeParsePostgreSqlFieldsFailed3()
+        {
+            var parameters = new NameValueCollection()
+            {
                 { "osm_id", "2" },
                 { "tags", "\"foo\"=>" }
             };
@@ -87,9 +94,10 @@ namespace NUnitTests
         }
 
         [Test]
-		public void TestOsmNodeParsePostgreSqlFieldsFailed4()
-		{
-            var parameters = new NameValueCollection() {
+        public void TestOsmNodeParsePostgreSqlFieldsFailed4()
+        {
+            var parameters = new NameValueCollection()
+            {
                 { "osm_id", "2" },
                 { "tags", "\"foo\"=>\"bar" }
             };
@@ -100,9 +108,10 @@ namespace NUnitTests
         }
 
         [Test]
-		public void TestOsmNodeParsePostgreSqlFieldsWithEscapedBackslash()
-		{
-            var parameters = new NameValueCollection() {
+        public void TestOsmNodeParsePostgreSqlFieldsWithEscapedBackslash()
+        {
+            var parameters = new NameValueCollection()
+            {
                 { "osm_id", "2" },
                 { "tags", "\"foo\"=>\"bar\\baz\"" }
             };
@@ -116,7 +125,7 @@ namespace NUnitTests
         public void ParseHstore_ValidHstoreString_ReturnsDictionary()
         {
             // Arrange
-            string hstoreString = "\"key1\"=>\"value1\", \"key2\"=>\"value2\"";
+            const string hstoreString = "\"key1\"=>\"value1\", \"key2\"=>\"value2\"";
 
             // Act
             var result = Extension.ParseHstore(hstoreString);
@@ -139,7 +148,7 @@ namespace NUnitTests
 
             // Assert
             Assert.That(result, Is.InstanceOf<Dictionary<string, string>>());
-            Assert.That(result, Is.EqualTo(new Dictionary<string, string> {{"key1", "value1"}}));
+            Assert.That(result, Is.EqualTo(new Dictionary<string, string> { { "key1", "value1" } }));
         }
     }
 }

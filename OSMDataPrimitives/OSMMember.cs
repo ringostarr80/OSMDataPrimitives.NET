@@ -5,22 +5,22 @@ namespace OSMDataPrimitives
 	/// <summary>
 	/// OsmMember.
 	/// </summary>
-	public struct OsmMember
+	public readonly struct OsmMember
 	{
 		/// <summary>
 		/// The member-type.
 		/// </summary>
-		public MemberType Type { get; set; }
+		public MemberType Type { get; }
 
 		/// <summary>
 		/// The member-reference-id.
 		/// </summary>
-		public ulong Ref { get; set; }
+		public ulong Ref { get; }
 
 		/// <summary>
 		/// The member-role (usually "inner" or "outer").
 		/// </summary>
-		public string Role { get; set; }
+		public string Role { get; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:OSMDataPrimitives.OsmMember"/> struct.

@@ -68,14 +68,13 @@ namespace OSMDataPrimitives.BSON
 					break;
 				case OsmRelation relationElement:
 					var bsonMembersArray = new BsonArray();
-					foreach (var osmMember in relationElement.Members)
+					foreach (var memberDocument in relationElement.Members.Select(osmMember => new BsonDocument
+					         {
+						         { "type", osmMember.Type.ToString().ToLower() },
+						         { "ref", (long)osmMember.Ref },
+						         { "role", osmMember.Role }
+					         }))
 					{
-						var memberDocument = new BsonDocument
-						{
-							{ "type", osmMember.Type.ToString().ToLower() },
-							{ "ref", (long)osmMember.Ref },
-							{ "role", osmMember.Role }
-						};
 						bsonMembersArray.Add(memberDocument);
 					}
 
@@ -83,16 +82,18 @@ namespace OSMDataPrimitives.BSON
 					break;
 			}
 
-			if (element.Tags.Count > 0)
+			if (element.Tags.Count <= 0)
 			{
-				var tagsDoc = new BsonDocument();
-				foreach (KeyValuePair<string, string> tag in element.Tags)
-				{
-					tagsDoc.Add(tag.Key.Replace(".", "\uFF0E").Replace("$", "\uFF04"), tag.Value);
-				}
-
-				bsonDoc.Add("tags", tagsDoc);
+				return bsonDoc;
 			}
+
+			var tagsDoc = new BsonDocument();
+			foreach (KeyValuePair<string, string> tag in element.Tags)
+			{
+				tagsDoc.Add(tag.Key.Replace(".", "\uFF0E").Replace("$", "\uFF04"), tag.Value);
+			}
+
+			bsonDoc.Add("tags", tagsDoc);
 
 			return bsonDoc;
 		}
@@ -150,7 +151,7 @@ namespace OSMDataPrimitives.BSON
 			}
 
 			var tags = doc["tags"].AsBsonDocument;
-			foreach (string key in tags.Names)
+			foreach (var key in tags.Names)
 			{
 				element.Tags.Add(key, tags[key].AsString);
 			}

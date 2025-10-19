@@ -10,7 +10,8 @@ namespace NUnitTests
 	{
 		private static OsmNode GetDefaultOsmNode()
 		{
-			var node = new OsmNode(2) {
+			var node = new OsmNode(2)
+			{
 				Latitude = 52.123456,
 				Longitude = 12.654321,
 				UserId = 5,
@@ -100,7 +101,7 @@ namespace NUnitTests
 		{
 			var node = GetOsmNodeSpatial1();
 			var wkt = node.ToWkt();
-			var expectedWkt = "POINT (9.992475 53.553345)";
+			const string expectedWkt = "POINT (9.992475 53.553345)";
 			Assert.That(wkt, Is.EqualTo(expectedWkt));
 		}
 	}

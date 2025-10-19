@@ -242,7 +242,7 @@ namespace NUnitTests
 		{
 			var way = GetDefaultOsmWaySpatial();
 			var wkt = way.ToWkt();
-			var expectedWkt = "LINESTRING (9.9936292 53.5510746, 9.9937873 53.5511904, 9.9943703 53.5515143, 9.994567 53.5516129)";
+			const string expectedWkt = "LINESTRING (9.9936292 53.5510746, 9.9937873 53.5511904, 9.9943703 53.5515143, 9.994567 53.5516129)";
 			Assert.That(wkt, Is.EqualTo(expectedWkt));
 		}
 

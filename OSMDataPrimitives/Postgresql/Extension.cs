@@ -225,8 +225,7 @@ namespace OSMDataPrimitives.PostgreSql
 			{
 				case OsmWay way:
 					insertStringBuilder.Append(", @node_refs::bigint[]");
-					var wayElement = way;
-					parameters.Add("node_refs", "{" + string.Join(", ", wayElement.NodeRefs) + "}");
+					parameters.Add("node_refs", "{" + string.Join(", ", way.NodeRefs) + "}");
 					break;
 				case OsmRelation relationElement:
 					insertStringBuilder.Append(GetRelationSpecificInsert(relationElement, parameters));
@@ -246,18 +245,13 @@ namespace OSMDataPrimitives.PostgreSql
 			}
 
 			var nodeRefsArray = nodeRefsString.Split(',', StringSplitOptions.RemoveEmptyEntries);
-			var nodeRefs = new List<long>();
-			foreach (var nodeRef in nodeRefsArray)
-			{
-				nodeRefs.Add(Convert.ToInt64(nodeRef));
-			}
 
-			return nodeRefs;
+			return nodeRefsArray.Select(nodeRef => Convert.ToInt64(nodeRef)).ToList();
 		}
 
 		private static string ReplaceHstoreValue(string val)
 		{
-			return val.Replace("'", "''").Replace("\\", "\\\\").Replace("\"", "\\\"");
+			return val.Replace("'", "''").Replace("\\", @"\\").Replace("\"", "\\\"");
 		}
 
 		/// <summary>

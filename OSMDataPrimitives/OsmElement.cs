@@ -94,24 +94,30 @@ namespace OSMDataPrimitives
 				return false;
 			}
 
-			if (this.Tags is not null && other.Tags is not null)
+			if (this.Tags is null || other.Tags is null)
+				return (
+					this.Id == other.Id &&
+					this.UserId == other.UserId &&
+					this.UserName == other.UserName &&
+					this.Version == other.Version &&
+					this.Timestamp == other.Timestamp &&
+					this.Changeset == other.Changeset
+				);
+			if (this.Tags.Count != other.Tags.Count)
 			{
-				if (this.Tags.Count != other.Tags.Count)
+				return false;
+			}
+
+			foreach (var kvp in this.Tags)
+			{
+				if (!other.Tags.TryGetValue(kvp.Key, out string valueInDict2))
 				{
 					return false;
 				}
 
-				foreach (var kvp in this.Tags)
+				if (kvp.Value != valueInDict2)
 				{
-					if (!other.Tags.TryGetValue(kvp.Key, out string valueInDict2))
-					{
-						return false;
-					}
-
-					if (kvp.Value != valueInDict2)
-					{
-						return false;
-					}
+					return false;
 				}
 			}
 

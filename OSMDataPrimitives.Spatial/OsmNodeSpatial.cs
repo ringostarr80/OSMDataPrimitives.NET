@@ -16,7 +16,6 @@ namespace OSMDataPrimitives.Spatial
 		/// <param name="id">Identifier.</param>
 		public OsmNodeSpatial(ulong id) : base(id)
 		{
-
 		}
 
 		/// <summary>
@@ -27,7 +26,6 @@ namespace OSMDataPrimitives.Spatial
 		/// <param name="longitude">Longitude.</param>
 		public OsmNodeSpatial(ulong id, double latitude, double longitude) : base(id, latitude, longitude)
 		{
-
 		}
 
 		/// <summary>
@@ -108,10 +106,11 @@ namespace OSMDataPrimitives.Spatial
 			var cosLatitudeDestination = Math.Cos(radLatitudeDestination);
 
 			var sqlMod = SqlMod(Math.Atan2(
-					Math.Cos(radLatitudeOrigin) * Math.Sin(radLatitudeDestination) - Math.Sin(radLatitudeOrigin) *
-					cosLatitudeDestination * Math.Cos(radLongitudeDestination - radLongitudeOrigin),
-					Math.Sin(radLongitudeDestination - radLongitudeOrigin) * cosLatitudeDestination) -
-				(5 * Math.PI / 2),
+				                    Math.Cos(radLatitudeOrigin) * Math.Sin(radLatitudeDestination) -
+				                    Math.Sin(radLatitudeOrigin) *
+				                    cosLatitudeDestination * Math.Cos(radLongitudeDestination - radLongitudeOrigin),
+				                    Math.Sin(radLongitudeDestination - radLongitudeOrigin) * cosLatitudeDestination) -
+			                    (5 * Math.PI / 2),
 				2 * Math.PI);
 			var direction = (-180.0 / Math.PI) * sqlMod;
 

@@ -320,13 +320,8 @@ namespace OSMDataPrimitives.Spatial
                 }
 
                 resultStringBuilder.Append("((" + outerWay.ToWktPart() + ")");
-                foreach (var innerWay in innerWays)
+                foreach (var innerWay in innerWays.Where(innerWay => outerWay.PointInPolygon(innerWay.Nodes[0].Latitude, innerWay.Nodes[0].Longitude)))
                 {
-                    if (!outerWay.PointInPolygon(innerWay.Nodes[0].Latitude, innerWay.Nodes[0].Longitude))
-                    {
-                        continue;
-                    }
-
                     resultStringBuilder.Append(", (" + innerWay.ToWktPart() + ")");
                 }
 
@@ -340,14 +335,14 @@ namespace OSMDataPrimitives.Spatial
 
         private static string ToWktPart(this OsmNode node)
         {
-            return string.Format("{0} {1}", node.Longitude.ToString(CultureInfo.InvariantCulture),
-                node.Latitude.ToString(CultureInfo.InvariantCulture));
+            return
+                $"{node.Longitude.ToString(CultureInfo.InvariantCulture)} {node.Latitude.ToString(CultureInfo.InvariantCulture)}";
         }
 
         private static string ToWktPart(this OsmNodeSpatial node)
         {
-            return string.Format("{0} {1}", node.Longitude.ToString(CultureInfo.InvariantCulture),
-                node.Latitude.ToString(CultureInfo.InvariantCulture));
+            return
+                $"{node.Longitude.ToString(CultureInfo.InvariantCulture)} {node.Latitude.ToString(CultureInfo.InvariantCulture)}";
         }
 
         private static string ToWktPart(this OsmWaySpatial way)

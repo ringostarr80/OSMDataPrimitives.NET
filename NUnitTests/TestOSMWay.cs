@@ -191,7 +191,7 @@ namespace NUnitTests
 		public void TestOsmWayToPostgreSqlDeleteString()
 		{
 			var way = GetDefaultOsmWay();
-			var expectedSql = "DELETE FROM ways WHERE osm_id = 2";
+			const string expectedSql = "DELETE FROM ways WHERE osm_id = 2";
 			Assert.That(way.ToPostgreSqlDelete(), Is.EqualTo(expectedSql));
 		}
 
