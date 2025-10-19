@@ -45,7 +45,7 @@ namespace OSMDataPrimitives.Spatial
 					return false;
 				}
 
-				return !(Math.Abs(this._nodes[0].Longitude - this._nodes[lastNodeIndex].Longitude) > double.Epsilon);
+				return Math.Abs(this._nodes[0].Longitude - this._nodes[lastNodeIndex].Longitude) <= double.Epsilon;
 			}
 		}
 
