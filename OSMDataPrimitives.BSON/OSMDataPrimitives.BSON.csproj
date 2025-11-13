@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
@@ -16,10 +16,10 @@
     <Owners>Ringo Leese</Owners>
     <PackageProjectUrl>https://github.com/ringostarr80/OSMDataPrimitives.NET</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>changed target framework to .NET 8.0 - .NET 9.0</PackageReleaseNotes>
+    <PackageReleaseNotes>changed target framework to .NET 8.0 - .NET 10.0</PackageReleaseNotes>
     <Description>This is the BSON-Extension for the OSMDataPrimitives project</Description>
     <PackageTags>osm;data;primitives;bson</PackageTags>
-    <Copyright>Copyright 2024</Copyright>
+    <Copyright>Copyright 2025</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,5 +32,6 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <DocumentationFile>bin\Release\net8.0\OSMDataPrimitives.BSON.xml</DocumentationFile>
     <DocumentationFile>bin\Release\net9.0\OSMDataPrimitives.BSON.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\net10.0\OSMDataPrimitives.BSON.xml</DocumentationFile>
   </PropertyGroup>
 </Project>
