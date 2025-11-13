@@ -6,7 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.1.0] - 2025-11-13
+
 ### Changed
+- supported target frameworks are now from .NET 8.0 to .NET 10.0
+
+## [3.0.0] - 2024-11-18
+
+### Changed
+- supported target frameworks are now from .NET 8.0 to .NET 9.0
 - renamed OSMElement -> OsmElement, OSMNode -> OsmNode, OSMWay -> OsmWay, OSMRelation ->  OsmRelation, OSMMember -> OsmMember, IOSMElement -> IOsmElement and some others.
 
 ## [2.2.2] - 2024-02-01
