@@ -43,3 +43,27 @@ jobs:
             -H "Content-Type: multipart/form-data" \
             -F "projectName=OSMDataPrimitives" \
             -F "bom=@osm-data-primitives-sbom.xml"
+
+    - name: Upload SBOM for OSMDataPrimitives.BSON to DependencyTrack
+      env:
+        DTRACK_API_KEY: ${{ secrets.DTRACK_API_KEY }}
+        DTRACK_URL: ${{ secrets.DTRACK_URL }}
+      run: |
+        curl -X "POST" \
+            "${DTRACK_URL}/api/v1/bom" \
+            -H "X-API-Key: ${DTRACK_API_KEY}" \
+            -H "Content-Type: multipart/form-data" \
+            -F "projectName=OSMDataPrimitives.BSON" \
+            -F "bom=@osm-data-primitives-bson-sbom.xml"
+
+    - name: Upload SBOM for OSMDataPrimitives.Spatial to DependencyTrack
+      env:
+        DTRACK_API_KEY: ${{ secrets.DTRACK_API_KEY }}
+        DTRACK_URL: ${{ secrets.DTRACK_URL }}
+      run: |
+        curl -X "POST" \
+            "${DTRACK_URL}/api/v1/bom" \
+            -H "X-API-Key: ${DTRACK_API_KEY}" \
+            -H "Content-Type: multipart/form-data" \
+            -F "projectName=OSMDataPrimitives.Spatial" \
+            -F "bom=@osm-data-primitives-spatial-sbom.xml"
