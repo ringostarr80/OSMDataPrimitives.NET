@@ -24,7 +24,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
-    <PackageReference Include="MongoDB.Bson" Version="3.5.0" />
+    <PackageReference Include="MongoDB.Bson" Version="3.5.1" />
     <ProjectReference Include="..\OSMDataPrimitives\OSMDataPrimitives.csproj" />
     <None Include="..\README.md" Pack="true" PackagePath="" />
   </ItemGroup>
