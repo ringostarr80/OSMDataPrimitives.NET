@@ -1,0 +1,45 @@
+name: Generate and Upload SBOM
+
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@d4c94342e560b34958eacfc5d055d21461ed1c5d # v5
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Install CycloneDX
+      run: dotnet tool install --global CycloneDX
+
+    - name: Generate SBOMs
+      run: |
+        dotnet CycloneDX OSMDataPrimitives/OSMDataPrimitives.csproj -o ./ -f osm-data-primitives-sbom.xml
+        dotnet CycloneDX OSMDataPrimitives.BSON/OSMDataPrimitives.BSON.csproj -o ./ -f osm-data-primitives-bson-sbom.xml
+        dotnet CycloneDX OSMDataPrimitives.Spatial/OSMDataPrimitives.Spatial.csproj -o ./ -f osm-data-primitives-spatial-sbom.xml
+    
+    - name: Upload SBOM for OSMDataPrimitives to DependencyTrack
+      env:
+        DTRACK_API_KEY: ${{ secrets.DTRACK_API_KEY }}
+        DTRACK_URL: ${{ secrets.DTRACK_URL }}
+      run: |
+        curl -X "POST" \
+            "${DTRACK_URL}/api/v1/bom" \
+            -H "X-API-Key: ${DTRACK_API_KEY}" \
+            -H "Content-Type: multipart/form-data" \
+            -F "projectName=OSMDataPrimitives" \
+            -F "bom=@osm-data-primitives-sbom.xml"
