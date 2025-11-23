@@ -39,3 +39,8 @@ Thumbs.db
 
 # dotCover
 *.dotCover
+
+# BOM
+bom.xml
+*-bom.xml
+*-sbom.xml
