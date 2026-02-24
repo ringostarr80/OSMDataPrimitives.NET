@@ -28,9 +28,9 @@ jobs:
 
     - name: Generate SBOMs
       run: |
-        dotnet CycloneDX OSMDataPrimitives/OSMDataPrimitives.csproj -o ./ -f osm-data-primitives-sbom.xml
-        dotnet CycloneDX OSMDataPrimitives.BSON/OSMDataPrimitives.BSON.csproj -o ./ -f osm-data-primitives-bson-sbom.xml
-        dotnet CycloneDX OSMDataPrimitives.Spatial/OSMDataPrimitives.Spatial.csproj -o ./ -f osm-data-primitives-spatial-sbom.xml
+        dotnet CycloneDX OSMDataPrimitives/OSMDataPrimitives.csproj -o ./ --filename osm-data-primitives-sbom.xml
+        dotnet CycloneDX OSMDataPrimitives.BSON/OSMDataPrimitives.BSON.csproj -o ./ --filename osm-data-primitives-bson-sbom.xml
+        dotnet CycloneDX OSMDataPrimitives.Spatial/OSMDataPrimitives.Spatial.csproj -o ./ --filename osm-data-primitives-spatial-sbom.xml
     
     - name: Upload SBOM for OSMDataPrimitives to DependencyTrack
       env:
