@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using OSMDataPrimitives;
 using OSMDataPrimitives.Spatial;
 
@@ -132,10 +133,10 @@ namespace NUnitTests
 		[Test]
 		public void TestOsmWaySpatialCollectionMultiPolygonWithNoData()
 		{
-			Assert.Throws<DataException>(() => {
+			Assert.Throws<DataException>((Action)(() => {
 				var multiPolygon = new OsmWaySpatialCollection();
 				multiPolygon.ToWkt(WktType.MultiPolygon);
-			});
+			}));
 		}
 
 		[Test]
