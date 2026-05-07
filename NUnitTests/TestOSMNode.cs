@@ -48,16 +48,16 @@ namespace NUnitTests
 		public void TestOsmNodeSettingLatitudeOutOfRangeException()
 		{
 			var node = new OsmNode(2);
-			Assert.That(() => node.Latitude = 91.0, Throws.TypeOf<ArgumentOutOfRangeException>());
-			Assert.That(() => node.Latitude = -91.0, Throws.TypeOf<ArgumentOutOfRangeException>());
+			Assert.That((Action)(() => node.Latitude = 91.0), Throws.TypeOf<ArgumentOutOfRangeException>());
+			Assert.That((Action)(() => node.Latitude = -91.0), Throws.TypeOf<ArgumentOutOfRangeException>());
 		}
 
 		[Test]
 		public void TestOsmNodeSettingLongitudeOutOfRangeException()
 		{
 			var node = new OsmNode(2);
-			Assert.That(() => node.Longitude = 181.0, Throws.TypeOf<ArgumentOutOfRangeException>());
-			Assert.That(() => node.Longitude = -181.0, Throws.TypeOf<ArgumentOutOfRangeException>());
+			Assert.That((Action)(() => node.Longitude = 181.0), Throws.TypeOf<ArgumentOutOfRangeException>());
+			Assert.That((Action)(() => node.Longitude = -181.0), Throws.TypeOf<ArgumentOutOfRangeException>());
 		}
 
 		[Test]
