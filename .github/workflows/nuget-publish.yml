@@ -17,6 +17,10 @@ jobs:
   build:
     name: Build and publish to NuGet
     runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: read  # Required by actions/checkout to read the repository
+      id-token: write  # Required for OIDC token exchange with nuget.org Trusted Publishing
 
     steps:
     - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
@@ -43,7 +47,13 @@ jobs:
     - name: Pack
       run: dotnet pack -c Release -o out -p:Version=$PACKAGE_VERSION -p:ContinuousIntegrationBuild=true
 
+    - name: NuGet login (OIDC -> short-lived API key)
+      id: nuget-login
+      uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
+      with:
+        user: Ringo
+
     - name: Publish to NuGet
       env:
-        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-      run: dotnet nuget push out/*.nupkg -k $NUGET_API_KEY -s https://api.nuget.org/v3/index.json
+        NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
+      run: dotnet nuget push out/*.nupkg -k "$NUGET_API_KEY" -s https://api.nuget.org/v3/index.json
