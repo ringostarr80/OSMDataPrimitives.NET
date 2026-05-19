@@ -1,19 +1,26 @@
 name: Generate and Upload SBOM
 
 permissions:
+  # Required by actions/checkout to read the repository
   contents: read
-  pull-requests: write
 
 on:
   push:
     branches: [ "main" ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
+    name: Build and upload SBOMs
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      with:
+        persist-credentials: false
 
     - name: Setup .NET
       uses: actions/setup-dotnet@d4c94342e560b34958eacfc5d055d21461ed1c5d # v5
